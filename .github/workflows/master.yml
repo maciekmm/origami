@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  thesis:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Github Action for LaTeX
+      uses: xu-cheng/latex-action@1.2.1
+      with:
+        root_file: thesis/thesis.tex
+    - uses: actions/upload-artifact@v1
+      with:
+        name: thesis.pdf
+        path: thesis/thesis.pdf
