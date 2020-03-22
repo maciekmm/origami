@@ -83,7 +83,7 @@
 \renewcommand{\baselinestretch}{1.1}
 
 
-\bibliographystyle{abbrv}
+%\bibliographystyle{abbrv}
 
 %------------------------------------------------------------------------------
 
