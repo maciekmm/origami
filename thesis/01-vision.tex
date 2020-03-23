@@ -23,13 +23,13 @@ Even though origami seems to be a child's play, at times
 people would get discouraged whilst following the origami instructions due to
 the lack of details they expose.
 
-We would like to provide a way for beginners (and advanced origamists alike) to visualise step-by-step the folding process of the origami pattern that they provide.
+We would like to provide a way for beginners (and advanced origamists alike) to visualize step-by-step the folding process of the origami pattern that they provide.
 While there exist some programs aiding the process of design, there is no satisfactory solution
 that would present the process of folding as it would be carried out manually.
 
 We have evaluated existing solutions, and the one that resembles 
 what we would like to achieve the most \cite{origami-simulator} provides a way to load a crease pattern
-and display the process of folding, however it does not allow to visualise the process step-by-step, it only allows 
+and display the process of folding, however it does not allow to visualize the process step-by-step, it only allows 
 to go from a flat sheet of paper to a folded state immediately. It also bypasses some physical properties, such as the fact that the
 paper should collide with itself.
 
@@ -44,15 +44,15 @@ paper should collide with itself.
 
 \subsubsection{Functionality}
 
-Our main goal is to create a platform to visualise the origami model in 3D,
+Our main goal is to create a platform to visualize the origami model in 3D,
 in every step of the folding process, while animating the transitions between the steps.
 
-The inseparable component of the system would be a file format describing the folding steps neccesary to complete the origami.\\
+The inseparable component of the system would be a file format describing the folding steps necessary to complete the origami.\\
 
 \noindent \textbf{The users would be able to:}
 \begin{itemize}
 	\item load the folding instruction
-	\item choose the step of the instruction that they want to visualise
+	\item choose the step of the instruction that they want to visualize
 	\item rotate the scene
     \item zoom in and out
 	\item move around the scene
@@ -67,7 +67,7 @@ Backend part will serve frontend pages, and be responsible
 for storing user files.
 
 Frontend part will handle user interaction, computations on the origami model,
-3D visualisations, and communication with backend.
+3D visualizations, and communication with backend.
 
 We have decided to use well-known and tested technologies.
 For the backend part, we are going to use \textbf{Go} language,
@@ -105,7 +105,7 @@ Therefore, we are not expecting problems connected with the tools we have select
 Since the project will require a lot of knowledge from the computational origami
 field, we will have to research the existing materials on this topic.
 The most promising resource seems to be a MIT course by
-Eric Demaine \cite{mit-course}, and a book coauthored by the same person -
+Eric Demaine \cite{mit-course}, and a book co-authored by the same person -
 Geometric Folding Algorithms\cite{origami-book}.
 Various papers are also available which might come in handy, especially those regarding software implementations.
 
@@ -132,7 +132,7 @@ We foresee many challenges along the way, such as:
 			\item cutting
 		\end{itemize}
 
-	\item performance - web browser are stil not well optimized to carry out 3D computations and render 3D graphics in real time.
+	\item performance - web browser are still not well optimized to carry out 3D computations and render 3D graphics in real time.
 		The system will have to be highly optimized, in order to be usable.
 		State of the art programs offload computational payload to GPU.
 
