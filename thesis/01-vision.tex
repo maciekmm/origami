@@ -28,9 +28,9 @@ While there exist some programs aiding the process of design, there is no satisf
 that would present the process of folding as it would be carried out manually.
 
 We have evaluated existing solutions, and the one that resembles 
-what we would like to achieve the most \cite{origami-simulator}, provides a way to load the crease pattern
+what we would like to achieve the most \cite{origami-simulator} provides a way to load a crease pattern
 and display the process of folding, however it does not allow to visualise the process step-by-step, it only allows 
-to go from flat sheet of paper to folded state immediately. It also bypasses some physical properties, such as the fact that the
+to go from a flat sheet of paper to a folded state immediately. It also bypasses some physical properties, such as the fact that the
 paper should collide with itself.
 
 
@@ -56,7 +56,7 @@ The inseparable component of the system would be a file format describing the fo
 	\item rotate the scene
     \item zoom in and out
 	\item move around the scene
-	\item pause the animation in any moment, and move back and forth
+	\item pause the animation at any time, and move back and forth
 \end{itemize}
 
 \subsubsection{Technology}
@@ -64,7 +64,7 @@ The inseparable component of the system would be a file format describing the fo
 Our application will consist of two layers - backend and frontend.
 
 Backend part will serve frontend pages, and be responsible
-for processing user files.
+for storing user files.
 
 Frontend part will handle user interaction, computations on the origami model,
 3D visualisations, and communication with backend.
@@ -75,8 +75,8 @@ using standard library to write the server part.
 
 For the frontend, we will use vanilla \textbf{JavaScript}
 for user interface and computations,
-and we will perform 3d rendering using \textbf{Three.js} library,
-that is built on top of \textbf{WebGL}
+and we will perform 3D rendering using \textbf{Three.js} library
+that is built on top of \textbf{WebGL}.
 
 \begin{figure}[H]
 	\caption{Technology stack}
@@ -98,7 +98,7 @@ that is built on top of \textbf{WebGL}
 
 Both \textbf{Go} and \textbf{JavaScript} are widely spread and actively maintained languages.
 There is a strong community surrounding both of them.
-\textbf{Three.js} is the most popular library for 3d \textbf{WebGL} rendering.
+\textbf{Three.js} is the most popular library for 3D \textbf{WebGL} rendering.
 
 Therefore, we are not expecting problems connected with the tools we have selected.
 
@@ -120,7 +120,7 @@ so the mathematics behind it are not yet well developed.
 We foresee many challenges along the way, such as:
 
 \begin{itemize}
-	\item NP-hardness - some problems that we will face are in general proved to be np-hard.
+	\item NP-hardness - some problems that we will face are in general proved to be NP-hard.
 		Example of such a problem can be computing layer ordering based on a crease pattern.
 		We will have to overcome them either using approximate methods, or coming up with solutions that will avoid them.
 
@@ -144,7 +144,7 @@ We foresee many challenges along the way, such as:
 
 \end{itemize}
 
-That all being said, we believe we will be able to undertake this problem and provide a solution to it.
+That all being said, we believe we are able to undertake this problem and provide a solution to it.
 While challenging it is also rewarding in terms of business value and as a unique product in the field.
 
 
