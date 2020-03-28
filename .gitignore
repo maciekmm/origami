@@ -1,3 +1,7 @@
+.idea/
+src/node_modules/
+src/dist/
+
 *.gz
 *.lot
 *.fdb_latexmk
