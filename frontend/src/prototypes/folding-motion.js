@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-// const OrbitControls = require('three-orbitcontrols')(THREE);
-// import OrbitControls from 'three-orbitcontrols';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { dotProduct, mat, normalize, vec } from '@josh-brown/vector';
 

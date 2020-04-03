@@ -5,11 +5,16 @@
     <title>Origami folding</title>
     <style>
         body { margin: 0; }
+        header {
+            position: absolute;
+        }
         canvas { display: block; }
     </style>
-</head>
+</head>   
 <body>
-
+<header><input id="load-model" type="file"></header>
+<main id="visualizer"></main>
+<aside id="steps"></aside>
 <script src="main.js"></script>
 </body>
 </html>

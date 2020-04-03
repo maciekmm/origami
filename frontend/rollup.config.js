@@ -28,7 +28,9 @@ export default {
       targets: [
         { src: 'index.html', dest: 'dist' },
         { src: 'public/**', dest: 'dist' }
-      ]
+      ],
+      flatten: false,
+      hook: 'writeBundle'
     })
   ]
 };
