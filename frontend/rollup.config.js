@@ -6,7 +6,7 @@ import copy from 'rollup-plugin-copy';
 // const production = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: 'app/index.js',
+  input: 'src/index.js',
   output: {
     file: 'dist/main.js',
     format: 'iife', // immediately-invoked function expression — suitable for <script> tags
@@ -26,7 +26,8 @@ export default {
     // production && terser() // minify, but only in production
     copy({
       targets: [
-        { src: 'index.html', dest: 'dist' }
+        { src: 'index.html', dest: 'dist' },
+        { src: 'public/**', dest: 'dist' }
       ]
     })
   ]

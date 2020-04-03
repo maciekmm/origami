@@ -22,6 +22,8 @@
   },
   "dependencies": {
     "@josh-brown/vector": "^3.4.0",
+    "earcut": "^2.2.2",
+    "fold": "^0.11.1",
     "three": "^0.115.0",
     "three-orbitcontrols": "^2.110.3"
   }
