@@ -1,25 +1,38 @@
 import THREEViewer from './three/viewer'
-import THREEModel from './three/model'
+import THREEGuide from './three/guide'
 
-const viewer = new THREEViewer()
 
 async function renderModel(model) {
     if (!model['vertices_coords']) {
         console.error("missing vertices_coords in loaded model")
         return
     }
-    const threeModel = new THREEModel()
-    model['vertices_coords'].forEach(
-        position => threeModel.addVertex(...position)
-    )
-
-    model['faces_vertices'].forEach(
-        vertices => threeModel.addFace(vertices)
-    )
-
-    viewer.model = threeModel
+    const guide = new THREEGuide(extractFrames(model))
+    viewer.setGuide(guide)
 }
 
+function extractFrames(foldModel) {
+    if(!foldModel.file_frames) {
+        return [foldModel]
+    }
+    foldModel.file_frames[0].vertices_coords = foldModel.file_frames[0].vertices_coords.map(
+        vertex => [vertex[0] + 0.05 * Math.random(), vertex[1] + 0.05*Math.random(), vertex[2] + 0.05*Math.random()]
+    )
+    foldModel.file_frames[1].vertices_coords = foldModel.file_frames[1].vertices_coords.map(
+        vertex => [vertex[0] + 0.05 * Math.random(), vertex[1] + 0.05*Math.random(), vertex[2] + 0.05*Math.random()]
+    )
+    return [foldModel, ...foldModel.file_frames]
+}
+
+async function initialLoad() {
+    const modelURL = "models/simple.fold"
+    const fetched = await fetch(modelURL)
+    const model = await fetched.json()
+    renderModel(model)
+}
+
+const visualizerElement = document.querySelector("#visualizer")
+const viewer = new THREEViewer(visualizerElement.clientWidth, visualizerElement.clientHeight)
 const loadInput = document.getElementById("load-model")
 loadInput.addEventListener('change', (event) => {
     const fileReader = new FileReader()
@@ -29,12 +42,13 @@ loadInput.addEventListener('change', (event) => {
     fileReader.readAsText(loadInput.files[0])
 })
 
-async function initialLoad() {
-    const modelURL = "models/simple.fold"
-    const fetched = await fetch(modelURL)
-    const model = await fetched.json()
-    renderModel(model)
+initialLoad()
+viewer.render(visualizerElement)
+
+function stepper() {
+    viewer.step()
 }
 
-initialLoad()
-viewer.start()
+setInterval(stepper, 100)
+
+// viewer.step()

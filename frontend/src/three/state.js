@@ -1,7 +1,7 @@
 import * as THREE from 'three'
-import * as triangulate from 'earcut'
+import { triangulate } from '../triangulation.js'
 
-export default class THREEModel {
+export class THREEState {
     constructor() {
         this.geometry = new THREE.Geometry()
         this.vertices = this.geometry.vertices
@@ -25,32 +25,24 @@ export default class THREEModel {
         })
     }
 
-    _triangulate(vertices) {
-        if (vertices.length == 3) return [vertices];
-        let local_idxs = []
-
-        if (vertices.length == 4) {
-            local_idxs = [
-                [0, 1, 2],
-                [0, 2, 3]
-            ]
-        } else {
-            const triangulated = triangulate.default(this._verticesIdsToCoordinates(vertices), null, 3)
-            for (let i = 0; i < triangulated.length; i += 3) {
-                local_idxs.push([triangulated[i], triangulated[i + 1], triangulated[i + 2]].sort())
-            }
-        }
-        return local_idxs.map(local_idxs =>
-            local_idxs.map(local_id => vertices[local_id])
-        )
-    }
-
     addFace(vertices) {
-        const triangulated = this._triangulate(vertices)
+        const triangulated = triangulate(this._verticesIdsToCoordinates(vertices), vertices)
         triangulated.forEach(indices => this.faces.push(new THREE.Face3(
             ...indices,
             null, new THREE.Color(Math.max(0.2, Math.random()), Math.max(0.2, Math.random()), Math.max(0.2, Math.random()))
         )))
+        this.geometry.elementsNeedUpdate = true
+    }
+
+    setVertexPosition(id, x, y, z) {
+        const vertex = this.vertices[id]
+        if (!vertex) {
+            throw "error setting position, no vertex with " + id + " found"
+        }
+        vertex.x = x
+        vertex.y = y
+        vertex.z = z
+        this.geometry.verticesNeedUpdate = true
         this.geometry.elementsNeedUpdate = true
     }
 }
