@@ -5,7 +5,6 @@ const FRAME_RATE = 24
 
 export default class THREEViewer {
     constructor(width, height) {
-        console.log(width, height)
         this.scene = new THREE.Scene()
         this.camera = new THREE.PerspectiveCamera(
             75, 
@@ -72,8 +71,12 @@ export default class THREEViewer {
         this.guide.step()
     }
 
-    _getMillisecondsPerFrame() {
+    get _getMillisecondsPerFrame() {
         return 1000 / FRAME_RATE
+    }
+
+    get _shouldRender() {
+        return time - this._lastRender> this._getMillisecondsPerFrame
     }
 
     _update(time) {
@@ -87,8 +90,8 @@ export default class THREEViewer {
                 }
             }
         }
-        if(this._lastFrame == time || 
-           (time - this._lastRender) > this._getMillisecondsPerFrame()) {
+
+        if(this._lastFrame == time || this._shouldRender) {
             this._lastRender = time
             this.controls.update()
             this.renderer.render(this.scene, this.camera)

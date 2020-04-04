@@ -37,13 +37,13 @@ export default class THREEGuide {
             console.warn("no next frame for transition found")
             return this.isSetState()
         }
-        this.currentFrameId = (this.currentFrameId + 1 ) % this.frames.length
+        this.currentFrameId++// = (this.currentFrameId + 1 ) % this.frames.length
 
         const frame = this.currentFrame
 
         if(!frame.frame_inherit) {
             //TODO: we can't recreate THREEState here because viewer cannot update geometry
-            this.state = this._createState(frame)
+            // this.state = this._createState(frame)
         }
 
         if(!frame.vertices_coords) {

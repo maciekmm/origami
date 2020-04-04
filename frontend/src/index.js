@@ -15,12 +15,6 @@ function extractFrames(foldModel) {
     if(!foldModel.file_frames) {
         return [foldModel]
     }
-    foldModel.file_frames[0].vertices_coords = foldModel.file_frames[0].vertices_coords.map(
-        vertex => [vertex[0] + 0.05 * Math.random(), vertex[1] + 0.05*Math.random(), vertex[2] + 0.05*Math.random()]
-    )
-    foldModel.file_frames[1].vertices_coords = foldModel.file_frames[1].vertices_coords.map(
-        vertex => [vertex[0] + 0.05 * Math.random(), vertex[1] + 0.05*Math.random(), vertex[2] + 0.05*Math.random()]
-    )
     return [foldModel, ...foldModel.file_frames]
 }
 
@@ -34,6 +28,7 @@ async function initialLoad() {
 const visualizerElement = document.querySelector("#visualizer")
 const viewer = new THREEViewer(visualizerElement.clientWidth, visualizerElement.clientHeight)
 const loadInput = document.getElementById("load-model")
+
 loadInput.addEventListener('change', (event) => {
     const fileReader = new FileReader()
     fileReader.onload = function(data) {
@@ -42,13 +37,10 @@ loadInput.addEventListener('change', (event) => {
     fileReader.readAsText(loadInput.files[0])
 })
 
+document.addEventListener('resize', event => {
+    viewer.onResize(visualizerElement.clientWidth, visualizerElement.clientHeight)
+})
+
 initialLoad()
 viewer.render(visualizerElement)
-
-function stepper() {
-    viewer.step()
-}
-
-setInterval(stepper, 100)
-
-// viewer.step()
+viewer.play()
