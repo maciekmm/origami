@@ -16,11 +16,13 @@ export default class THREEViewer {
         this.renderer = new THREE.WebGLRenderer() // TODO: fallback
         this.renderer.setSize(width, height)
         this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+
         this.frontMaterial = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors,
             color: new THREE.Color(1, 0, 0),
             side: THREE.FrontSide,
         });
+
         this.backMaterial = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors,
             color: new THREE.Color(0, 1, 0),
@@ -54,7 +56,7 @@ export default class THREEViewer {
         requestAnimationFrame(this._update.bind(this))
     }
 
-    isPlaying() {
+    get isPlaying() {
         return this._playing
     }
 
@@ -75,23 +77,35 @@ export default class THREEViewer {
         return 1000 / FRAME_RATE
     }
 
-    get _shouldRender() {
+    _shouldRender(time) {
         return time - this._lastRender> this._getMillisecondsPerFrame
+    }
+
+    _shouldStep(time) {
+        return this.isPlaying && !!this.guide && time - this._lastFrame > this._getMillisecondsPerFrame;
+    }
+
+    _tryStep(time) {
+        if(!this._shouldStep(time)) {
+            return false
+        }
+
+        this._lastFrame = time
+        if(!this.guide.step() || this.guide.isInSteadyState) {
+            this.pause()
+            return false
+        } else {
+            stepped = true
+        }
+        return true
     }
 
     _update(time) {
         requestAnimationFrame(this._update.bind(this))
 
-        if(this.isPlaying() && !!this.guide) {
-            if(time - this._lastFrame > this._getMillisecondsPerFrame) {
-                this._lastFrame = time
-                if(this.guide.step()) {
-                    this.pause()
-                }
-            }
-        }
+        let stepped = this._tryStep(time)
 
-        if(this._lastFrame == time || this._shouldRender) {
+        if(stepped || this._shouldRender(time)) {
             this._lastRender = time
             this.controls.update()
             this.renderer.render(this.scene, this.camera)

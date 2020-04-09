@@ -1,0 +1,45 @@
+:root {
+    --color-text: #BFBFBF;
+    --color-accent: #F23005;
+    --color-accent-mild: #D94F30;
+    --color-background-mild: #262626;
+    --color-background: #0d0d0d;    
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    background: var(--color-background);
+    color: var(--color-text);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu {
+    padding: 0.5em;
+    display: flex;
+}
+
+.menu input {
+    background: var(--color-background-mild);
+    color: var(--color-accent-mild);
+}
+
+#visualizer {
+    width: 100%;
+    height: 100%;
+}
+
+#steps {
+    width: 100%;
+    height: 200px;
+}
+
+.step {
+    border: 10px solid var(--color-background-mild);
+}

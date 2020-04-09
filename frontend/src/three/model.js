@@ -1,11 +1,16 @@
 import * as THREE from 'three'
 import { triangulate } from '../triangulation.js'
 
-export class THREEState {
+export class THREEModel {
     constructor() {
         this.geometry = new THREE.Geometry()
         this.vertices = this.geometry.vertices
         this.faces = this.geometry.faces
+    }
+
+    clear() {
+        this.vertices.length = 0
+        this.geometry.length = 0
     }
 
     addVertex(x, y, z) {

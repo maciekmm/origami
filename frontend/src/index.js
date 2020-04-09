@@ -1,5 +1,5 @@
 import THREEViewer from './three/viewer'
-import THREEGuide from './three/guide'
+import {GuidePlay, STEADY_STATE} from './guide_play'
 
 
 async function renderModel(model) {
@@ -7,11 +7,16 @@ async function renderModel(model) {
         console.error("missing vertices_coords in loaded model")
         return
     }
-    const guide = new THREEGuide(extractFrames(model))
+    const guide = new GuidePlay(extractFrames(model))
     viewer.setGuide(guide)
 }
 
 function extractFrames(foldModel) {
+    if(!!foldModel.frame_classes) {
+        foldModel.frame_classes = [STEADY_STATE]
+    } else {
+        foldModel.frame_classes = [...foldModel.frame_classes, STEADY_STATE]
+    }
     if(!foldModel.file_frames) {
         return [foldModel]
     }
@@ -19,7 +24,7 @@ function extractFrames(foldModel) {
 }
 
 async function initialLoad() {
-    const modelURL = "models/simple.fold"
+    const modelURL = "./public/models/simple.fold"
     const fetched = await fetch(modelURL)
     const model = await fetched.json()
     renderModel(model)
