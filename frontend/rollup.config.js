@@ -1,14 +1,15 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import copy from 'rollup-plugin-copy';
-// import { terser } from 'rollup-plugin-terser';
+import livereload from 'rollup-plugin-livereload';
 
-// const production = !process.env.ROLLUP_WATCH;
+const production = !process.env.ROLLUP_WATCH;
 
 export default {
   input: 'src/index.js',
   output: {
-    file: 'dist/main.js',
+    dir: 'dist/',
+    // file: 'dist/index.html',
     format: 'iife', // immediately-invoked function expression — suitable for <script> tags
     sourcemap: true
   },
@@ -23,14 +24,7 @@ export default {
         }
       }
     ),
-    // production && terser() // minify, but only in production
-    copy({
-      targets: [
-        { src: 'index.html', dest: 'dist' },
-        { src: 'public/**', dest: 'dist' }
-      ],
-      flatten: false,
-      hook: 'writeBundle'
-    })
+    !production && livereload(),
+    production && terser() // minify, but only in production
   ]
 };
