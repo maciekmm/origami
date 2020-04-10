@@ -18,3 +18,5 @@ frontend/dist/
 *.nav
 *.snm
 thesis/thesis.pdf
+
+venv/
