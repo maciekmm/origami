@@ -1,0 +1,4 @@
+CONFIG = {
+    'DEBUG_ENABLED': True,
+    'AXIAL_STIFFNESS_EA': 20.0,
+}
