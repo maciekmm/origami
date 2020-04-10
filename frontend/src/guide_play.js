@@ -5,7 +5,7 @@ export class GuidePlay {
     constructor(fold) {
         this.fold = fold
         this.model = new THREEModel()
-        this.currentFrameId = -1
+        this.currentFrameID = -1
         this.step()
     }
 
@@ -26,11 +26,11 @@ export class GuidePlay {
     }
 
     get currentFrame() {
-        return this.frames[this.currentFrameId]
+        return this.frames[this.currentFrameID]
     }
 
     get isFinished() {
-        return this.currentFrameId + 1 >= this.frameCount
+        return this.currentFrameID + 1 >= this.frameCount
     }
 
     _isSteadyState(frame) {
@@ -51,7 +51,10 @@ export class GuidePlay {
         );
     }
 
-    _selectFrame(frame) {
+    selectFrame(frameID) {
+        this.currentFrameID = frameID
+
+        let frame = this.frames[frameID]
         if(!!frame.frame_inherit) {
             frame.vertices_coords.forEach(
                 (position, id) => {
@@ -71,18 +74,16 @@ export class GuidePlay {
         )
     }
 
-    selectFrame(frame_id) {
-        this._selectFrame(this.frames[frame_id])
-    }
-
     step() {
         if(this.isFinished) {
             console.warn("no next frame for transition found")
             return false
         }
-        this.currentFrameId++
-
-        this._selectFrame(this.currentFrame)
+        this.selectFrame(this.currentFrameID + 1)
         return true
+    }
+
+    clone() {
+        return new GuidePlay(JSON.parse(JSON.stringify(this.fold)))
     }
 }

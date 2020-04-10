@@ -7,14 +7,14 @@ export function parseFOLD(foldModel) {
         foldModel.frame_classes = [...foldModel.frame_classes, STEADY_STATE]
     }
     if(!foldModel.file_frames) {
-        return new Fold([foldModel])
+        return new Fold([foldModel], 24)
     }
-    return new Fold([foldModel, ...foldModel.file_frames])
+    return new Fold([foldModel, ...foldModel.file_frames], 24)
 }
 
 export class Fold {
-    constructor(frames) {
-        this.frameRate = 24
+    constructor(frames, frameRate) {
+        this.frameRate = frameRate 
         this.frames = frames
     }
 }
