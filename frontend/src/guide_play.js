@@ -69,8 +69,8 @@ export class GuidePlay extends THREEModel {
             console.warn("no next frame for transition found")
             return false
         }
-        //this.currentFrameId++
-        this.currentFrameId = (this.currentFrameId + 1 ) % this.frames.length
+        this.currentFrameId++
+        // this.currentFrameId = (this.currentFrameId + 1 ) % this.frames.length
 
         this._selectFrame(this.currentFrame)
         return true
