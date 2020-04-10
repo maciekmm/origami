@@ -1,21 +1,24 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-const FRAME_RATE = 24
+const VIEWER_FRAMERATE = 30
 
 export default class THREEViewer {
-    constructor(width, height) {
-        this.scene = new THREE.Scene()
-        this.camera = new THREE.PerspectiveCamera(
+    constructor(element) {
+        this._element = element
+        let width = this._element.clientWidth
+        let height = this._element.clientHeight
+        this._scene = new THREE.Scene()
+        this._camera = new THREE.PerspectiveCamera(
             75, 
             width / height,
             0.1,
             1000
         )
-        this.camera.position.set(-10, -5, 5)
-        this.renderer = new THREE.WebGLRenderer() // TODO: fallback
-        this.renderer.setSize(width, height)
-        this.controls = new OrbitControls(this.camera, this.renderer.domElement)
+        this._camera.position.set(-10, -5, 5)
+        this._renderer = new THREE.WebGLRenderer() // TODO: fallback
+        this._renderer.setSize(width, height)
+        this._controls = new OrbitControls(this._camera, this._renderer.domElement)
 
         this.frontMaterial = new THREE.MeshBasicMaterial({
             vertexColors: THREE.FaceColors,
@@ -28,85 +31,55 @@ export default class THREEViewer {
             color: new THREE.Color(0, 1, 0),
             side: THREE.BackSide,
         });
+        this._frameRate = VIEWER_FRAMERATE
+        this.onResize()
     }
 
-    onResize(width, height) {
-        this.renderer.setSize(width, height)
-        this.camera.aspect = width / height
+    onResize() {
+        let width = this._element.clientWidth
+        let height = this._element.clientHeight
+        this._renderer.setSize(width, height)
+        this._camera.aspect = width / height
     }
 
     clear() {
-        if (!this.mesh) return
-        this.mesh.geometry.dispose()
-        this.scene.remove(this.mesh)
-        this.mesh = null
+        if (!this._mesh) return
+        this._mesh.geometry.dispose()
+        this._scene.remove(this._mesh)
+        this._mesh = null
     }
 
-    setGuide(guide) {
+    set guide(guide) {
         this.clear()
-        this.guide = guide
-        this.mesh = new THREE.Mesh(guide.geometry, this.frontMaterial)
-        this.mesh.add(new THREE.Mesh(guide.geometry, this.backMaterial))
-        this.scene.add(this.mesh)
+        this._guide = guide
+        this._frameRate = Math.max(guide.frameRate, VIEWER_FRAMERATE)
+        this._mesh = new THREE.Mesh(guide.geometry, this.frontMaterial)
+        this._mesh.add(new THREE.Mesh(guide.geometry, this.backMaterial))
+        this._scene.add(this._mesh)
     }
 
-    render(element) {
-        element.appendChild(this.renderer.domElement)
+    start() {
+        this._element.appendChild(this._renderer.domElement)
         this._lastRender = performance.now()
-        requestAnimationFrame(this._update.bind(this))
-    }
-
-    get isPlaying() {
-        return this._playing
-    }
-
-    play() {
-        this._playing = true
-        this._lastFrame = performance.now()
-    }
-
-    pause() {
-        this._playing = false
-    }
-
-    step() {
-        this.guide.step()
+        requestAnimationFrame(this._render.bind(this))
     }
 
     get _getMillisecondsPerFrame() {
-        return 1000 / FRAME_RATE
+        return 1000 / this._frameRate
     }
 
     _shouldRender(time) {
-        return time - this._lastRender> this._getMillisecondsPerFrame
+        return !!this._guide && time - this._lastRender> this._getMillisecondsPerFrame
     }
 
-    _shouldStep(time) {
-        return this.isPlaying && !!this.guide && time - this._lastFrame > this._getMillisecondsPerFrame;
-    }
+    _render(time) {
+        requestAnimationFrame(this._render.bind(this))
 
-    _tryStep(time) {
-        if(!this._shouldStep(time)) {
-            return false
-        }
-
-        this._lastFrame = time
-        if(!this.guide.step() || this.guide.isInSteadyState) {
-            this.pause()
-            return false
-        } 
-        return true
-    }
-
-    _update(time) {
-        requestAnimationFrame(this._update.bind(this))
-
-        let stepped = this._tryStep(time)
-
-        if(stepped || this._shouldRender(time)) {
+        if(this._shouldRender(time)) {
             this._lastRender = time
-            this.controls.update()
-            this.renderer.render(this.scene, this.camera)
+            this._controls.update()
+            this._renderer.render(this._scene, this._camera)
         }
     }
+
 }

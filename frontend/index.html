@@ -3,21 +3,25 @@
 <head>
     <meta charset="utf-8">
     <title>Origami folding</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="./public/style.css">
 </head>   
 <body>
-<header class="menu">
-    <input id="load-model" type="file">
-    <ul>
-        <li><a href="#">Play</a></li>
-        <li><a href="#">Pause</a></li>
-    </ul>
-    <label>Loop
-    <input type="checkbox" name="loop">
+<header id="controls" class="menu">
+    <label for="load-model">
+        <i class="material-icons">insert_drive_file</i>
+        <span id="model-name"></span>
     </label>
+    <input id="load-model" type="file">
+    <div>
+        <a id="ctrl-play" href="#play"><i class="material-icons">play_arrow</i></a>
+        <a id="ctrl-pause" href="#pause"><i class="material-icons">pause</i></a>
+        <a id="ctrl-stop" href="#stop"><i class="material-icons">stop</i></a>
+        <!-- <a id="loop" href="#loop"><i class="material-icons">repeat</i></a> -->
+    </div>
 </header>
 <main id="visualizer"></main>
-<aside id="steps"></aside>
+<aside id="timeline"></aside>
 <script src="./dist/index.js"></script>
 </body>
 </html>  

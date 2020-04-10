@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { triangulate } from '../triangulation.js'
+import { triangulate } from './triangulation'
 
 export class THREEModel {
     constructor() {
