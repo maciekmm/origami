@@ -94,9 +94,7 @@ export default class THREEViewer {
         if(!this.guide.step() || this.guide.isInSteadyState) {
             this.pause()
             return false
-        } else {
-            stepped = true
-        }
+        } 
         return true
     }
 

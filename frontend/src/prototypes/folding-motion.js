@@ -55,13 +55,13 @@ function Vector3FromEdges(edge1, edge2, edge3) {
 
 //create a triangular geometry
 const geometry = new THREE.Geometry();
-geometry.vertices.push( new THREE.Vector3( -5, -5, 0 ) );
-geometry.vertices.push( new THREE.Vector3(  5, -5, 0 ) );
-geometry.vertices.push( new THREE.Vector3(  5,  5, 0 ) );
+geometry.vertices.push( new THREE.Vector3( -1, -1, 0 ) );
+geometry.vertices.push( new THREE.Vector3(  1, -1, 0 ) );
+geometry.vertices.push( new THREE.Vector3(  1,  1, 0 ) );
 
 const oppositeVertexOriginal = {
-  x: -5,
-  y: 5,
+  x: -1,
+  y: 1,
   z: 0
 };
 
@@ -164,18 +164,25 @@ console.log(radius);
 
 
 let animatedYet = false;
-const theta = Math.PI / 6;
+const theta = Math.PI / 4;
 const planeRot = mat([
   [Math.cos(theta), -Math.sin(theta), 0],
   [Math.sin(theta), Math.cos(theta) ,0],
   [0, 0, 1]]);
 
+let time = 0
+let framNo = 0
+let frames = []
+
 function animate(t) {
   controls.update();
-  t = t / 2000;
+  // t = t / 1000;
+  time += 0.05;
+  t = time
 
   if (Math.sin(t) < 0) {
     animatedYet = true;
+  console.log(JSON.stringify(frames))
   }
 
 
@@ -187,9 +194,13 @@ function animate(t) {
 
     const coord = planeRot.multiply(mat([[x, y ,z]]).transpose()).getColumn(0);
     geometry.vertices[3] = new THREE.Vector3(coord.getEntry(0), coord.getEntry(1), coord.getEntry(2))
-    console.log(geometry.vertices[3]);
+    let frame = {
+      "frame_inherit": true,
+      "frame_parent": framNo++,
+      "vertices_position": geometry.vertices.map(vert => [vert.x, vert.y, vert.z])
+    }
+    frames.push(frame)
 
-    console.log(coord);
     geometry.verticesNeedUpdate = true;
     geometry.elementsNeedUpdate = true;
     geometry.normalsNeedUpdate = true;
@@ -203,5 +214,4 @@ function animate(t) {
   requestAnimationFrame( animate );
   renderer.render( scene, camera );
 }
-
 animate(0);

@@ -23,7 +23,7 @@ export class GuidePlay extends THREEModel {
     }
 
     _isSteadyState(frame) {
-        return frame.frame_classes.indexOf(STEADY_STATE) != -1
+        return frame.frame_classes && frame.frame_classes.indexOf(STEADY_STATE) != -1
     }
 
     get isInSteadyState() {
