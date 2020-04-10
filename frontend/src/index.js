@@ -23,12 +23,12 @@ function extractFrames(foldModel) {
     return [foldModel, ...foldModel.file_frames]
 }
 
-async function initialLoad() {
-    const modelURL = "./public/models/simple.fold"
-    const fetched = await fetch(modelURL)
-    const model = await fetched.json()
-    renderModel(model)
-}
+// async function initialLoad() {
+//     const modelURL = "./public/models/simple.fold"
+//     const fetched = await fetch(modelURL)
+//     const model = await fetched.json()
+//     renderModel(model)
+// }
 
 const visualizerElement = document.querySelector("#visualizer")
 const viewer = new THREEViewer(visualizerElement.clientWidth, visualizerElement.clientHeight)
@@ -46,6 +46,6 @@ document.addEventListener('resize', event => {
     viewer.onResize(visualizerElement.clientWidth, visualizerElement.clientHeight)
 })
 
-initialLoad()
+// initialLoad()
 viewer.render(visualizerElement)
 viewer.play()
