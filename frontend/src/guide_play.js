@@ -1,17 +1,28 @@
 import {THREEModel} from './three/model'
+import {STEADY_STATE} from './fold'
 
-export const STEADY_STATE = "origuide:steady_state"
-
-export class GuidePlay extends THREEModel {
-    constructor(frames) {
-        super()
-        this.frames = frames
+export class GuidePlay {
+    constructor(fold) {
+        this.fold = fold
+        this.model = new THREEModel()
         this.currentFrameId = -1
         this.step()
+    }
+
+    get geometry() {
+        return this.model.geometry
+    }
+
+    get frames() {
+        return this.fold.frames
     }
  
     get frameCount() {
         return this.frames.length
+    }
+    
+    get frameRate() {
+        return this.fold.frameRate
     }
 
     get currentFrame() {
@@ -44,19 +55,19 @@ export class GuidePlay extends THREEModel {
         if(!!frame.frame_inherit) {
             frame.vertices_coords.forEach(
                 (position, id) => {
-                    this.setVertexPosition(id, ...position)
+                    this.model.setVertexPosition(id, ...position)
                 }
             )
             return
         }
-        this.clear()
+        this.model.clear()
 
         frame.vertices_coords.forEach(
-            position => this.addVertex(...position)
+            position => this.model.addVertex(...position)
         )
 
         frame.faces_vertices.forEach(
-            vertices => this.addFace(vertices)
+            vertices => this.model.addFace(vertices)
         )
     }
 
@@ -70,7 +81,6 @@ export class GuidePlay extends THREEModel {
             return false
         }
         this.currentFrameId++
-        // this.currentFrameId = (this.currentFrameId + 1 ) % this.frames.length
 
         this._selectFrame(this.currentFrame)
         return true

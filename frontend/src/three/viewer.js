@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-const FRAME_RATE = 24
 
 export default class THREEViewer {
     constructor(width, height) {
@@ -74,11 +73,14 @@ export default class THREEViewer {
     }
 
     get _getMillisecondsPerFrame() {
-        return 1000 / FRAME_RATE
+        if(!this.guide) {
+            return 0
+        }
+        return 1000 / this.guide.frameRate
     }
 
     _shouldRender(time) {
-        return time - this._lastRender> this._getMillisecondsPerFrame
+        return !!this.guide && time - this._lastRender> this._getMillisecondsPerFrame
     }
 
     _shouldStep(time) {
