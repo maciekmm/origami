@@ -1,9 +1,8 @@
-import { Player } from './components/player'
-import { GuidePlay } from './guide_play'
-import {parseFOLD} from './fold'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import AppWrapper from './entry'
 
-const player = new Player(document.body)
-
-document.addEventListener('resize', event => {
-    player.onResize(visualizerElement.clientWidth, visualizerElement.clientHeight)
-})
+ReactDOM.render(
+    <AppWrapper />,
+    document.getElementById("app")
+);

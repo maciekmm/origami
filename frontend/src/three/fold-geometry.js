@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { triangulate } from './triangulation'
 
-export class THREEModel {
+export default class FoldGeometry {
     constructor() {
         this.geometry = new THREE.Geometry()
         this.vertices = this.geometry.vertices
