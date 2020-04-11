@@ -1,2 +1,75 @@
-def set_all_crease_forces():
-    pass
+from config import CONFIG
+from generic_models import ForceName
+from geometry_models import Edge, EDGE_MOUNTAIN, EDGE_VALLEY, angle_from_assignment, Face
+from geometry_tools import vector_from_to, triangle_height, cot
+
+
+def set_crease_force(edge: Edge):
+    # TODO: Add FACET handling here? (Driven by triangulation facet creases)
+    if edge.assignment != EDGE_MOUNTAIN or edge.assignment != EDGE_VALLEY:
+        return
+
+    if edge.face1 is None or edge.face2 is None:
+        raise RuntimeError("edge should have 2 faces assigned")
+
+    if edge.assignment == EDGE_MOUNTAIN or edge.assignment == EDGE_VALLEY:
+        k_crease = edge.l0 * CONFIG['FOLD_STIFFNESS']
+    else:
+        return
+
+    theta = edge.face_angle()
+    theta_target = angle_from_assignment(edge.assignment)
+
+    c = k_crease * (theta_target - theta)
+
+    face1 = edge.face1
+    face2 = edge.face2
+
+    p1 = find_vertex_not_in_edge(face1, edge)
+    p2 = find_vertex_not_in_edge(face2, edge)
+    p3 = edge.v1
+    p4 = edge.v2
+
+    p32 = vector_from_to(p3, p2)
+    p34 = vector_from_to(p3, p4)
+    p31 = vector_from_to(p3, p1)
+
+    h1 = triangle_height(p34, p31)
+    h2 = triangle_height(p34, p32)
+
+    alfa314 = face1.angle_for_vertex(p3)
+    alfa342 = face2.angle_for_vertex(p3)
+    alfa431 = face1.angle_for_vertex(p4)
+    alfa423 = face2.angle_for_vertex(p4)
+
+    dp1 = face1.normal.vec / h1
+    dp2 = face2.normal.vec / h2
+
+    mul1 = dp1 / (cot(alfa314) + cot(alfa431))
+    mul2 = dp2 / (cot(alfa342) + cot(alfa423))
+
+    dp3 = (-cot(alfa431) * mul1) + (-cot(alfa423) * mul2)
+    dp4 = (-cot(alfa314) * mul1) + (-cot(alfa342) * mul2)
+
+    f1 = c * dp1
+    f2 = c * dp2
+    f3 = c * dp3
+    f4 = c * dp4
+
+    p1.set_force(ForceName.CREASE, f1)
+    p2.set_force(ForceName.CREASE, f2)
+    p3.set_force(ForceName.CREASE, f3)
+    p4.set_force(ForceName.CREASE, f4)
+
+
+def find_vertex_not_in_edge(face: Face, edge: Edge):
+    for v in face.vertices:
+        if v != edge.v1 and v != edge.v2:
+            return v
+
+    raise RuntimeError("No vertex found")
+
+
+def set_all_crease_forces(edges):
+    for e in edges:
+        set_crease_force(e)

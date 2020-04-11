@@ -1,6 +1,7 @@
 from config import CONFIG
+from generic_models import ForceName
+from geometry_models import Edge
 from geometry_tools import vector_from_to, normalize
-from models import Edge, ForceName
 
 
 def _set_beam_force(edge: Edge):
