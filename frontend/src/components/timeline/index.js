@@ -14,9 +14,9 @@ export default function Timeline() {
         (steadyFrameId, seq) => {
             const nextSteadyId = steadyIds.length == seq - 1 ? steadyIds[seq + 1] : null
 
-            let framesBehind = frame - steadyFrameId
-            let totalFrames = nextSteadyId - steadyFrameId
-            let fracOfFramesCovered = nextSteadyId ? framesBehind / totalFrames : 1
+            const framesBehind = frame - steadyFrameId
+            const totalFrames = nextSteadyId - steadyFrameId
+            const fracOfFramesCovered = nextSteadyId ? framesBehind / totalFrames : 1
 
             return <Step
                 model={model}

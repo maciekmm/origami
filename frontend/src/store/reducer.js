@@ -1,8 +1,4 @@
-import React from 'react'
-import { StoreProvider } from './store'
-import App from './components/app'
-
-const reducer = (state, action) => {
+export default function reducer(state, action) {
     switch (action.type) {
         case 'selectFrame':
             return {
@@ -25,22 +21,13 @@ const reducer = (state, action) => {
                 ...state,
                 playing: false
             }
+        case 'stop':
+            return {
+                ...state,
+                playing: false,
+                frame: 0
+            }
         default:
-            console.warn('undefined action type ' + action.type)
-            return state
+            throw new Error(`action type ${action.type} not recognized`)
     }
-}
-
-export default function AppEntry() {
-    const initialState = {
-        model: null,
-        frame: -1,
-        playing: false
-    }
-
-    return (
-        <StoreProvider initialState={initialState} reducer={reducer}>
-            <App />
-        </StoreProvider>
-    )
 }

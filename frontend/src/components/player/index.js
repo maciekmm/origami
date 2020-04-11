@@ -9,9 +9,17 @@ export default function Player() {
 
     const step = () => dispatch({ type: 'selectFrame', frame: frame + 1 })
     const pause = () => dispatch({ type: 'pause' })
+    const isLastFrame = model.file_frames.length === frame + 1
 
     useAfter(() => {
-        if (!playing) return
+        if (!playing) {
+            return
+        }
+
+        if(isLastFrame) {
+            pause()
+            return
+        }
         
         step()
         
@@ -21,7 +29,7 @@ export default function Player() {
     }, 1000 / model.file_frameRate, [playing, frame, model])
 
     return (
-        <div className="test">
+        <div className="player">
             <Viewer model={model} frame={frame} />
         </div>
     )
