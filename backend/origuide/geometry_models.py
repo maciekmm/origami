@@ -70,9 +70,9 @@ class Edge:
 class Face:
     def __init__(self, v1: Vertex, v2: Vertex, v3: Vertex):
         self.vertices = [v1, v2, v3]
-        self.alfa01 = self.angle_for_vertex(v1)
-        self.alfa01 = self.angle_for_vertex(v2)
-        self.alfa01 = self.angle_for_vertex(v3)
+        self.alfa0 = []
+        for v in self.vertices:
+            self.alfa0.append(self.angle_for_vertex(v))
 
     def angle_for_vertex(self, v: Vertex):
         # p1 ---> p2
@@ -84,6 +84,12 @@ class Face:
         p3 = self.vertices[(i + 2) % len(self.vertices)]
 
         return vector_angle(vector_from_to(p1, p2), vector_from_to(p1, p3))
+
+    def prev_vertex(self, v: Vertex):
+        return self.vertices[(self.vertices.index(v) - 1 + len(self.vertices)) % len(self.vertices)]
+
+    def next_vertex(self, v: Vertex):
+        return self.vertices[(self.vertices.index(v) + 1) % len(self.vertices)]
 
     def __str__(self):
         return 'Face: {} -> {} -> {}'.format(self.vertices[0], self.vertices[1], self.vertices[2])

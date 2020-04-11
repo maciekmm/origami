@@ -3,6 +3,7 @@ import sys
 
 from beam_force import set_all_beam_forces
 from crease_force import set_all_crease_forces
+from face_force import set_all_face_forces
 from geometry_models import *
 
 
@@ -83,21 +84,22 @@ def main():
 
     # TODO: Maybe some graph would be a more appropriate structure?
 
-    for v in vertices:
-        print(v)
-    print()
-
-    for e in edges:
-        print(e)
-        print('EDGE faces: ', e.face1, e.face2)
-    print()
-
+    # for v in vertices:
+    #     print(v)
+    # print()
+    #
+    # for e in edges:
+    #     print(e)
+    #     print('EDGE faces: ', e.face1, e.face2)
+    # print()
+    #
     # for f in faces:
     #     print(f)
     # print()
 
     set_all_beam_forces(edges)
     set_all_crease_forces(edges)
+    set_all_face_forces(faces)
 
     # print(faces[0].normal)
 
