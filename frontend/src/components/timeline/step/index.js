@@ -1,5 +1,5 @@
 import React from 'react'
-import Viewer from "../viewer"
+import Viewer from "../../viewer"
 
 export default function Step(props) {
 

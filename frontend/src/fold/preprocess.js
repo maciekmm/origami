@@ -37,6 +37,6 @@ function markFrameSteady(frame) {
     if (!frame.frame_classes) {
         frame.frame_classes = [STEADY_STATE]
     } else if (frame.frame_classes.indexOf(STEADY_STATE) == -1) {
-        frame.frame_classes = [...foldModel.frame_classes, STEADY_STATE]
+        frame.frame_classes = [...frame.frame_classes, STEADY_STATE]
     }
 }

@@ -16,12 +16,10 @@ export default function ModelLoader() {
     }
 
     return (
-        <>
-            <label>
-                <InsertDriveFile />
-                {model && <span>{model.file_author}</span>}
-                <input id="load-model" onChange={loadModel} type="file" />
-            </label>
-        </>
+        <label>
+            <InsertDriveFile />
+            {model && <span>{model.file_author}</span>}
+            <input id="load-model" onChange={loadModel} type="file" />
+        </label>
     )
 }

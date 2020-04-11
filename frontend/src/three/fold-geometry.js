@@ -10,7 +10,11 @@ export default class FoldGeometry {
 
     clear() {
         this.vertices.length = 0
-        this.geometry.length = 0
+        this.faces.length = 0
+    }
+
+    dispose() {
+        this.geometry.dispose()
     }
 
     addVertex(x, y, z) {
@@ -48,6 +52,5 @@ export default class FoldGeometry {
         vertex.y = y
         vertex.z = z
         this.geometry.verticesNeedUpdate = true
-        this.geometry.elementsNeedUpdate = true
     }
 }
