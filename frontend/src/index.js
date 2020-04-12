@@ -4,6 +4,7 @@ import App from './components/app'
 
 import { StoreProvider } from './store'
 import reducer from './store/reducer'
+import '../public/style.css'
 
 export default function AppWithStore() {
     const initialState = {

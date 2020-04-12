@@ -1,0 +1,7 @@
+.timeline {
+    width: 100%;
+    overflow-x: hidden;
+    display: flex;
+    flex: 0 1 150px;
+    justify-content: center;
+}

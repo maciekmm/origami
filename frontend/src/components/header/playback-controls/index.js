@@ -5,6 +5,7 @@ import Pause from '@material-ui/icons/Pause';
 import Stop from '@material-ui/icons/Stop';
 import ArrowRight from '@material-ui/icons/ArrowRight';
 import ArrowLeft from '@material-ui/icons/ArrowLeft';
+import styles from './styles.css'
 
 export default function PlaybackControls() {
     const [{ playing, frame, model }, dispatch] = useStore()
@@ -16,7 +17,7 @@ export default function PlaybackControls() {
     const prevFrame = () => dispatch({type: 'selectFrame', frame: Math.max(0, frame - 1)})
 
     return (
-        <div>
+        <div className={styles.controls}>
             {!playing && <ArrowLeft onClick={prevFrame} />}
             {!playing && <PlayArrow onClick={play} />}
             {!playing && <ArrowRight onClick={nextFrame} />}

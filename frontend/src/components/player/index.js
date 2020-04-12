@@ -3,6 +3,7 @@ import Viewer from '../viewer'
 import { useStore } from '../../store'
 import { isSteady } from '../../fold/tools'
 import { useAfter } from '../../hooks'
+import styles from './styles.css'
 
 export default function Player() {
     const [{ model, frame, playing }, dispatch] = useStore()
@@ -29,7 +30,7 @@ export default function Player() {
     }, 1000 / model.file_frameRate, [playing, frame, model])
 
     return (
-        <div className="player">
+        <div className={styles.player}>
             <Viewer model={model} frame={frame} />
         </div>
     )

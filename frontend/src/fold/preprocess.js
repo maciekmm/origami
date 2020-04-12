@@ -4,7 +4,9 @@ const FRAME_RATE_PROPERTY = "file_og:frameRate"
 const DEFAULT_FRAME_RATE = 24
 
 export default function preprocessFOLDModel(foldModel) {
-    ridFirstFrameFromRoot(foldModel)
+    const frame = extractFrameFromRoot(foldModel)
+    foldModel.file_frames = [frame, ...foldModel.file_frames]
+
     markFrameSteady(foldModel.file_frames[0])
     markFrameSteady(foldModel.file_frames[foldModel.file_frames.length - 1])
 
@@ -16,7 +18,7 @@ export default function preprocessFOLDModel(foldModel) {
     return foldModel
 }
 
-function ridFirstFrameFromRoot(foldModel) {
+function extractFrameFromRoot(foldModel) {
     let firstFrame = {}
     for (let property in foldModel) {
         const value = foldModel[property]
@@ -26,11 +28,7 @@ function ridFirstFrameFromRoot(foldModel) {
             delete foldModel[property]
         }
     }
-
-    if (!foldModel.file_frames) {
-        foldModel.file_frames = []
-    }
-    foldModel.file_frames = [firstFrame, ...foldModel.file_frames]
+    return firstFrame
 }
 
 function markFrameSteady(frame) {

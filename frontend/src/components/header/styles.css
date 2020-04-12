@@ -1,0 +1,9 @@
+.header {
+    padding: 0.5em;
+    display: flex;
+    justify-content: space-between;
+}
+
+.header input {
+    display: none;
+}

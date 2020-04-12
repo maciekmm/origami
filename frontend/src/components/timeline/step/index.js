@@ -1,12 +1,13 @@
 import React from 'react'
 import Viewer from "../../viewer"
+import styles from './styles.css'
 
 export default function Step(props) {
 
     return (
-        <div {...props} className="step">
+        <div {...props} className={styles.step}>
             <Viewer model={props.model} frame={props.frame} />
-            <span className="step--description">
+            <span className={styles.description}>
                 Step {props.frame}
             </span>
         </div>
