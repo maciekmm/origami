@@ -25,7 +25,7 @@ class Vertex(Vector3):
     def __init__(self, x: float, y: float, z: float):
         super().__init__(x, y, z)
 
-        self.forces = {}
+        self.forces = []
 
     def __str__(self):
         return 'Vertex (x, y, z): {}, {}, {}'.format(self.x, self.y, self.z)
@@ -37,10 +37,10 @@ class Vertex(Vector3):
                 val,
                 self.__str__()
             ))
-        self.forces[force] = val
+        self.forces.append(val)
 
     def total_force(self):
-        return np.sum(np.array(list(self.forces.values())), axis=0)
+        return np.sum(np.array(self.forces), axis=0)
 
 
 class Edge:

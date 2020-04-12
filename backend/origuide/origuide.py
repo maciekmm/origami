@@ -69,7 +69,7 @@ def main():
     # TODO: There might be an issue of edges and faces orientation (not handled correctly)
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    content = read_fold('../../assets/models/diagonal_fold.fold')
+    content = read_fold('../../assets/models/crane.fold')
 
     vertices = create_vertices(content['vertices_coords'])
     edges = create_edges(vertices,
