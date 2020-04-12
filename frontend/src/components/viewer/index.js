@@ -1,7 +1,7 @@
 import React from 'react'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Canvas, extend, useThree } from 'react-three-fiber'
-import Figure from '../../app/figure'
+import Figure from '../../components/figure'
 
 extend({ OrbitControls })
 

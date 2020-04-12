@@ -30,7 +30,7 @@ export default function Figure(props) {
         )
     }, [frame]);
 
-    useEffect(() => foldGeometry.dispose, [])
+    useEffect(() => () => foldGeometry.dispose(), [foldGeometry])
 
     return (
         <mesh>
