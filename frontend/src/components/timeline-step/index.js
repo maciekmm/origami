@@ -1,8 +1,8 @@
 import React from 'react'
-import Viewer from "../../viewer"
+import Viewer from "../viewer"
 import styles from './styles.css'
 
-export default function Step(props) {
+export default function TimelineStep(props) {
 
     return (
         <div {...props} className={styles.step}>

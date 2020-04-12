@@ -1,13 +1,14 @@
 import React from 'react'
-import Step from './step'
+import TimelineStep from '../../components/timeline-step'
 import { useStore } from "../../store";
 import { getSteadyFrameIds } from "../../fold/tools";
 import styles from './styles.css'
+import { SELECT_FRAME } from '../../store/actions';
 
 export default function Timeline() {
     const [{ model, frame }, dispatch] = useStore()
 
-    const selectFrame = (frame) => dispatch({ type: 'selectFrame', frame: frame })
+    const selectFrame = (frame) => dispatch({ type: SELECT_FRAME, frame: frame })
 
     const steadyIds = model ? getSteadyFrameIds(model.file_frames) : []
 
@@ -19,7 +20,7 @@ export default function Timeline() {
             const totalFrames = nextSteadyId - steadyFrameId
             const fracOfFramesCovered = nextSteadyId ? framesBehind / totalFrames : 1
 
-            return <Step
+            return <TimelineStep
                 model={model}
                 frame={steadyFrameId}
                 progress={fracOfFramesCovered}
