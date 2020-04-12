@@ -1,0 +1,22 @@
+.step {
+    background: var(--color-background-mild);
+    width: 150px;
+    height: 100%;
+    padding: 0.5em 0.2em;
+
+    cursor: pointer;
+    display: flex;
+    flex: 0 auto;
+    flex-direction: column;
+}
+
+.step:not(:last-child) {
+    border-right: 1px solid var(--color-background);
+}
+
+.description {
+    display: inline-block;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 10pt;
+}

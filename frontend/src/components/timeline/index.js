@@ -2,6 +2,7 @@ import React from 'react'
 import Step from './step'
 import { useStore } from "../../store";
 import { getSteadyFrameIds } from "../../fold/tools";
+import styles from './styles.css'
 
 export default function Timeline() {
     const [{ model, frame }, dispatch] = useStore()
@@ -29,7 +30,7 @@ export default function Timeline() {
     )
 
     return (
-        <aside id="timeline">
+        <aside className={styles.timeline}>
             {steps}
         </aside>
     )
