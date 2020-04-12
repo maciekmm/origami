@@ -1,27 +1,45 @@
+import { SELECT_FRAME, SELECT_NEXT_FRAME, SELECT_PREVIOUS_FRAME, LOAD_MODEL, PLAY, PAUSE, STOP } from "./actions"
+
+export const initialState = {
+    model: null,
+    frame: -1,
+    playing: false
+}
+
 export default function reducer(state, action) {
     switch (action.type) {
-        case 'selectFrame':
+        case SELECT_FRAME:
             return {
                 ...state,
                 frame: action.frame
             }
-        case 'loadModel':
+        case SELECT_NEXT_FRAME:
+            return {
+                ...state,
+                frame: Math.min(state.frame + 1, state.model.file_frames.length - 1)
+            }
+        case SELECT_PREVIOUS_FRAME:
+            return {
+                ...state,
+                frame: Math.max(state.frame - 1, 0)
+            }
+        case LOAD_MODEL:
             return {
                 ...state,
                 model: action.model,
                 frame: 0
             }
-        case 'play':
+        case PLAY:
             return {
                 ...state,
                 playing: true
             }
-        case 'pause':
+        case PAUSE:
             return {
                 ...state,
                 playing: false
             }
-        case 'stop':
+        case STOP:
             return {
                 ...state,
                 playing: false,

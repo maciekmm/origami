@@ -5,6 +5,10 @@ const DEFAULT_FRAME_RATE = 24
 
 export default function preprocessFOLDModel(foldModel) {
     const frame = extractFrameFromRoot(foldModel)
+    
+    if(!foldModel.file_frames) {
+        foldModel.file_frames = []
+    }
     foldModel.file_frames = [frame, ...foldModel.file_frames]
 
     markFrameSteady(foldModel.file_frames[0])

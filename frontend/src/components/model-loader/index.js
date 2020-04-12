@@ -1,7 +1,7 @@
 import React from 'react'
-import { useStore } from '../../../store'
+import { useStore } from '../../store'
 import InsertDriveFile from '@material-ui/icons/InsertDriveFile'
-import preprocessFOLDModel from '../../../fold/preprocess'
+import preprocessFOLDModel from '../../fold/preprocess'
 
 export default function ModelLoader() {
     const [{ model }, dispatch] = useStore()

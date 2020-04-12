@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import * as THREE from 'three'
-import FoldGeometry from '../../../three/fold-geometry'
+import FoldGeometry from '../../three/fold-geometry'
 
 
-export default function Model(props) {
+export default function Figure(props) {
     const [foldGeometry] = useState(() => new FoldGeometry())
 
     const model = props.model
@@ -26,13 +26,11 @@ export default function Model(props) {
 
     useEffect(() => {
         frame.vertices_coords.forEach(
-            (position, id) => {
-                foldGeometry.setVertexPosition(id, ...position)
-            }
+            (position, id) => foldGeometry.setVertexPosition(id, ...position)
         )
     }, [frame]);
 
-    useEffect(() => () => foldGeometry.dispose(), [])
+    useEffect(() => foldGeometry.dispose, [])
 
     return (
         <mesh>

@@ -10,6 +10,7 @@ module.exports = {
     devServer: {
         contentBase: './dist'
     },
+    devtool: 'eval',
     module: {
         rules: [
             {

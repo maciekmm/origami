@@ -1,7 +1,7 @@
 import React from 'react'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Canvas, extend, useThree } from 'react-three-fiber'
-import Model from './model'
+import Figure from '../../app/figure'
 
 extend({ OrbitControls })
 
@@ -24,7 +24,7 @@ export default function Viewer(props) {
     return (
         <Canvas>
             <SceneConfiguration />
-            <Model {...props} />
+            <Figure {...props} />
         </Canvas>
     )
 }

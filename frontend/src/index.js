@@ -1,18 +1,12 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './components/app'
+import App from './app'
 
 import { StoreProvider } from './store'
-import reducer from './store/reducer'
+import reducer, {initialState} from './store/reducer'
 import '../public/style.css'
 
 export default function AppWithStore() {
-    const initialState = {
-        model: null,
-        frame: -1,
-        playing: false
-    }
-
     return (
         <StoreProvider initialState={initialState} reducer={reducer}>
             <App />

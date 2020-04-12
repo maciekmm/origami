@@ -1,15 +1,16 @@
 import React from 'react'
-import Viewer from '../viewer'
+import Viewer from '../../components/viewer'
 import { useStore } from '../../store'
 import { isSteady } from '../../fold/tools'
 import { useAfter } from '../../hooks'
 import styles from './styles.css'
+import { SELECT_NEXT_FRAME, PAUSE } from '../../store/actions'
 
 export default function Player() {
     const [{ model, frame, playing }, dispatch] = useStore()
 
-    const step = () => dispatch({ type: 'selectFrame', frame: frame + 1 })
-    const pause = () => dispatch({ type: 'pause' })
+    const step = () => dispatch({ type: SELECT_NEXT_FRAME })
+    const pause = () => dispatch({ type: PAUSE })
     const isLastFrame = model.file_frames.length === frame + 1
 
     useAfter(() => {
