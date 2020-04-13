@@ -1,17 +1,17 @@
-import React from 'react'
-import { useStore } from '../store'
-import Header from './header'
-import Player from './player'
-import Timeline from './timeline'
+import React from "react"
+import { useStore } from "../store"
+import Header from "./header"
+import Player from "./player"
+import Timeline from "./timeline"
 
 export default function App() {
-    const [{ model }, dispatch] = useStore()
+	const [{ model }] = useStore()
 
-    return (
-        <>
-            <Header />
-            {model && <Player />}
-            {model && <Timeline />}
-        </>
-    )
+	return (
+		<>
+			<Header />
+			{model && <Player />}
+			{model && <Timeline />}
+		</>
+	)
 }

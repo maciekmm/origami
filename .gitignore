@@ -1,6 +1,7 @@
 .idea/
 node_modules/
 frontend/dist/
+frontend/.eslintcache
 
 *.gz
 *.lot
