@@ -1,26 +1,28 @@
 :root {
-    --color-text: #BFBFBF;
-    --color-accent: #F23005;
-    --color-accent-mild: #D94F30;
-    --color-background-mild: #262626;
-    --color-background: #0d0d0d;    
+	--color-text: #bfbfbf;
+	--color-accent: #f23005;
+	--color-accent-mild: #d94f30;
+	--color-background-mild: #262626;
+	--color-background: #0d0d0d;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
 }
 
-body, html, #app {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: var(--color-text);
-    background: var(--color-background);
-    width: 100%;
-    height: 100%;
+body,
+html,
+#app {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	color: var(--color-text);
+	background: var(--color-background);
+	width: 100%;
+	height: 100%;
 }
 
 #app {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
