@@ -1,13 +1,17 @@
-name: CI
+name: Thesis
 
 on:
   push:
     branches: [ master ]
+    paths:
+    - 'thesis/**'
   pull_request:
     branches: [ master ]
+    paths:
+    - 'thesis/**'
 
 jobs:
-  thesis:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
