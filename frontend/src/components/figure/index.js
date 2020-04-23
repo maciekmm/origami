@@ -31,20 +31,22 @@ export default function Figure(props) {
 
 	return (
 		<mesh>
-			<meshBasicMaterial
+			<meshPhongMaterial
 				side={THREE.FrontSide}
 				color={0xff0000}
 				vertexColors={THREE.FaceColors}
+				flatShading={true}
 				attach="material"
-			></meshBasicMaterial>
+			></meshPhongMaterial>
 			<primitive attach="geometry" object={foldGeometry.geometry} />
 			<mesh>
-				<meshBasicMaterial
+				<meshPhongMaterial
 					side={THREE.BackSide}
 					color={0x00ff00}
 					vertexColors={THREE.FaceColors}
 					attach="material"
-				></meshBasicMaterial>
+					flatShading={true}
+				></meshPhongMaterial>
 				<primitive attach="geometry" object={foldGeometry.geometry} />
 			</mesh>
 		</mesh>
