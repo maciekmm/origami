@@ -1,8 +1,7 @@
-import React from 'react'
-import InsertDriveFile from '@material-ui/icons/InsertDriveFile'
+import React from "react"
+import InsertDriveFile from "@material-ui/icons/InsertDriveFile"
 
 export default function ModelLoader(props) {
-
 	const loadModel = (event) => {
 		const fileReader = new FileReader()
 		fileReader.onload = (data) => {
