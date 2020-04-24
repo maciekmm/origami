@@ -5,6 +5,8 @@ from beam_force import set_all_beam_forces
 from crease_force import set_all_crease_forces
 from face_force import set_all_face_forces
 from geometry_models import *
+from solver import Solver
+from triangulation import triangulate
 
 
 def read_fold(filename):
@@ -25,42 +27,53 @@ def create_vertices(coords):
 
 def create_edges(vertices, edges_vertices, edges_assignment):
     edges = []
-    for i, edge_verteices in enumerate(edges_vertices):
-        v1 = vertices[edge_verteices[0]]
-        v2 = vertices[edge_verteices[1]]
+    for i, edge_vertices in enumerate(edges_vertices):
+        v1 = vertices[edge_vertices[0]]
+        v2 = vertices[edge_vertices[1]]
         assignment = edges_assignment[i]
         edges.append(Edge(v1, v2, assignment))
 
     return edges
 
 
-def create_faces(vertices, faces_vertices, edges_map):
+def create_faces(vertices, edges, faces_vertices):
+    edges_bag = {}  # TODO: Think of a better solution for this edges_bag
+    for e in edges:
+        edges_bag[(tuple(e.v1.vec), tuple(e.v2.vec))] = e
+
     faces = []
 
-    for i, face_vertices in enumerate(faces_vertices):
-        v1 = vertices[face_vertices[0]]
-        v2 = vertices[face_vertices[1]]
-        v3 = vertices[face_vertices[2]]
+    for i, vertices_index in enumerate(faces_vertices):
+        face_to_triangulate = list(map(lambda x: vertices[x], vertices_index))
 
-        face = Face(v1, v2, v3)
-        faces.append(face)
+        triangles = triangulate(face_to_triangulate)
 
-        # TODO: If sth is messed up, it might be that faces/edges orientation matters
+        for triangle in triangles:
 
-        if (v1, v2) in edges_map:
-            edges_map[(v1, v2)].face1 = face
-        else:
-            edges_map[(v2, v1)].face2 = face
+            # TODO: HERE. FIX THIS!!! TRIANGULATION SHOULD NOT CREATE NOT VERTICES. IT BREAKS FORCE CALCULATION
+            face_vertices = triangle
 
-        if (v2, v3) in edges_map:
-            edges_map[(v2, v3)].face1 = face
-        else:
-            edges_map[(v3, v2)].face2 = face
+            face = Face(*triangle)
 
-        if (v3, v1) in edges_map:
-            edges_map[(v3, v1)].face1 = face
-        else:
-            edges_map[(v1, v3)].face2 = face
+            face_edges = zip(face_vertices, np.roll(face_vertices, -1))
+            for p in face_edges:
+                v1 = tuple(p[0].vec)
+                v2 = tuple(p[1].vec)
+
+                # Introduce new edges
+                if (v1, v2) not in edges_bag and (v2, v1) not in edges_bag:
+                    edge = Edge(p[0], p[1], EDGE_FLAT)
+                    edges.append(edge)
+                    edges_bag[(v1, v2)] = edge
+
+                if (v1, v2) in edges_bag:
+                    edges_bag[(v1, v2)].face_left = face
+                elif (v2, v1) in edges_bag:
+                    edges_bag[(v2, v1)].face_right = face
+                else:
+                    raise RuntimeError("Impossible. You messed up edges map. ")
+
+            faces.append(face)
 
     return faces
 
@@ -69,40 +82,41 @@ def main():
     # TODO: There might be an issue of edges and faces orientation (not handled correctly)
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    content = read_fold('../../assets/models/crane.fold')
+    content = read_fold('../../assets/models/diagonal_fold_folded.fold')
 
     vertices = create_vertices(content['vertices_coords'])
+
+    if CONFIG['DEBUG_ENABLED']:
+        print('Vertices read...')
+        for v in vertices:
+            print(v)
+        print()
+
     edges = create_edges(vertices,
                          content['edges_vertices'],
                          content['edges_assignment'])
 
-    edges_map = {}
-    for e in edges:
-        edges_map[(e.v1, e.v2)] = e
-
-    faces = create_faces(vertices, content['faces_vertices'], edges_map)
+    faces = create_faces(vertices, edges, content['faces_vertices'])
 
     # TODO: Maybe some graph would be a more appropriate structure?
 
-    # for v in vertices:
-    #     print(v)
-    # print()
-    #
-    # for e in edges:
-    #     print(e)
-    #     print('EDGE faces: ', e.face1, e.face2)
-    # print()
-    #
-    # for f in faces:
-    #     print(f)
-    # print()
+    if CONFIG['DEBUG_ENABLED']:
+        print('Edges read...')
+        for e in edges:
+            print(e)
+            print('EDGE faces: ', e.face_left, e.face_right)
+        print()
 
-    set_all_beam_forces(edges)
-    set_all_crease_forces(edges)
-    set_all_face_forces(faces)
+    if CONFIG['DEBUG_ENABLED']:
+        print('Faces read...')
+        for f in faces:
+            print(f)
+        print()
 
-    # print(faces[0].normal)
+    solver = Solver(vertices, edges, faces)
+    solver.solve()
 
 
 if __name__ == '__main__':
+    # playground()
     main()

@@ -10,6 +10,8 @@ class ForceName(Enum):
     FACE = auto()
 
 
+# TODO: Maybe some vector library that handles this?
+# TODO: For sure make this a "value object". Otherwise it can be a cause of hard to trace bugs. This is critical. It breaks things
 class Vector3:
     def __init__(self, x: float, y: float, z: float):
         self.vec = np.array([x, y, z])
@@ -41,6 +43,12 @@ class Vector3:
     @z.setter
     def z(self, val):
         self.vec[2] = val
+
+    def __add__(self, other):
+        return Vector3.from_vec(self.vec + other.vec)
+
+    def __sub__(self, other):
+        return Vector3.from_vec(self.vec - other.vec)
 
     def __str__(self):
         return 'Vector3' \

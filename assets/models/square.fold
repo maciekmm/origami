@@ -1,0 +1,33 @@
+print({
+  "file_spec": 1,
+  "file_creator": "A text editor",
+  "file_author": "Maciej Mionskowski",
+  "file_classes": ["origuide:guide"],
+  "frame_title": "",
+  "frame_classes": [
+      "creasePattern",
+      "origuide:steady_state"
+  ],
+  "frame_attributes": ["3D"],
+  "vertices_coords": [
+    [-1,-1,0],
+    [1,-1,0],
+    [1,1,0],
+    [-1,1,0]
+  ],
+  "faces_vertices": [
+    [0,1,2,3]
+  ],
+  "edges_vertices": [
+    [0,1],
+    [1,2],
+    [2,3],
+    [3,0]
+  ],
+  "edges_assignment": [
+    "B",
+    "B",
+    "B",
+    "B"
+  ]
+}

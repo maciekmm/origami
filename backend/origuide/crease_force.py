@@ -6,10 +6,10 @@ from geometry_tools import vector_from_to, triangle_height, cot
 
 def set_crease_force(edge: Edge):
     # TODO: Add FACET handling here? (Driven by triangulation facet creases)
-    if edge.assignment != EDGE_MOUNTAIN or edge.assignment != EDGE_VALLEY:
+    if edge.assignment != EDGE_MOUNTAIN and edge.assignment != EDGE_VALLEY:
         return
 
-    if edge.face1 is None or edge.face2 is None:
+    if edge.face_left is None or edge.face_right is None:
         raise RuntimeError("edge should have 2 faces assigned")
 
     if edge.assignment == EDGE_MOUNTAIN or edge.assignment == EDGE_VALLEY:
@@ -22,11 +22,11 @@ def set_crease_force(edge: Edge):
 
     c = k_crease * (theta_target - theta)
 
-    face1 = edge.face1
-    face2 = edge.face2
+    left_face = edge.face_left
+    right_face = edge.face_right
 
-    p1 = find_vertex_not_in_edge(face1, edge)
-    p2 = find_vertex_not_in_edge(face2, edge)
+    p1 = find_vertex_not_in_edge(left_face, edge)
+    p2 = find_vertex_not_in_edge(right_face, edge)
     p3 = edge.v1
     p4 = edge.v2
 
@@ -37,13 +37,13 @@ def set_crease_force(edge: Edge):
     h1 = triangle_height(p34, p31)
     h2 = triangle_height(p34, p32)
 
-    alfa314 = face1.angle_for_vertex(p3)
-    alfa342 = face2.angle_for_vertex(p3)
-    alfa431 = face1.angle_for_vertex(p4)
-    alfa423 = face2.angle_for_vertex(p4)
+    alfa314 = left_face.angle_for_vertex(p3)
+    alfa342 = right_face.angle_for_vertex(p3)
+    alfa431 = left_face.angle_for_vertex(p4)
+    alfa423 = right_face.angle_for_vertex(p4)
 
-    dp1 = face1.normal.vec / h1
-    dp2 = face2.normal.vec / h2
+    dp1 = left_face.normal.vec / h1
+    dp2 = right_face.normal.vec / h2
 
     mul1 = dp1 / (cot(alfa314) + cot(alfa431))
     mul2 = dp2 / (cot(alfa342) + cot(alfa423))

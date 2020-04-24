@@ -11,7 +11,6 @@ def _set_beam_force(edge: Edge):
     i12 = normalize(f1)
 
     c = CONFIG['AXIAL_STIFFNESS_EA']
-    print('Edge: ', edge)
 
     m = c * (edge.length() - edge.l0) / edge.l0
 

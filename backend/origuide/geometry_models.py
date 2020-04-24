@@ -15,12 +15,13 @@ EDGE_UNKNOWN = 'U'
 
 def angle_from_assignment(assignment):
     if assignment == EDGE_VALLEY:
-        return np.PI
+        return np.pi
     elif assignment == EDGE_MOUNTAIN:
-        return -np.PI
+        return -np.pi
     return 0
 
 
+# TODO: Do not inherit from vector, keep it as a member
 class Vertex(Vector3):
     def __init__(self, x: float, y: float, z: float):
         super().__init__(x, y, z)
@@ -42,6 +43,10 @@ class Vertex(Vector3):
     def total_force(self):
         return np.sum(np.array(self.forces), axis=0)
 
+    @property
+    def mass(self):
+        return 1.0
+
 
 class Edge:
     def __init__(self, v1: Vertex, v2: Vertex, assignment: str):
@@ -51,20 +56,21 @@ class Edge:
         self.l0 = self.length()
 
         # TODO: Not sure yet if it's a good idea to have faces in here
-        self.face1 = None   # face on the left as defined by edge orientation
-        self.face2 = None   # face on the right as defined by edge orientation
+        self.face_left = None   # face on the left as defined by edge orientation
+        self.face_right = None   # face on the right as defined by edge orientation
+        self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
 
     def length(self):
         return np.linalg.norm(np.subtract(self.v1.vec, self.v2.vec))
 
     def face_angle(self):
-        if self.face1 is None or self.face2 is None:
+        if self.face_left is None or self.face_right is None:
             raise RuntimeError("Cannot compute angle: exactly 2 faces must be assigned to an edge")
 
-        return vector_angle(self.face1.normal, self.face2.normal)
+        return vector_angle(self.face_left.normal, self.face_right.normal)
 
     def __str__(self):
-        return 'Edge: {} -> {}, l0: {}'.format(self.v1, self.v2, self.l0)
+        return 'Edge: {} -> {}, assignment: {}, l0: {}'.format(self.v1, self.v2, self.assignment, self.l0)
 
 
 class Face:
@@ -77,6 +83,11 @@ class Face:
     def angle_for_vertex(self, v: Vertex):
         # p1 ---> p2
         # p1 ---> p3
+        print('My vertices are: ')
+        for vert in self.vertices:
+            print (vert, id(vert))
+        print('You want: ', v, id(v))
+
         i = self.vertices.index(v)
 
         p1 = self.vertices[i]
