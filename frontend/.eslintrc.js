@@ -3,7 +3,8 @@ module.exports = {
 		browser: true,
 		es6: true,
 	},
-	extends: ["plugin:prettier/recommended", "plugin:react/recommended", "prettier"],
+	ignorePatterns: ["dist/", "node_modules/"],
+	extends: ["plugin:prettier/recommended", "plugin:react/recommended", "prettier", "plugin:jest/recommended"],
 	globals: {
 		Atomics: "readonly",
 		SharedArrayBuffer: "readonly",
@@ -16,7 +17,7 @@ module.exports = {
 		ecmaVersion: 2018,
 		sourceType: "module",
 	},
-	plugins: ["react", "prettier"],
+	plugins: ["react", "prettier", "jest"],
 	rules: {
 		"react/prop-types": ["off"],
 		"prettier/prettier": "error"
