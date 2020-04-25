@@ -10,7 +10,7 @@
 		"test": "eslint ./"
 	},
 	"author": "",
-	"license": "ISC",
+	"license": "GPL-3.0",
 	"devDependencies": {
 		"@babel/core": "^7.9.0",
 		"@babel/preset-env": "^7.9.5",
