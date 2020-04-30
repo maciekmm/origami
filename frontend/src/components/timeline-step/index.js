@@ -2,11 +2,11 @@ import React from "react"
 import Viewer from "../viewer"
 import styles from "./styles.css"
 
-export default function TimelineStep(props) {
+export default function TimelineStep({ model, frame, ...handlers }) {
 	return (
-		<div {...props} className={styles.step}>
-			<Viewer model={props.model} frame={props.frame} />
-			<span className={styles.description}>Step {props.frame}</span>
+		<div {...handlers} className={styles.step}>
+			<Viewer model={model} frame={frame} />
+			<span className={styles.description}>Step {frame}</span>
 		</div>
 	)
 }

@@ -2,17 +2,16 @@ import React, { useState, useEffect } from "react"
 import * as THREE from "three"
 import FoldGeometry from "../../three/fold-geometry"
 
-export default function Figure(props) {
+export default function Figure({ frame, model }) {
 	const [foldGeometry] = useState(() => new FoldGeometry())
 
-	const model = props.model
-	const frame = model.file_frames[props.frame]
+	const fileFrame = model.file_frames[frame]
 
 	useEffect(() => {
 		foldGeometry.clear()
 		const baseFrame = model.file_frames[0]
 
-		frame.vertices_coords.forEach((position) => {
+		fileFrame.vertices_coords.forEach((position) => {
 			foldGeometry.addVertex(...position)
 		})
 
@@ -22,10 +21,10 @@ export default function Figure(props) {
 	}, [model])
 
 	useEffect(() => {
-		frame.vertices_coords.forEach((position, id) =>
+		fileFrame.vertices_coords.forEach((position, id) =>
 			foldGeometry.setVertexPosition(id, ...position)
 		)
-	}, [frame])
+	}, [fileFrame])
 
 	useEffect(() => () => foldGeometry.dispose(), [foldGeometry])
 
