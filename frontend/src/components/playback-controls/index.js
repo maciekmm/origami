@@ -6,16 +6,21 @@ import ArrowRight from "@material-ui/icons/ArrowRight"
 import ArrowLeft from "@material-ui/icons/ArrowLeft"
 import styles from "./styles.css"
 
-export default function PlaybackControls(props) {
-	const playing = props.playing
-
+export default function PlaybackControls({
+	playing,
+	prevFrame,
+	play,
+	nextFrame,
+	pause,
+	stop,
+}) {
 	return (
 		<div className={styles.controls}>
-			{!playing && <ArrowLeft onClick={props.prevFrame} />}
-			{!playing && <PlayArrow onClick={props.play} />}
-			{!playing && <ArrowRight onClick={props.nextFrame} />}
-			{playing && <Pause onClick={props.pause} />}
-			<Stop onClick={props.stop} />
+			{!playing && <ArrowLeft onClick={prevFrame} />}
+			{!playing && <PlayArrow onClick={play} />}
+			{!playing && <ArrowRight onClick={nextFrame} />}
+			{playing && <Pause onClick={pause} />}
+			<Stop onClick={stop} />
 		</div>
 	)
 }
