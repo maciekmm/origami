@@ -1,48 +1,10 @@
 import preprocessFOLDModel, {
-	markFrameSteady,
 	setDefaultFrameRate,
 	moveRootFrameToFileFrames,
-	FRAME_RATE_PROPERTY,
 	DEFAULT_FRAME_RATE,
 } from "./preprocess"
-import { STEADY_STATE } from "./tools"
 
-describe("markFrameSteady", () => {
-	it("should add steady class to frame if frame has no classes", () => {
-		// given
-		const frame = {}
-		// when
-		markFrameSteady(frame)
-		// then
-		expect(frame.frame_classes).toStrictEqual([STEADY_STATE])
-	})
-
-	it("should add steady class and retain others", () => {
-		// given
-		const dummyClass = "dummy-class"
-		const frame = {
-			frame_classes: [dummyClass],
-		}
-		// when
-		markFrameSteady(frame)
-		// then
-		expect(frame.frame_classes).toContain(STEADY_STATE)
-		expect(frame.frame_classes).toContain(dummyClass)
-		expect(frame.frame_classes).toHaveLength(2)
-	})
-
-	it("should not add steady class if steady class is already set", () => {
-		// given
-		const classes = [STEADY_STATE, "dummy-class"]
-		const frame = {
-			frame_classes: classes,
-		}
-		// when
-		markFrameSteady(frame)
-		// then
-		expect(frame.frame_classes).toBe(classes)
-	})
-})
+import { FRAME_RATE_PROPERTY } from "./properties"
 
 describe("moveRootFrameToFileFrames", () => {
 	const modelFactory = () => {

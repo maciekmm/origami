@@ -1,7 +1,7 @@
 import React from "react"
 import TimelineStep from "../../components/timeline-step"
 import { useStore } from "../../store"
-import { getSteadyFrameIds } from "../../fold/tools"
+import { getSteadyFrameIds } from "../../fold/steadyness"
 import styles from "./styles.css"
 import { SELECT_FRAME } from "../../store/actions"
 
