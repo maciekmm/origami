@@ -109,16 +109,6 @@ describe("setDefaultFrameRate", () => {
 	})
 })
 
-describe("FRAME_RATE_PROPERTY", () => {
-	it("should be a file property", () => {
-		expect(FRAME_RATE_PROPERTY).toMatch(/^file_/)
-	})
-
-	it("should be in origuide namespace", () => {
-		expect(FRAME_RATE_PROPERTY).toMatch(/^[^:]*_og:/)
-	})
-})
-
 describe("preprocessFOLDModel", () => {
 	it("should work in-place for performance reasons", () => {
 		// given
