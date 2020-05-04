@@ -49,6 +49,7 @@ export default class FoldGeometry {
 			)
 		)
 		this.geometry.elementsNeedUpdate = true
+		this.geometry.normalsNeedUpdate = true
 	}
 
 	setVertexPosition(id, x, y, z) {
@@ -60,5 +61,6 @@ export default class FoldGeometry {
 		vertex.y = y
 		vertex.z = z
 		this.geometry.verticesNeedUpdate = true
+		this.geometry.normalsNeedUpdate = true
 	}
 }
