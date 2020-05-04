@@ -1,5 +1,5 @@
 from config import CONFIG
-from generic_models import ForceName
+from generic_models import ForceName, Vector3
 from geometry_models import Edge, EDGE_MOUNTAIN, EDGE_VALLEY, angle_from_assignment, Face
 from geometry_tools import vector_from_to, triangle_height, cot
 
@@ -30,9 +30,9 @@ def set_crease_force(edge: Edge):
     p3 = edge.v1
     p4 = edge.v2
 
-    p32 = vector_from_to(p3, p2)
-    p34 = vector_from_to(p3, p4)
-    p31 = vector_from_to(p3, p1)
+    p32 = vector_from_to(p3.vec, p2.vec)
+    p34 = vector_from_to(p3.vec, p4.vec)
+    p31 = vector_from_to(p3.vec, p1.vec)
 
     h1 = triangle_height(p34, p31)
     h2 = triangle_height(p34, p32)
@@ -56,10 +56,10 @@ def set_crease_force(edge: Edge):
     f3 = c * dp3
     f4 = c * dp4
 
-    p1.set_force(ForceName.CREASE, f1)
-    p2.set_force(ForceName.CREASE, f2)
-    p3.set_force(ForceName.CREASE, f3)
-    p4.set_force(ForceName.CREASE, f4)
+    p1.set_force(ForceName.CREASE, Vector3.from_vec(f1))
+    p2.set_force(ForceName.CREASE, Vector3.from_vec(f2))
+    p3.set_force(ForceName.CREASE, Vector3.from_vec(f3))
+    p4.set_force(ForceName.CREASE, Vector3.from_vec(f4))
 
 
 def find_vertex_not_in_edge(face: Face, edge: Edge):

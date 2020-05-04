@@ -10,8 +10,6 @@ class ForceName(Enum):
     FACE = auto()
 
 
-# TODO: Maybe some vector library that handles this?
-# TODO: For sure make this a "value object". Otherwise it can be a cause of hard to trace bugs. This is critical. It breaks things
 class Vector3:
     def __init__(self, x: float, y: float, z: float):
         self.vec = np.array([x, y, z])
@@ -44,6 +42,18 @@ class Vector3:
     def z(self, val):
         self.vec[2] = val
 
+    def __getitem__(self, index):
+        if 0 <= index < len(self.vec):
+            return self.vec[index]
+        raise IndexError('Vector index out of range')
+
+    def __setitem__(self, index, value):
+        if 0 < index < len(self.vec):
+            self.vec[index] = value
+
+    def __eq__(self, other):
+        return (self.vec == other.vec).all()
+
     def __add__(self, other):
         return Vector3.from_vec(self.vec + other.vec)
 
@@ -53,3 +63,4 @@ class Vector3:
     def __str__(self):
         return 'Vector3' \
                ' (x, y, z): {}, {}, {}'.format(self.x, self.y, self.z)
+

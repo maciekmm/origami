@@ -14,6 +14,10 @@ def normalize(v: Vector3) -> Vector3:
     return res
 
 
+def distance(v1: Vector3, v2: Vector3) -> float:
+    return np.linalg.norm((v1 - v2).vec)
+
+
 def plane_normal(v1: Vector3, v2: Vector3, v3: Vector3) -> Vector3:
     w1 = vector_from_to(v1, v2)
     w2 = vector_from_to(v1, v3)
@@ -23,7 +27,7 @@ def plane_normal(v1: Vector3, v2: Vector3, v3: Vector3) -> Vector3:
 
 
 def vector_angle(v1: Vector3, v2: Vector3) -> float:
-    return np.arccos(np.clip(np.dot(v1.vec, v2.vec), -1.0, 1.0))
+    return np.arccos(np.dot(normalize(v1).vec, normalize(v2).vec))
 
 
 def triangle_height(project_onto: Vector3, project_from: Vector3) -> float:

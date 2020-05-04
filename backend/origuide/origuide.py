@@ -50,7 +50,7 @@ def create_faces(vertices, edges, faces_vertices):
 
         for triangle in triangles:
 
-            # TODO: HERE. FIX THIS!!! TRIANGULATION SHOULD NOT CREATE NOT VERTICES. IT BREAKS FORCE CALCULATION
+            # TODO: HERE. FIX THIS!!! TRIANGULATION SHOULD NOT CREATE NEW VERTICES. IT BREAKS FORCE CALCULATION
             face_vertices = triangle
 
             face = Face(*triangle)

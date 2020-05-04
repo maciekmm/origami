@@ -5,8 +5,8 @@ from geometry_tools import vector_from_to, normalize
 
 
 def _set_beam_force(edge: Edge):
-    f1 = vector_from_to(edge.v1, edge.v2)
-    f2 = vector_from_to(edge.v2, edge.v1)
+    f1 = vector_from_to(edge.v1.vec, edge.v2.vec)
+    f2 = vector_from_to(edge.v2.vec, edge.v1.vec)
 
     i12 = normalize(f1)
 

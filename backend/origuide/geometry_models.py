@@ -4,7 +4,7 @@ import numpy as np
 
 from config import CONFIG
 from generic_models import ForceName, Vector3
-from geometry_tools import plane_normal, vector_angle, vector_from_to
+from geometry_tools import plane_normal, vector_angle, vector_from_to, distance
 
 EDGE_BOUNDARY = 'B'
 EDGE_VALLEY = 'V'
@@ -21,24 +21,46 @@ def angle_from_assignment(assignment):
     return 0
 
 
-# TODO: Do not inherit from vector, keep it as a member
-class Vertex(Vector3):
+class Vertex:
     def __init__(self, x: float, y: float, z: float):
-        super().__init__(x, y, z)
-
+        self.vec = Vector3(x, y, z)
         self.forces = []
+
+    @property
+    def x(self):
+        return self.vec[0]
+
+    @x.setter
+    def x(self, val):
+        self.vec[0] = val
+
+    @property
+    def y(self):
+        return self.vec[1]
+
+    @y.setter
+    def y(self, val):
+        self.vec[1] = val
+
+    @property
+    def z(self):
+        return self.vec[2]
+
+    @z.setter
+    def z(self, val):
+        self.vec[2] = val
 
     def __str__(self):
         return 'Vertex (x, y, z): {}, {}, {}'.format(self.x, self.y, self.z)
 
-    def set_force(self, force: ForceName, val: float):
+    def set_force(self, name: ForceName, force: Vector3):
         if CONFIG['DEBUG_ENABLED']:
             logging.debug('Setting force {}:{} on {}'.format(
+                name,
                 force,
-                val,
                 self.__str__()
             ))
-        self.forces.append(val)
+        self.forces.append(force)
 
     def total_force(self):
         return np.sum(np.array(self.forces), axis=0)
@@ -61,7 +83,7 @@ class Edge:
         self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
 
     def length(self):
-        return np.linalg.norm(np.subtract(self.v1.vec, self.v2.vec))
+        return distance(self.v1.vec, self.v2.vec)
 
     def face_angle(self):
         if self.face_left is None or self.face_right is None:
@@ -94,7 +116,7 @@ class Face:
         p2 = self.vertices[(i + 1) % len(self.vertices)]
         p3 = self.vertices[(i + 2) % len(self.vertices)]
 
-        return vector_angle(vector_from_to(p1, p2), vector_from_to(p1, p3))
+        return vector_angle(vector_from_to(p1.vec, p2.vec), vector_from_to(p1.vec, p3.vec))
 
     def prev_vertex(self, v: Vertex):
         return self.vertices[(self.vertices.index(v) - 1 + len(self.vertices)) % len(self.vertices)]
@@ -107,4 +129,4 @@ class Face:
 
     @property
     def normal(self):
-        return plane_normal(self.vertices[0], self.vertices[1], self.vertices[2])
+        return plane_normal(self.vertices[0].vec, self.vertices[1].vec, self.vertices[2].vec)

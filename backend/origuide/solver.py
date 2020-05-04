@@ -6,6 +6,7 @@ from beam_force import set_all_beam_forces
 from config import CONFIG
 from crease_force import set_all_crease_forces
 from face_force import set_all_face_forces
+from generic_models import Vector3
 from geometry_models import Vertex, Edge, Face
 
 
@@ -16,7 +17,7 @@ class Solver:
         self.edges = edges
         self.faces = faces
 
-        self.v_t = 0
+        self.v_t = np.zeros(3)
 
         # TODO: Getting k_axial, getting min node mass
         max_k_axial = max(map(lambda e: e.k_axial, self.edges))
@@ -37,7 +38,7 @@ class Solver:
                 v_next = self.v_t + a * self.d_t
                 self.v_t = v_next
 
-                v.vec = p_t + v_next * self.d_t
+                v.vec = p_t + Vector3.from_vec(v_next * self.d_t)
 
                 print(v)
 
