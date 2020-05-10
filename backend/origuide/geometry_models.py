@@ -24,7 +24,7 @@ def angle_from_assignment(assignment):
 class Vertex:
     def __init__(self, x: float, y: float, z: float):
         self.vec = Vector3(x, y, z)
-        self.forces = []
+        self.forces = {}
 
     @property
     def x(self):
@@ -60,10 +60,10 @@ class Vertex:
                 force,
                 self.__str__()
             ))
-        self.forces.append(force)
+        self.forces[name] = force
 
     def total_force(self):
-        return np.sum(np.array(self.forces), axis=0)
+        return np.sum(np.array(list(self.forces.values())), axis=0)
 
     @property
     def mass(self):
