@@ -24,7 +24,9 @@ def angle_from_assignment(assignment):
 class Vertex:
     def __init__(self, x: float, y: float, z: float):
         self.vec = Vector3(x, y, z)
-        self.forces = {}
+
+        self.reset_forces()
+        # self.forces = {}
 
     @property
     def x(self):
@@ -60,10 +62,16 @@ class Vertex:
                 force,
                 self.__str__()
             ))
-        self.forces[name] = force
+
+        self._total_force += force
+        # self.forces[name] = force
 
     def total_force(self):
-        return np.sum(np.array(list(self.forces.values())), axis=0)
+        return self._total_force
+        # return np.sum(np.array(list(self.forces.values())), axis=0)
+
+    def reset_forces(self):
+        self._total_force = Vector3(0.0, 0.0, 0.0)
 
     @property
     def mass(self):
@@ -105,11 +113,6 @@ class Face:
     def angle_for_vertex(self, v: Vertex):
         # p1 ---> p2
         # p1 ---> p3
-        print('My vertices are: ')
-        for vert in self.vertices:
-            print (vert, id(vert))
-        print('You want: ', v, id(v))
-
         i = self.vertices.index(v)
 
         p1 = self.vertices[i]

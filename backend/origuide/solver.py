@@ -2,6 +2,7 @@ from typing import List
 
 import numpy as np
 
+import plot
 from beam_force import set_all_beam_forces
 from config import CONFIG
 from crease_force import set_all_crease_forces
@@ -17,7 +18,7 @@ class Solver:
         self.edges = edges
         self.faces = faces
 
-        self.v_t = np.zeros(3)
+        self.vertices_velocity = np.zeros((len(vertices), 3))
 
         # TODO: Getting k_axial, getting min node mass
         max_k_axial = max(map(lambda e: e.k_axial, self.edges))
@@ -30,29 +31,41 @@ class Solver:
         cur_forces = self._total_forces_vecs()
 
         while self._should_continue(prev_forces, cur_forces):
-            for v, total_force in zip(self.vertices, cur_forces):
+            for i, (v, v_t, total_force) in enumerate(zip(self.vertices, self.vertices_velocity, cur_forces)):
                 node_mass = v.mass
                 p_t = v.vec
 
                 a = total_force / node_mass
-                v_next = self.v_t + a * self.d_t
-                self.v_t = v_next
+                v_next = v_t + a * self.d_t
+                self.vertices_velocity[i] = v_next
 
                 v.vec = p_t + Vector3.from_vec(v_next * self.d_t)
 
                 print(v)
 
+            self._reset_forces()
             self._set_forces()
 
             prev_forces = cur_forces.copy()
             cur_forces = self._total_forces_vecs()
 
+            print(cur_forces)
+            plot.plot3d(self.vertices, cur_forces)
+
             print()
+
+        print('FINISHED')
+        for v in self.vertices:
+            print(v)
+
+    def _reset_forces(self):
+        for v in self.vertices:
+            v.reset_forces()
 
     def _set_forces(self):
         set_all_beam_forces(self.edges)
         set_all_crease_forces(self.edges)
-        set_all_face_forces(self.faces)
+        # set_all_face_forces(self.faces)
 
     def _total_forces_vecs(self):
         return np.array(list(map(lambda v: v.total_force().vec, self.vertices)))

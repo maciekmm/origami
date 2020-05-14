@@ -60,6 +60,9 @@ class Vector3:
     def __sub__(self, other):
         return Vector3.from_vec(self.vec - other.vec)
 
+    def __neg__(self):
+        return Vector3.from_vec(-self.vec)
+
     def __str__(self):
         return 'Vector3' \
                ' (x, y, z): {}, {}, {}'.format(self.x, self.y, self.z)
