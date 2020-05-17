@@ -17,7 +17,8 @@ def set_crease_force(edge: Edge):
     else:
         return
 
-    theta = edge.face_angle()
+    theta = edge.face_angle(edge.orientation_vec)
+    print(theta)
     theta_target = angle_from_assignment(edge.assignment)
 
     c = k_crease * (theta_target - theta)

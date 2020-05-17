@@ -18,9 +18,12 @@ def plot3d(vertices: List[Vertex], forces):
     us, vs, ws = zip(*forces)
     ax.scatter(xs, ys, zs)
     ax.quiver(xs, ys, zs, us, vs, ws)
-    ax.set_xlim([-4, 4])
-    ax.set_ylim([-4, 4])
-    ax.set_zlim([-4, 4])
+
+    box_lim = 12
+
+    ax.set_xlim([-box_lim, box_lim])
+    ax.set_ylim([-box_lim, box_lim])
+    ax.set_zlim([-box_lim, box_lim])
 
     plt.show()
 

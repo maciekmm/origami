@@ -18,11 +18,12 @@ class Solver:
         self.edges = edges
         self.faces = faces
 
+        # TODO: Add damping force and see if it makes the simulation numerically stable
         self.vertices_velocity = np.zeros((len(vertices), 3))
 
         # TODO: Getting k_axial, getting min node mass
         max_k_axial = max(map(lambda e: e.k_axial, self.edges))
-        self.d_t = 1 / (2 * np.pi * np.sqrt(max_k_axial / self.vertices[0].mass))
+        self.d_t = 1 / (2 * np.pi * np.sqrt(max_k_axial / self.vertices[0].mass))  # TODO: Fine tune this parameter
         self.epsilon = CONFIG['SOLVER_EPSILON']
 
     def solve(self):
@@ -50,7 +51,7 @@ class Solver:
             cur_forces = self._total_forces_vecs()
 
             print(cur_forces)
-            plot.plot3d(self.vertices, cur_forces)
+            # plot.plot3d(self.vertices, cur_forces)
 
             print()
 
@@ -64,7 +65,7 @@ class Solver:
 
     def _set_forces(self):
         set_all_beam_forces(self.edges)
-        set_all_crease_forces(self.edges)
+        # set_all_crease_forces(self.edges)
         # set_all_face_forces(self.faces)
 
     def _total_forces_vecs(self):
@@ -76,4 +77,3 @@ class Solver:
 
         diff = np.abs(cur_forces - prev_forces)
         return np.any(diff > self.epsilon)
-

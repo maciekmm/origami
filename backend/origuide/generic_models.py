@@ -48,7 +48,7 @@ class Vector3:
         raise IndexError('Vector index out of range')
 
     def __setitem__(self, index, value):
-        if 0 < index < len(self.vec):
+        if 0 <= index < len(self.vec):
             self.vec[index] = value
 
     def __eq__(self, other):

@@ -4,7 +4,7 @@ import numpy as np
 
 from config import CONFIG
 from generic_models import ForceName, Vector3
-from geometry_tools import plane_normal, vector_angle, vector_from_to, distance
+from geometry_tools import plane_normal, vector_angle, vector_from_to, distance, signed_vector_angle
 
 EDGE_BOUNDARY = 'B'
 EDGE_VALLEY = 'V'
@@ -24,7 +24,6 @@ def angle_from_assignment(assignment):
 class Vertex:
     def __init__(self, x: float, y: float, z: float):
         self.vec = Vector3(x, y, z)
-
         self.reset_forces()
         # self.forces = {}
 
@@ -82,6 +81,7 @@ class Edge:
     def __init__(self, v1: Vertex, v2: Vertex, assignment: str):
         self.v1 = v1
         self.v2 = v2
+        self.orientation_vec = vector_from_to(v1.vec, v2.vec)
         self.assignment = assignment
         self.l0 = self.length()
 
@@ -93,11 +93,11 @@ class Edge:
     def length(self):
         return distance(self.v1.vec, self.v2.vec)
 
-    def face_angle(self):
+    def face_angle(self, ref_n: Vector3):
         if self.face_left is None or self.face_right is None:
             raise RuntimeError("Cannot compute angle: exactly 2 faces must be assigned to an edge")
 
-        return vector_angle(self.face_left.normal, self.face_right.normal)
+        return signed_vector_angle(self.face_right.normal, self.face_left.normal, ref_n)
 
     def __str__(self):
         return 'Edge: {} -> {}, assignment: {}, l0: {}'.format(self.v1, self.v2, self.assignment, self.l0)

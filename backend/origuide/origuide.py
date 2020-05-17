@@ -82,7 +82,7 @@ def main():
     # TODO: There might be an issue of edges and faces orientation (not handled correctly)
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    content = read_fold('../../assets/models/diagonal_fold_folded.fold')
+    content = read_fold('../../assets/solver_test_models/square.fold')
 
     vertices = create_vertices(content['vertices_coords'])
 
@@ -97,6 +97,10 @@ def main():
                          content['edges_assignment'])
 
     faces = create_faces(vertices, edges, content['faces_vertices'])
+
+    # TODO:DEBUG
+    vertices[0].x = -2.0
+    vertices[0].y = -2.0
 
     # TODO: Maybe some graph would be a more appropriate structure?
 
@@ -117,6 +121,20 @@ def main():
     solver.solve()
 
 
+def test_beam():
+    v1 = Vertex(0, -1, 0)
+    v2 = Vertex(0, 1, 0)
+
+    vertices = [v1, v2]
+    edge = Edge(v1, v2, EDGE_FLAT)
+
+    v1.y = -2
+
+    solver = Solver(vertices, [edge], [])
+    solver.solve()
+
+
 if __name__ == '__main__':
+    test_beam()
     # playground()
-    main()
+    # main()

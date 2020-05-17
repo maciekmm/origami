@@ -18,7 +18,7 @@ def triangulate(face: List[Vertex]):
         return [face]
         # return TriangulationRes([face], [], [])
 
-    face_coords = np.array(map(lambda v: v.vec, face))
+    face_coords = np.array(list(map(lambda v: v.vec.vec, face)))
 
     # z_coords = face_coords[:, 2]
     faces_2d = face_coords[:, 0:2]
