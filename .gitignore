@@ -21,3 +21,4 @@ frontend/.eslintcache
 thesis/thesis.pdf
 
 venv/
+__pycache__/
