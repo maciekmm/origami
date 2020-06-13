@@ -8,6 +8,7 @@ class ForceName(Enum):
     BEAM = auto()
     CREASE = auto()
     FACE = auto()
+    DAMPING = auto()
 
 
 class Vector3:
@@ -62,6 +63,18 @@ class Vector3:
 
     def __neg__(self):
         return Vector3.from_vec(-self.vec)
+
+    def __mul__(self, other):
+        other_type = type(other)
+        if other_type != float and other_type != int:
+            raise TypeError('unsupported operand type(s) for *')
+        return Vector3.from_vec(self.vec * other)
+
+    def __rmul__(self, other):
+        other_type = type(other)
+        if other_type != float and other_type != int:
+            raise TypeError('unsupported operand type(s) for *')
+        return Vector3.from_vec(self.vec * other)
 
     def __str__(self):
         return 'Vector3' \

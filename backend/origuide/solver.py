@@ -6,6 +6,7 @@ import plot
 from beam_force import set_all_beam_forces
 from config import CONFIG
 from crease_force import set_all_crease_forces
+from damping_force import set_all_damping_forces
 from face_force import set_all_face_forces
 from generic_models import Vector3
 from geometry_models import Vertex, Edge, Face
@@ -18,12 +19,15 @@ class Solver:
         self.edges = edges
         self.faces = faces
 
+        # TODO: Maybe add error indicator (like globalError in original simulator) to see how it does
         # TODO: Add damping force and see if it makes the simulation numerically stable
+
+        # TODO: Is this needed here if we have it in vertices? (or vice versa)
         self.vertices_velocity = np.zeros((len(vertices), 3))
 
         # TODO: Getting k_axial, getting min node mass
         max_k_axial = max(map(lambda e: e.k_axial, self.edges))
-        self.d_t = 1 / (2 * np.pi * np.sqrt(max_k_axial / self.vertices[0].mass))  # TODO: Fine tune this parameter
+        self.d_t = 1 / (2 * np.pi * np.sqrt(max_k_axial / self.vertices[0].mass)) * 0.9 # TODO: Fine tune this parameter
         self.epsilon = CONFIG['SOLVER_EPSILON']
 
     def solve(self):
@@ -31,8 +35,11 @@ class Solver:
         prev_forces = None
         cur_forces = self._total_forces_vecs()
 
+        # TODO: For better debugging, push in batches (e.g. like 100 iters)
+
         while self._should_continue(prev_forces, cur_forces):
             for i, (v, v_t, total_force) in enumerate(zip(self.vertices, self.vertices_velocity, cur_forces)):
+                v.velocity = Vector3.from_vec(v_t)
                 node_mass = v.mass
                 p_t = v.vec
 
@@ -46,6 +53,7 @@ class Solver:
 
             self._reset_forces()
             self._set_forces()
+
 
             prev_forces = cur_forces.copy()
             cur_forces = self._total_forces_vecs()
@@ -65,6 +73,7 @@ class Solver:
 
     def _set_forces(self):
         set_all_beam_forces(self.edges)
+        set_all_damping_forces(self.edges)
         # set_all_crease_forces(self.edges)
         # set_all_face_forces(self.faces)
 
@@ -72,6 +81,8 @@ class Solver:
         return np.array(list(map(lambda v: v.total_force().vec, self.vertices)))
 
     def _should_continue(self, prev_forces, cur_forces):
+        # return True
+
         if prev_forces is None:
             return True
 

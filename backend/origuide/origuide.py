@@ -103,6 +103,8 @@ def main():
     vertices[0].y = -2.0
 
     # TODO: Maybe some graph would be a more appropriate structure?
+    # IDEA: Create vertices, beams, etc "globally", and assign only their IDs to some more advanced objects
+    # that can extend the behavior
 
     if CONFIG['DEBUG_ENABLED']:
         print('Edges read...')
@@ -135,6 +137,5 @@ def test_beam():
 
 
 if __name__ == '__main__':
-    test_beam()
-    # playground()
-    # main()
+    # test_beam()
+    main()

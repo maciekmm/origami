@@ -1,4 +1,5 @@
 import logging
+import math
 
 import numpy as np
 
@@ -24,7 +25,8 @@ def angle_from_assignment(assignment):
 class Vertex:
     def __init__(self, x: float, y: float, z: float):
         self.vec = Vector3(x, y, z)
-        self.reset_forces()
+        self._total_force = Vector3(0.0, 0.0, 0.0)
+        self.velocity = Vector3(0.0, 0.0, 0.0)
         # self.forces = {}
 
     @property
@@ -89,6 +91,7 @@ class Edge:
         self.face_left = None   # face on the left as defined by edge orientation
         self.face_right = None   # face on the right as defined by edge orientation
         self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
+        self.damping_coeff = CONFIG['PERCENT_DAMPING'] * 2 * np.sqrt(self.k_axial * min(self.v1.mass, self.v2.mass))
 
     def length(self):
         return distance(self.v1.vec, self.v2.vec)
