@@ -1,11 +1,10 @@
-from collections import namedtuple
 from typing import List
 
 from scipy.spatial import Delaunay  # TODO: Fix this not being picked up by IDEs
 import numpy as np
 
 # TriangulationRes = namedtuple("TriangulationRes", "faces vertices edges")
-from geometry_models import Vertex
+from geometry.geometry_models import Vertex
 
 
 def triangulate(face: List[Vertex]):
@@ -18,7 +17,7 @@ def triangulate(face: List[Vertex]):
         return [face]
         # return TriangulationRes([face], [], [])
 
-    face_coords = np.array(list(map(lambda v: v.vec.vec, face)))
+    face_coords = np.array(list(map(lambda v: v.pos.pos, face)))
 
     # z_coords = face_coords[:, 2]
     faces_2d = face_coords[:, 0:2]

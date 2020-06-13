@@ -1,7 +1,6 @@
 from typing import List
 
-from generic_models import ForceName
-from geometry_models import Edge
+from geometry.geometry_models import Edge, ForceName
 
 
 def _set_damping_force(edge: Edge):

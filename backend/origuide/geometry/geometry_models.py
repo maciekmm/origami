@@ -1,17 +1,25 @@
 import logging
-import math
+from enum import unique, Enum, auto
 
 import numpy as np
 
 from config import CONFIG
-from generic_models import ForceName, Vector3
-from geometry_tools import plane_normal, vector_angle, vector_from_to, distance, signed_vector_angle
+from geometry.generic_models import Vector3
+from geometry.geometry_tools import plane_normal, vector_angle, vector_from_to, distance, signed_vector_angle
 
 EDGE_BOUNDARY = 'B'
 EDGE_VALLEY = 'V'
 EDGE_MOUNTAIN = 'M'
 EDGE_FLAT = 'F'
 EDGE_UNKNOWN = 'U'
+
+
+@unique
+class ForceName(Enum):
+    BEAM = auto()
+    CREASE = auto()
+    FACE = auto()
+    DAMPING = auto()
 
 
 def angle_from_assignment(assignment):
@@ -24,34 +32,33 @@ def angle_from_assignment(assignment):
 
 class Vertex:
     def __init__(self, x: float, y: float, z: float):
-        self.vec = Vector3(x, y, z)
+        self.pos = Vector3(x, y, z)
         self._total_force = Vector3(0.0, 0.0, 0.0)
         self.velocity = Vector3(0.0, 0.0, 0.0)
-        # self.forces = {}
 
     @property
     def x(self):
-        return self.vec[0]
+        return self.pos[0]
 
     @x.setter
     def x(self, val):
-        self.vec[0] = val
+        self.pos[0] = val
 
     @property
     def y(self):
-        return self.vec[1]
+        return self.pos[1]
 
     @y.setter
     def y(self, val):
-        self.vec[1] = val
+        self.pos[1] = val
 
     @property
     def z(self):
-        return self.vec[2]
+        return self.pos[2]
 
     @z.setter
     def z(self, val):
-        self.vec[2] = val
+        self.pos[2] = val
 
     def __str__(self):
         return 'Vertex (x, y, z): {}, {}, {}'.format(self.x, self.y, self.z)
@@ -65,11 +72,9 @@ class Vertex:
             ))
 
         self._total_force += force
-        # self.forces[name] = force
 
     def total_force(self):
         return self._total_force
-        # return np.sum(np.array(list(self.forces.values())), axis=0)
 
     def reset_forces(self):
         self._total_force = Vector3(0.0, 0.0, 0.0)
@@ -83,7 +88,7 @@ class Edge:
     def __init__(self, v1: Vertex, v2: Vertex, assignment: str):
         self.v1 = v1
         self.v2 = v2
-        self.orientation_vec = vector_from_to(v1.vec, v2.vec)
+        self.orientation_vec = vector_from_to(v1.pos, v2.pos)
         self.assignment = assignment
         self.l0 = self.length()
 
@@ -94,7 +99,7 @@ class Edge:
         self.damping_coeff = CONFIG['PERCENT_DAMPING'] * 2 * np.sqrt(self.k_axial * min(self.v1.mass, self.v2.mass))
 
     def length(self):
-        return distance(self.v1.vec, self.v2.vec)
+        return distance(self.v1.pos, self.v2.pos)
 
     def face_angle(self, ref_n: Vector3):
         if self.face_left is None or self.face_right is None:
@@ -122,7 +127,7 @@ class Face:
         p2 = self.vertices[(i + 1) % len(self.vertices)]
         p3 = self.vertices[(i + 2) % len(self.vertices)]
 
-        return vector_angle(vector_from_to(p1.vec, p2.vec), vector_from_to(p1.vec, p3.vec))
+        return vector_angle(vector_from_to(p1.pos, p2.pos), vector_from_to(p1.pos, p3.pos))
 
     def prev_vertex(self, v: Vertex):
         return self.vertices[(self.vertices.index(v) - 1 + len(self.vertices)) % len(self.vertices)]
@@ -135,4 +140,6 @@ class Face:
 
     @property
     def normal(self):
-        return plane_normal(self.vertices[0].vec, self.vertices[1].vec, self.vertices[2].vec)
+        return plane_normal(self.vertices[0].pos, self.vertices[1].pos, self.vertices[2].pos)
+
+

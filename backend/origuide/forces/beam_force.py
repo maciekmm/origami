@@ -1,11 +1,11 @@
 from config import CONFIG
-from generic_models import ForceName, Vector3
-from geometry_models import Edge
-from geometry_tools import vector_from_to, normalize
+from geometry.generic_models import Vector3
+from geometry.geometry_models import Edge, ForceName
+from geometry.geometry_tools import vector_from_to, normalize
 
 
 def _set_beam_force(edge: Edge):
-    i12 = normalize(vector_from_to(edge.v1.vec, edge.v2.vec))
+    i12 = normalize(vector_from_to(edge.v1.pos, edge.v2.pos))
 
     k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / edge.l0
 

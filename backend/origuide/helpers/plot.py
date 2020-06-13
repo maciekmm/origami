@@ -2,7 +2,7 @@ from typing import List
 
 import matplotlib.pyplot as plt
 
-from geometry_models import Vertex
+from geometry.geometry_models import Vertex
 
 
 def plot3d(vertices: List[Vertex], forces):

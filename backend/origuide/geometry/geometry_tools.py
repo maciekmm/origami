@@ -1,6 +1,6 @@
 import numpy as np
 
-from generic_models import Vector3
+from geometry.generic_models import Vector3
 
 
 def vector_from_to(v1: Vector3, v2: Vector3) -> Vector3:
@@ -8,13 +8,10 @@ def vector_from_to(v1: Vector3, v2: Vector3) -> Vector3:
 
 
 def normalize(v: Vector3) -> Vector3:
-    res = Vector3.from_vec(v.vec)
-    res.vec = res.vec / np.linalg.norm(res.vec)
-    return res
-
-
-def norm(v: Vector3) -> float:
-    return np.linalg.norm(v.vec)
+    v_len = v.length
+    if v_len == 0:
+        return v
+    return Vector3.from_vec(v.vec / v_len)
 
 
 def cross(v1: Vector3, v2: Vector3) -> Vector3:
@@ -26,7 +23,7 @@ def dot(v1: Vector3, v2: Vector3) -> float:
 
 
 def distance(v1: Vector3, v2: Vector3) -> float:
-    return np.linalg.norm((v1 - v2).vec)
+    return (v1 - v2).length
 
 
 def plane_normal(v1: Vector3, v2: Vector3, v3: Vector3) -> Vector3:
@@ -41,7 +38,7 @@ def plane_normal(v1: Vector3, v2: Vector3, v3: Vector3) -> Vector3:
 
 
 def vector_angle(v1: Vector3, v2: Vector3) -> float:
-    return np.arctan2(norm(cross(v1, v2)), dot(v1, v2))
+    return np.arctan2(cross(v1, v2).length, dot(v1, v2))
 
 
 def signed_vector_angle(v1: Vector3, v2: Vector3, ref_n: Vector3) -> float:
@@ -55,11 +52,13 @@ def triangle_height(project_onto: Vector3, project_from: Vector3) -> float:
     """
     Calculates height of a triangle spanned by 2 vectors
 
-    @param project_from: vector which tip will point to a vertex containing the height
-    @param project_onto: vector which contains the side of the triangle
+    @param project_from: vector which tip points to a vertex,
+    from which the height is dropped
+    @param project_onto: vector which contains the side of the triangle,
+    onto which the height id dropped
     """
     alfa = vector_angle(project_onto, project_from)
-    return np.sin(alfa) * np.linalg.norm(project_from.vec)
+    return np.sin(alfa) * project_from.length
 
 
 def cot(angle):

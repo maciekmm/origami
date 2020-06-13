@@ -1,24 +1,9 @@
-import json
 import sys
 
-from beam_force import set_all_beam_forces
-from crease_force import set_all_crease_forces
-from face_force import set_all_face_forces
-from geometry_models import *
+from fold import read_fold
+from geometry.geometry_models import *
 from solver import Solver
-from triangulation import triangulate
-
-
-def read_fold(filename):
-    with open(filename) as foldfile:
-        content = json.load(foldfile)
-
-        return {
-            'vertices_coords': content['vertices_coords'],
-            'faces_vertices': content['faces_vertices'],
-            'edges_vertices': content['edges_vertices'],
-            'edges_assignment': content['edges_assignment'],
-        }
+from geometry.triangulation import triangulate
 
 
 def create_vertices(coords):
@@ -39,7 +24,7 @@ def create_edges(vertices, edges_vertices, edges_assignment):
 def create_faces(vertices, edges, faces_vertices):
     edges_bag = {}  # TODO: Think of a better solution for this edges_bag
     for e in edges:
-        edges_bag[(tuple(e.v1.vec), tuple(e.v2.vec))] = e
+        edges_bag[(tuple(e.v1.pos), tuple(e.v2.pos))] = e
 
     faces = []
 
@@ -57,8 +42,8 @@ def create_faces(vertices, edges, faces_vertices):
 
             face_edges = zip(face_vertices, np.roll(face_vertices, -1))
             for p in face_edges:
-                v1 = tuple(p[0].vec)
-                v2 = tuple(p[1].vec)
+                v1 = tuple(p[0].pos)
+                v2 = tuple(p[1].pos)
 
                 # Introduce new edges
                 if (v1, v2) not in edges_bag and (v2, v1) not in edges_bag:
@@ -82,7 +67,7 @@ def main():
     # TODO: There might be an issue of edges and faces orientation (not handled correctly)
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    content = read_fold('../../assets/solver_test_models/square.fold')
+    content = read_fold('../../assets/solver_test_models/diagonal_fold_folded.fold')
 
     vertices = create_vertices(content['vertices_coords'])
 
@@ -97,10 +82,6 @@ def main():
                          content['edges_assignment'])
 
     faces = create_faces(vertices, edges, content['faces_vertices'])
-
-    # TODO:DEBUG
-    vertices[0].x = -2.0
-    vertices[0].y = -2.0
 
     # TODO: Maybe some graph would be a more appropriate structure?
     # IDEA: Create vertices, beams, etc "globally", and assign only their IDs to some more advanced objects

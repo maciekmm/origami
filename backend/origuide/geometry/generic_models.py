@@ -1,14 +1,4 @@
-from enum import unique, Enum, auto
-
 import numpy as np
-
-
-@unique
-class ForceName(Enum):
-    BEAM = auto()
-    CREASE = auto()
-    FACE = auto()
-    DAMPING = auto()
 
 
 class Vector3:
@@ -42,6 +32,10 @@ class Vector3:
     @z.setter
     def z(self, val):
         self.vec[2] = val
+
+    @property
+    def length(self):
+        return np.linalg.norm(self.vec)
 
     def __getitem__(self, index):
         if 0 <= index < len(self.vec):

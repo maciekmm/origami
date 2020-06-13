@@ -1,7 +1,7 @@
 from config import CONFIG
-from generic_models import ForceName, Vector3
-from geometry_models import Edge, EDGE_MOUNTAIN, EDGE_VALLEY, angle_from_assignment, Face
-from geometry_tools import vector_from_to, triangle_height, cot
+from geometry.generic_models import Vector3
+from geometry.geometry_models import Edge, EDGE_MOUNTAIN, EDGE_VALLEY, angle_from_assignment, Face, ForceName
+from geometry.geometry_tools import vector_from_to, triangle_height, cot
 
 
 def set_crease_force(edge: Edge):
@@ -31,9 +31,9 @@ def set_crease_force(edge: Edge):
     p3 = edge.v1
     p4 = edge.v2
 
-    p32 = vector_from_to(p3.vec, p2.vec)
-    p34 = vector_from_to(p3.vec, p4.vec)
-    p31 = vector_from_to(p3.vec, p1.vec)
+    p32 = vector_from_to(p3.pos, p2.pos)
+    p34 = vector_from_to(p3.pos, p4.pos)
+    p31 = vector_from_to(p3.pos, p1.pos)
 
     h1 = triangle_height(p34, p31)
     h2 = triangle_height(p34, p32)
@@ -43,8 +43,8 @@ def set_crease_force(edge: Edge):
     alfa431 = left_face.angle_for_vertex(p4)
     alfa423 = right_face.angle_for_vertex(p4)
 
-    dp1 = left_face.normal.vec / h1
-    dp2 = right_face.normal.vec / h2
+    dp1 = left_face.normal.pos / h1
+    dp2 = right_face.normal.pos / h2
 
     mul1 = dp1 / (cot(alfa314) + cot(alfa431))
     mul2 = dp2 / (cot(alfa342) + cot(alfa423))
