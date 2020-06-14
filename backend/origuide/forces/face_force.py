@@ -3,7 +3,7 @@ import numpy as np
 from config import CONFIG
 from geometry.generic_models import Vector3
 from geometry.geometry_models import Face, Vertex, ForceName
-from geometry.geometry_tools import vector_from_to
+from geometry.generic_tools import vector_from_to
 
 
 def set_face_force(face: Face):
@@ -26,7 +26,7 @@ def set_angle_face_force(angle_vertex: Vertex, alfa0, face: Face, k_face):
     p23 = vector_from_to(p2.pos, p3.pos).vec
     p23_len = np.linalg.norm(p23)
 
-    normal = face.normal.pos
+    normal = face.normal.vec
 
     dp1 = normal * p21 / p21_len
     dp2 = -normal * p21 / p21_len + normal * p23 / p23_len

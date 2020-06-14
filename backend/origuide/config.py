@@ -1,3 +1,5 @@
+# TODO: Probably split into something like program-config, and simulation parameters
+
 CONFIG = {
     'DEBUG_ENABLED': True,
     'AXIAL_STIFFNESS_EA': 20.0,
@@ -5,5 +7,5 @@ CONFIG = {
     'FOLD_STIFFNESS': 0.7,
     'FACE_STIFFNESS': 0.2,
     'SOLVER_EPSILON': 1.0e-4,
-    'PERCENT_DAMPING': 0.4,
+    'DAMPING_PERCENT': 0.4,
 }

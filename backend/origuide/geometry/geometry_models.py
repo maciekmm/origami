@@ -5,8 +5,9 @@ import numpy as np
 
 from config import CONFIG
 from geometry.generic_models import Vector3
-from geometry.geometry_tools import plane_normal, vector_angle, vector_from_to, distance, signed_vector_angle
+from geometry.generic_tools import plane_normal, vector_angle, vector_from_to, distance, signed_vector_angle
 
+# Left as constants, not an enum as the strings carry the meaning in FOLD format
 EDGE_BOUNDARY = 'B'
 EDGE_VALLEY = 'V'
 EDGE_MOUNTAIN = 'M'
@@ -90,22 +91,24 @@ class Edge:
         self.v2 = v2
         self.orientation_vec = vector_from_to(v1.pos, v2.pos)
         self.assignment = assignment
-        self.l0 = self.length()
+        self.l0 = self.length
 
-        # TODO: Not sure yet if it's a good idea to have faces in here
         self.face_left = None   # face on the left as defined by edge orientation
         self.face_right = None   # face on the right as defined by edge orientation
-        self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
-        self.damping_coeff = CONFIG['PERCENT_DAMPING'] * 2 * np.sqrt(self.k_axial * min(self.v1.mass, self.v2.mass))
 
+        # TODO: Hmm. Although edge properties, these 2 have knowledge that NO SIMPLE EDGE SHOULD EVER POSSES. WHAAAAAAA!!!1!1!!1
+        self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
+        self.damping_coeff = CONFIG['DAMPING_PERCENT'] * 2 * np.sqrt(self.k_axial * min(self.v1.mass, self.v2.mass))
+
+    @property
     def length(self):
         return distance(self.v1.pos, self.v2.pos)
 
-    def face_angle(self, ref_n: Vector3):
+    def faces_angle(self):
         if self.face_left is None or self.face_right is None:
-            raise RuntimeError("Cannot compute angle: exactly 2 faces must be assigned to an edge")
+            raise RuntimeError("Cannot compute angle: exactly 2 faces must be assigned to an self")
 
-        return signed_vector_angle(self.face_right.normal, self.face_left.normal, ref_n)
+        return signed_vector_angle(self.face_right.normal, self.face_left.normal, self.orientation_vec)
 
     def __str__(self):
         return 'Edge: {} -> {}, assignment: {}, l0: {}'.format(self.v1, self.v2, self.assignment, self.l0)
@@ -114,11 +117,17 @@ class Edge:
 class Face:
     def __init__(self, v1: Vertex, v2: Vertex, v3: Vertex):
         self.vertices = [v1, v2, v3]
-        self.alfa0 = []
-        for v in self.vertices:
-            self.alfa0.append(self.angle_for_vertex(v))
+        self.alfa0 = [self.angle_for_vertex(v) for v in self.vertices]
+
+    @property
+    def normal(self):
+        return plane_normal(self.vertices[0].pos, self.vertices[1].pos, self.vertices[2].pos)
 
     def angle_for_vertex(self, v: Vertex):
+        """
+        Returns plane angle at the given vertex v,
+        or raises an Error if such vertex is not in the face
+        """
         # p1 ---> p2
         # p1 ---> p3
         i = self.vertices.index(v)
@@ -137,9 +146,3 @@ class Face:
 
     def __str__(self):
         return 'Face: {} -> {} -> {}'.format(self.vertices[0], self.vertices[1], self.vertices[2])
-
-    @property
-    def normal(self):
-        return plane_normal(self.vertices[0].pos, self.vertices[1].pos, self.vertices[2].pos)
-
-

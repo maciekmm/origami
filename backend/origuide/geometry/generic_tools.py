@@ -28,7 +28,7 @@ def distance(v1: Vector3, v2: Vector3) -> float:
 
 def plane_normal(v1: Vector3, v2: Vector3, v3: Vector3) -> Vector3:
     """
-    v1, v2, v3 - 3 points to form vectors rooted in v1
+    v1, v2, v3 - 3 points to form vectors rooted in v1 (v1 -> v2, and v1 -> v3)
     """
     w1 = vector_from_to(v1, v2)
     w2 = vector_from_to(v1, v3)

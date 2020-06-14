@@ -2,7 +2,7 @@ from typing import List
 
 import numpy as np
 
-from helpers import plot
+from tools import plot
 from forces.beam_force import set_all_beam_forces
 from config import CONFIG
 from forces.crease_force import set_all_crease_forces
@@ -80,7 +80,7 @@ class Solver:
         set_all_face_forces(self.faces)
 
     def _total_forces_vecs(self):
-        return np.array(list(map(lambda v: v.total_force().pos, self.vertices)))
+        return np.array(list(map(lambda v: v.total_force().vec, self.vertices)))
 
     def _should_continue(self, prev_forces, cur_forces):
         # return True

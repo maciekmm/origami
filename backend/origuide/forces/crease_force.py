@@ -1,7 +1,7 @@
 from config import CONFIG
 from geometry.generic_models import Vector3
 from geometry.geometry_models import Edge, EDGE_MOUNTAIN, EDGE_VALLEY, angle_from_assignment, Face, ForceName
-from geometry.geometry_tools import vector_from_to, triangle_height, cot
+from geometry.generic_tools import vector_from_to, triangle_height, cot
 
 
 def set_crease_force(edge: Edge):
@@ -17,8 +17,7 @@ def set_crease_force(edge: Edge):
     else:
         return
 
-    theta = edge.face_angle(edge.orientation_vec)
-    print(theta)
+    theta = edge.faces_angle()
     theta_target = angle_from_assignment(edge.assignment)
 
     c = k_crease * (theta_target - theta)
@@ -43,8 +42,8 @@ def set_crease_force(edge: Edge):
     alfa431 = left_face.angle_for_vertex(p4)
     alfa423 = right_face.angle_for_vertex(p4)
 
-    dp1 = left_face.normal.pos / h1
-    dp2 = right_face.normal.pos / h2
+    dp1 = left_face.normal.vec / h1
+    dp2 = right_face.normal.vec / h2
 
     mul1 = dp1 / (cot(alfa314) + cot(alfa431))
     mul2 = dp2 / (cot(alfa342) + cot(alfa423))

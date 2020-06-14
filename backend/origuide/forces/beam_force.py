@@ -1,7 +1,7 @@
 from config import CONFIG
 from geometry.generic_models import Vector3
 from geometry.geometry_models import Edge, ForceName
-from geometry.geometry_tools import vector_from_to, normalize
+from geometry.generic_tools import vector_from_to, normalize
 
 
 def _set_beam_force(edge: Edge):
@@ -9,7 +9,7 @@ def _set_beam_force(edge: Edge):
 
     k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / edge.l0
 
-    m = k_axial * (edge.length() - edge.l0)
+    m = k_axial * (edge.length - edge.l0)
 
     f1 = Vector3.from_vec(m * i12.vec)
 

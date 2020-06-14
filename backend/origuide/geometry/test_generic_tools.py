@@ -2,7 +2,7 @@ import math
 import unittest
 
 from geometry.generic_models import Vector3
-from geometry.geometry_tools import signed_vector_angle, vector_angle, vector_from_to, normalize, distance, \
+from geometry.generic_tools import signed_vector_angle, vector_angle, vector_from_to, normalize, distance, \
     plane_normal, triangle_height
 
 
