@@ -83,8 +83,7 @@ class Solver:
         return np.array(list(map(lambda v: v.total_force().vec, self.vertices)))
 
     def _should_continue(self, prev_forces, cur_forces):
-        # return True
-
+        # TODO: Add iteration count also as a stop condition?
         if prev_forces is None:
             return True
 

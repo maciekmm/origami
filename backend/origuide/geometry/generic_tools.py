@@ -63,3 +63,11 @@ def triangle_height(project_onto: Vector3, project_from: Vector3) -> float:
 
 def cot(angle):
     return 1.0 / np.tan(angle)
+
+
+def same_direction_vec(v1: Vector3, v2: Vector3):
+    return normalize(v1) == normalize(v2)
+
+
+def opposite_direction_vec(v1: Vector3, v2: Vector3):
+    return normalize(v1) == -normalize(v2)

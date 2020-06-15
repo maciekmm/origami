@@ -3,7 +3,7 @@ import unittest
 
 from geometry.generic_models import Vector3
 from geometry.generic_tools import signed_vector_angle, vector_angle, vector_from_to, normalize, distance, \
-    plane_normal, triangle_height
+    plane_normal, triangle_height, same_direction_vec
 
 
 class TestVectorFormTo(unittest.TestCase):
@@ -147,3 +147,27 @@ class TestVectorAngle(unittest.TestCase):
 
         angle = vector_angle(v2, v1)
         self.assertEqual(angle, math.pi)
+
+
+class TestSameDirectionVec(unittest.TestCase):
+    def test_returns_true_if_same_direction(self):
+        v1 = Vector3(1, 2, 3)
+        v2 = Vector3(2, 4, 6)
+        self.assertTrue(same_direction_vec(v1, v2))
+
+    def test_returns_false_if_not_same_direction(self):
+        v1 = Vector3(1, 2, 3)
+        v2 = Vector3(2, -3, 6)
+        self.assertFalse(same_direction_vec(v1, v2))
+
+
+class TestOppositeDirectionVec(unittest.TestCase):
+    def test_returns_true_if_opposite_direction(self):
+        v1 = Vector3(1, 2, 3)
+        v2 = Vector3(2, -3, 6)
+        self.assertFalse(same_direction_vec(v1, v2))
+
+    def test_returns_false_if_not_opposite_direction(self):
+        v1 = Vector3(1, 2, 3)
+        v2 = Vector3(2, 4, 6)
+        self.assertTrue(same_direction_vec(v1, v2))
