@@ -24,7 +24,7 @@
 	
 	\newcommand*{\SectionTitleProjectVision}{Cel prac i wizja produktu}
 	\newcommand*{\SectionTitleScope}{Zakres funkcjonalno\'sci}	
-	\newcommand*{\SectionTitleRealizationAspects}{Wybrane aspekty realizacji}
+	\newcommand*{\SectionTitleImplementationAspects}{Wybrane aspekty realizacji}
 	\newcommand*{\SectionTitleWorkOrganization}{Organizacja pracy}
 	\newcommand*{\SectionTitleResults}{Wyniki projektu}	
 }
@@ -36,7 +36,7 @@
 	
 	\newcommand*{\SectionTitleProjectVision}{Project goals and vision}
 	\newcommand*{\SectionTitleScope}{Functional scope}
-	\newcommand*{\SectionTitleRealizationAspects}{Selected realization aspects}
+	\newcommand*{\SectionTitleImplementationAspects}{Selected implementation aspects}
 	\newcommand*{\SectionTitleWorkOrganization}{Work organization}
 	\newcommand*{\SectionTitleResults}{Project results}
 }
