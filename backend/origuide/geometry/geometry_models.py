@@ -97,7 +97,12 @@ class Edge:
         self.face_right = None   # face on the right as defined by edge orientation
 
         # TODO: Hmm. Although edge properties, these 2 have knowledge that NO SIMPLE EDGE SHOULD EVER POSSES. WHAAAAAAA!!!1!1!!1
-        self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
+
+        if self.l0 == 0:    # in general, this should not be the case
+            self.k_axial = CONFIG['AXIAL_STIFFNESS_EA']
+        else:
+            self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
+
         self.damping_coeff = CONFIG['DAMPING_PERCENT'] * 2 * np.sqrt(self.k_axial * min(self.v1.mass, self.v2.mass))
 
     @property
