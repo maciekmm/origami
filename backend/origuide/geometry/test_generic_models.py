@@ -7,8 +7,22 @@ class TestVector3(unittest.TestCase):
     def test_vector3_are_treated_as_equal_with_same_coordinates(self):
         v1 = Vector3(1, 2, 3)
         v2 = Vector3(1, 2, 3)
-
         self.assertEqual(v1, v2)
+
+    def test_not_equality(self):
+        v1 = Vector3(1, 3, 2)
+        v2 = Vector3(1, 2, 3)
+        self.assertNotEqual(v1, v2)
+
+    def test_hash_equal(self):
+        v1 = Vector3(1, 2, 3)
+        v2 = Vector3(1, 2, 3)
+        self.assertEqual(hash(v1), hash(v2))
+
+    def test_hash_not_equal(self):
+        v1 = Vector3(1, 3, 2)
+        v2 = Vector3(1, 2, 3)
+        self.assertNotEqual(hash(v1), hash(v2))
 
     def test_getting_by_index(self):
         v = Vector3(1, 2, 3)
@@ -49,3 +63,4 @@ class TestVector3(unittest.TestCase):
         v = Vector3(1, 2, 3)
         self.assertEqual(v * 2, Vector3(2, 4, 6))
         self.assertEqual(2 * v, Vector3(2, 4, 6))
+

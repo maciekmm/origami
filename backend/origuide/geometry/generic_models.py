@@ -49,6 +49,9 @@ class Vector3:
     def __eq__(self, other):
         return (self.vec == other.vec).all()
 
+    def __hash__(self):
+        return hash(self.vec.tostring())
+
     def __add__(self, other):
         return Vector3.from_vec(self.vec + other.vec)
 
