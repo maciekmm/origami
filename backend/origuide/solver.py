@@ -10,6 +10,7 @@ from forces.damping_force import set_all_damping_forces
 from forces.face_force import set_all_face_forces
 from geometry.generic_models import Vector3
 from geometry.geometry_models import Vertex, Edge, Face
+import copy
 
 
 class Solver:
@@ -29,7 +30,7 @@ class Solver:
         self.d_t = 1 / (2 * np.pi * np.sqrt(max_k_axial / self.vertices[0].mass)) * 0.9 # TODO: Fine tune this parameter
         self.epsilon = CONFIG['SOLVER_EPSILON']
 
-    def solve(self):
+    def solve(self, output):
         self._set_forces()
         prev_forces = None
         cur_forces = self._total_forces_vecs()
@@ -57,10 +58,11 @@ class Solver:
             prev_forces = cur_forces.copy()
             cur_forces = self._total_forces_vecs()
 
-            print(cur_forces)
+            # print(cur_forces)
+            output.accept(copy.deepcopy(self.vertices))
 
-            if plot_idx % 20 == 0: # plot every 100 iterations
-                plot.plot3d(self.vertices, cur_forces)
+            if plot_idx % 1 == 0:
+                plot.plot3d(self.vertices, self.edges, cur_forces)
             plot_idx += 1
 
             print()
@@ -68,6 +70,7 @@ class Solver:
         print('FINISHED')
         for v in self.vertices:
             print(v)
+        return
 
     def _reset_forces(self):
         for v in self.vertices:

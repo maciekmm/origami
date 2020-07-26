@@ -32,7 +32,8 @@ def angle_from_assignment(assignment):
 
 
 class Vertex:
-    def __init__(self, x: float, y: float, z: float):
+    def __init__(self, iden: int, x: float, y: float, z: float):
+        self.id = iden
         self.pos = Vector3(x, y, z)
         self._total_force = Vector3(0.0, 0.0, 0.0)
         self.velocity = Vector3(0.0, 0.0, 0.0)
@@ -62,7 +63,7 @@ class Vertex:
         self.pos[2] = val
 
     def __str__(self):
-        return 'Vertex (x, y, z): {}, {}, {}'.format(self.x, self.y, self.z)
+        return '[{}, {}, {}]'.format(self.x, self.y, self.z)
 
     def set_force(self, name: ForceName, force: Vector3):
         if CONFIG['DEBUG_ENABLED']:
@@ -86,7 +87,8 @@ class Vertex:
 
 
 class Edge:
-    def __init__(self, v1: Vertex, v2: Vertex, assignment: str):
+    def __init__(self, iden: int, v1: Vertex, v2: Vertex, assignment: str):
+        self.id = iden
         self.v1 = v1
         self.v2 = v2
         self.orientation_vec = vector_from_to(v1.pos, v2.pos)

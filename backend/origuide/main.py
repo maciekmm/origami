@@ -4,11 +4,11 @@ from fold import read_fold
 from geometry.geometry_models import *
 from solver import Solver
 from geometry.triangulation import triangulate
+from fold_producer import FoldProducer
 
 
 def create_vertices(coords):
-    return list(map(lambda c: Vertex(c[0], c[1], c[2]), coords))
-
+    return [Vertex(iden, c[0], c[1], c[2]) for iden, c in enumerate(coords)]
 
 def create_edges(vertices, edges_vertices, edges_assignment):
     edges = []
@@ -16,7 +16,7 @@ def create_edges(vertices, edges_vertices, edges_assignment):
         v1 = vertices[edge_vertices[0]]
         v2 = vertices[edge_vertices[1]]
         assignment = edges_assignment[i]
-        edges.append(Edge(v1, v2, assignment))
+        edges.append(Edge(i, v1, v2, assignment))
 
     return edges
 
@@ -24,7 +24,7 @@ def create_edges(vertices, edges_vertices, edges_assignment):
 def create_faces(vertices, edges, faces_vertices):
     edges_bag = {}  # TODO: Think of a better solution for this edges_bag
     for e in edges:
-        edges_bag[(tuple(e.v1.pos), tuple(e.v2.pos))] = e
+        edges_bag[(e.v1.id, e.v2.id)] = e
 
     faces = []
 
@@ -33,21 +33,20 @@ def create_faces(vertices, edges, faces_vertices):
 
         triangles = triangulate(face_to_triangulate)
 
-        for triangle in triangles:
+        for face_vertices in triangles:
 
             # TODO: HERE. FIX THIS!!! TRIANGULATION SHOULD NOT CREATE NEW VERTICES. IT BREAKS FORCE CALCULATION
-            face_vertices = triangle
 
-            face = Face(*triangle)
+            face = Face(*face_vertices)
 
             face_edges = zip(face_vertices, np.roll(face_vertices, -1))
             for p in face_edges:
-                v1 = tuple(p[0].pos)
-                v2 = tuple(p[1].pos)
+                v1 = p[0].id#tuple(p[0].pos)
+                v2 = p[1].id#tuple(p[1].pos)
 
                 # Introduce new edges
                 if (v1, v2) not in edges_bag and (v2, v1) not in edges_bag:
-                    edge = Edge(p[0], p[1], EDGE_FLAT)
+                    edge = Edge(-1, p[0], p[1], EDGE_FLAT)
                     edges.append(edge)
                     edges_bag[(v1, v2)] = edge
 
@@ -67,21 +66,34 @@ def main():
     # TODO: There might be an issue of edges and faces orientation (not handled correctly)
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    content = read_fold('../../assets/solver_test_models/diagonal_fold_folded.fold')
+    fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice.fold')
 
-    vertices = create_vertices(content['vertices_coords'])
+    vertices = create_vertices(fold.vertices)
+    
+    fold_producer = FoldProducer(fold)
+
+    edges = create_edges(vertices,
+                         fold.edges,
+                         fold.assignments)
+
+    faces = create_faces(vertices, edges, fold.faces)
+
+    for steady_state in fold.steady_states:
+        # TODO: only assignments change between frames?
+        for edge in edges:
+            if edge.id == -1:
+                continue
+            edge.assignment = steady_state.assignments[edge.id]
+
+        solver = Solver(vertices, edges, faces)
+        solver.solve(fold_producer)
+        fold_producer.next_transition()
 
     if CONFIG['DEBUG_ENABLED']:
         print('Vertices read...')
         for v in vertices:
             print(v)
         print()
-
-    edges = create_edges(vertices,
-                         content['edges_vertices'],
-                         content['edges_assignment'])
-
-    faces = create_faces(vertices, edges, content['faces_vertices'])
 
     # TODO: Maybe some graph would be a more appropriate structure?
     # IDEA: Create vertices, beams, etc "globally", and assign only their IDs to some more advanced objects
@@ -100,9 +112,8 @@ def main():
             print(f)
         print()
 
-    solver = Solver(vertices, edges, faces)
-    solver.solve()
-
+    with open("/tmp/test.fold", "w") as file:
+        file.write(fold_producer.save())
 
 def test_beam():
     v1 = Vertex(0, -1, 0)
