@@ -14,7 +14,6 @@ import copy
 
 
 class Solver:
-    # TODO: NUMERICAL DAMPING
     def __init__(self, vertices: List[Vertex], edges: List[Edge], faces: List[Face]):
         self.vertices = vertices
         self.edges = edges
@@ -27,15 +26,19 @@ class Solver:
 
         # TODO: Getting k_axial, getting min node mass
         max_k_axial = max(map(lambda e: e.k_axial, self.edges))
-        self.d_t = 1 / (2 * np.pi * np.sqrt(max_k_axial / self.vertices[0].mass)) * 0.9 # TODO: Fine tune this parameter
+        self.d_t = 1 / (2 * np.pi * np.sqrt(max_k_axial / self.vertices[0].mass)) * 1.0 # TODO: Fine tune this parameter
         self.epsilon = CONFIG['SOLVER_EPSILON']
 
     def solve(self, output):
+        self._reset_forces()
         self._set_forces()
         prev_forces = None
         cur_forces = self._total_forces_vecs()
 
-        # TODO: For better debugging, push in batches (e.g. like 100 iters)
+        if CONFIG['DEBUG']:
+            print('Starting solver')
+            print('FORCES: ', cur_forces)
+            print('VELOCITIES: ', self.vertices_velocity)
 
         plot_idx = 0
         while self._should_continue(prev_forces, cur_forces):
@@ -50,7 +53,8 @@ class Solver:
 
                 v.pos = p_t + Vector3.from_vec(v_next * self.d_t)
 
-                print(v)
+                if CONFIG['DEBUG']:
+                    print(v)
 
             self._reset_forces()
             self._set_forces()
@@ -58,14 +62,17 @@ class Solver:
             prev_forces = cur_forces.copy()
             cur_forces = self._total_forces_vecs()
 
-            # print(cur_forces)
+            if CONFIG['DEBUG']:
+                print(cur_forces)
             output.accept(copy.deepcopy(self.vertices))
 
-            if plot_idx % 1 == 0:
-                plot.plot3d(self.vertices, self.edges, cur_forces)
-            plot_idx += 1
+            if CONFIG['DEBUG']:
+                if plot_idx % 20 == 0:
+                    plot.plot3d(self.vertices, self.edges, cur_forces)
+                plot_idx += 1
 
-            print()
+            if CONFIG['DEBUG']:
+                print()
 
         print('FINISHED')
         for v in self.vertices:

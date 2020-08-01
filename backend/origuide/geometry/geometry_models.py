@@ -63,10 +63,10 @@ class Vertex:
         self.pos[2] = val
 
     def __str__(self):
-        return '[{}, {}, {}]'.format(self.x, self.y, self.z)
+        return 'Vertex {}: [{}, {}, {}]'.format(self.id, self.x, self.y, self.z)
 
     def set_force(self, name: ForceName, force: Vector3):
-        if CONFIG['DEBUG_ENABLED']:
+        if CONFIG['DEBUG'] and CONFIG['DEBUG_FORCES']:
             logging.debug('Setting force {}:{} on {}'.format(
                 name,
                 force,
@@ -80,6 +80,13 @@ class Vertex:
 
     def reset_forces(self):
         self._total_force = Vector3(0.0, 0.0, 0.0)
+
+    def reset_velocity(self):
+        self.velocity = Vector3(0.0, 0.0, 0.0)
+
+    def reset(self):
+        self.reset_forces()
+        self.reset_velocity()
 
     @property
     def mass(self):
@@ -118,11 +125,12 @@ class Edge:
         return signed_vector_angle(self.face_right.normal, self.face_left.normal, self.orientation_vec)
 
     def __str__(self):
-        return 'Edge: {} -> {}, assignment: {}, l0: {}'.format(self.v1, self.v2, self.assignment, self.l0)
+        return 'Edge {}: {} -> {}, assignment: {}, l0: {}'.format(self.id, self.v1, self.v2, self.assignment, self.l0)
 
 
 class Face:
-    def __init__(self, v1: Vertex, v2: Vertex, v3: Vertex):
+    def __init__(self, iden: int, v1: Vertex, v2: Vertex, v3: Vertex):
+        self.id = iden
         self.vertices = [v1, v2, v3]
         self.alfa0 = [self.angle_for_vertex(v) for v in self.vertices]
 
@@ -144,6 +152,7 @@ class Face:
         p3 = self.vertices[(i + 2) % len(self.vertices)]
 
         return vector_angle(vector_from_to(p1.pos, p2.pos), vector_from_to(p1.pos, p3.pos))
+        # return signed_vector_angle(vector_from_to(p1.pos, p2.pos), vector_from_to(p1.pos, p3.pos), self.normal)
 
     def prev_vertex(self, v: Vertex):
         return self.vertices[(self.vertices.index(v) - 1 + len(self.vertices)) % len(self.vertices)]
@@ -152,4 +161,4 @@ class Face:
         return self.vertices[(self.vertices.index(v) + 1) % len(self.vertices)]
 
     def __str__(self):
-        return 'Face: {} -> {} -> {}'.format(self.vertices[0], self.vertices[1], self.vertices[2])
+        return 'Face {}: {} -> {} -> {}'.format(self.id, self.vertices[0], self.vertices[1], self.vertices[2])

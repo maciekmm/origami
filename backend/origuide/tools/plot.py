@@ -12,6 +12,8 @@ def assignment_to_color(assignment):
         return 'red'
     elif assignment == 'V':
         return 'blue'
+    elif assignment == 'F':
+        return 'yellow'
     else:
         return 'gray'
 

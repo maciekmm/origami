@@ -34,10 +34,7 @@ def create_faces(vertices, edges, faces_vertices):
         triangles = triangulate(face_to_triangulate)
 
         for face_vertices in triangles:
-
-            # TODO: HERE. FIX THIS!!! TRIANGULATION SHOULD NOT CREATE NEW VERTICES. IT BREAKS FORCE CALCULATION
-
-            face = Face(*face_vertices)
+            face = Face(i, *face_vertices) # TODO: ? This makes id in Face not unique (which might not be a problem)
 
             face_edges = zip(face_vertices, np.roll(face_vertices, -1))
             for p in face_edges:
@@ -63,10 +60,11 @@ def create_faces(vertices, edges, faces_vertices):
 
 
 def main():
-    # TODO: There might be an issue of edges and faces orientation (not handled correctly)
+    # TODO: There might be an issue of edges and faces orientation (not hanjkdled correctly)
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice.fold')
+    #fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_undrve.fold')
+    fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_from_flat_undriven.fold')
 
     vertices = create_vertices(fold.vertices)
     
@@ -78,18 +76,7 @@ def main():
 
     faces = create_faces(vertices, edges, fold.faces)
 
-    for steady_state in fold.steady_states:
-        # TODO: only assignments change between frames?
-        for edge in edges:
-            if edge.id == -1:
-                continue
-            edge.assignment = steady_state.assignments[edge.id]
-
-        solver = Solver(vertices, edges, faces)
-        solver.solve(fold_producer)
-        fold_producer.next_transition()
-
-    if CONFIG['DEBUG_ENABLED']:
+    if CONFIG['DEBUG']:
         print('Vertices read...')
         for v in vertices:
             print(v)
@@ -99,18 +86,54 @@ def main():
     # IDEA: Create vertices, beams, etc "globally", and assign only their IDs to some more advanced objects
     # that can extend the behavior
 
-    if CONFIG['DEBUG_ENABLED']:
+    if CONFIG['DEBUG']:
         print('Edges read...')
         for e in edges:
             print(e)
             print('EDGE faces: ', e.face_left, e.face_right)
         print()
 
-    if CONFIG['DEBUG_ENABLED']:
+    if CONFIG['DEBUG']:
         print('Faces read...')
         for f in faces:
             print(f)
         print()
+
+    for steady_state in fold.steady_states:
+        # TODO: only assignments change between frames?
+        for edge in edges:
+            if edge.id == -1:
+                continue
+            edge.assignment = steady_state.assignments[edge.id]
+
+        # if CONFIG['DEBUG']:
+        print('STARTING NEW FOLDING PROCESS')
+        for v in vertices:
+            v.reset()
+
+            print('Vertex: ', v)
+            print('Forces: ', v.total_force())
+            print('Velocity: ', v.velocity)
+            print()
+        print()
+
+        print('EDGES: ')
+        for e in edges:
+            print(e)
+            print('EDGE faces: ', e.face_left, e.face_right)
+            print(f'l0 = {e.l0}, current length = {e.length}')
+        print()
+
+        print('FACES: ')
+        for f in faces:
+            print(f)
+        print()
+
+        input()
+
+        solver = Solver(vertices, edges, faces)
+        solver.solve(fold_producer)
+        fold_producer.next_transition()
 
     with open("/tmp/test.fold", "w") as file:
         file.write(fold_producer.save())

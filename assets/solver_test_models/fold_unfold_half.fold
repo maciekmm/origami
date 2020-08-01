@@ -1,0 +1,78 @@
+{
+  "file_spec": 1,
+  "file_creator": "A text editor",
+  "file_author": "Maciej Mionskowski",
+  "file_classes": ["animation", "origuide:guide"],
+  "frame_title": "",
+  "frame_classes": [
+      "creasePattern",
+      "origuide:steady_state"
+  ],
+  "frame_attributes": ["3D"],
+  "vertices_coords": [
+      [-1,-1,0],
+      [0, -1, 0],
+      [1,-1,0],
+      [1,1,0],
+      [0, 1, 0],
+      [-1,1,0]
+  ],
+  "faces_vertices": [
+      [0,1,4,5],
+      [1,2,3,4]
+  ],
+    "edges_vertices": [
+        [0,1],
+        [1,2],
+        [2,3],
+        [3,4],
+        [4,5],
+        [5,0],
+        [1,4]
+  ],
+  "edges_assignment": [
+      "B",
+      "B",
+      "B",
+      "B",
+      "B",
+      "B",
+      "F"
+  ],
+  "file_frames": [
+    {
+    "frame_inherit": true,
+    "frame_parent": 0,
+    "frame_classes": [
+        "creasePattern",
+        "origuide:steady_state"
+      ],
+      "edges_assignment": [
+        "B",
+        "B",
+        "B",
+        "B",
+        "B",
+        "B",
+        "V"
+      ]
+    },
+    {
+    "frame_inherit": true,
+    "frame_parent": 0,
+    "frame_classes": [
+        "creasePattern",
+        "origuide:steady_state"
+      ],
+      "edges_assignment": [
+        "B",
+        "B",
+        "B",
+        "B",
+        "B",
+        "B",
+        "M"
+      ]
+    }
+  ]
+}
