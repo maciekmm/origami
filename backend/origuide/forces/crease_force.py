@@ -21,8 +21,10 @@ def set_crease_force(edge: Edge):
     elif edge.assignment == EDGE_FLAT:
         k_crease = edge.l0 * CONFIG['FACET_STIFFNESS']
 
+
     theta = edge.faces_angle()
     theta_target = angle_from_assignment(edge.assignment)
+    c = k_crease * (theta_target - theta)
 
     # TODO: Just a desperate experiment to try and make things not flip
 #    sign = lambda x: -1 if x < 0 else 1
@@ -30,13 +32,14 @@ def set_crease_force(edge: Edge):
 #        return
     # END 
 
-    if CONFIG['DEBUG']:
-        print(f'Current theta for {edge}. Theta = {theta}, target={theta_target}')
-
-    c = k_crease * (theta_target - theta)
-
     left_face = edge.face_left
     right_face = edge.face_right
+
+    if CONFIG['DEBUG']:
+        print(f'Current theta for {edge}. Theta = {theta}, target={theta_target}')
+        # print(f'Edge orientation_vec: {edge.orientation_vec}\n' +\
+        #       f'LEFT face: {left_face}\n FACE right: {right_face}')
+        print()
 
     p1 = find_vertex_not_in_edge(right_face, edge)
     p2 = find_vertex_not_in_edge(left_face, edge)

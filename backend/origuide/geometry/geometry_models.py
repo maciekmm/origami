@@ -98,7 +98,6 @@ class Edge:
         self.id = iden
         self.v1 = v1
         self.v2 = v2
-        self.orientation_vec = vector_from_to(v1.pos, v2.pos)
         self.assignment = assignment
         self.l0 = self.length
 
@@ -122,7 +121,8 @@ class Edge:
         if self.face_left is None or self.face_right is None:
             raise RuntimeError("Cannot compute angle: exactly 2 faces must be assigned to an self")
 
-        return signed_vector_angle(self.face_right.normal, self.face_left.normal, self.orientation_vec)
+        orientation_vec = vector_from_to(self.v1.pos, self.v2.pos)
+        return signed_vector_angle(self.face_right.normal, self.face_left.normal, orientation_vec)
 
     def __str__(self):
         return 'Edge {}: {} -> {}, assignment: {}, l0: {}'.format(self.id, self.v1, self.v2, self.assignment, self.l0)

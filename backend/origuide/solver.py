@@ -68,7 +68,7 @@ class Solver:
 
             if CONFIG['DEBUG']:
                 if plot_idx % 20 == 0:
-                    plot.plot3d(self.vertices, self.edges, cur_forces)
+                    plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
                 plot_idx += 1
 
             if CONFIG['DEBUG']:

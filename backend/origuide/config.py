@@ -1,7 +1,7 @@
 # TODO: Probably split into something like program-config, and simulation parameters
 
 CONFIG = {
-    'DEBUG': True,
+    'DEBUG': False,
     'DEBUG_FORCES': False,
     'AXIAL_STIFFNESS_EA': 30.0,
     'FACET_STIFFNESS': 15.0,

@@ -63,8 +63,9 @@ def main():
     # TODO: There might be an issue of edges and faces orientation (not hanjkdled correctly)
     logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
-    #fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_undrve.fold')
-    fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_from_flat_undriven.fold')
+    # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_undrve.fold')
+    # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_from_flat_undriven.fold')
+    fold = read_fold('../../assets/solver_test_models/fold_unfold_half.fold')
 
     vertices = create_vertices(fold.vertices)
     
@@ -76,28 +77,9 @@ def main():
 
     faces = create_faces(vertices, edges, fold.faces)
 
-    if CONFIG['DEBUG']:
-        print('Vertices read...')
-        for v in vertices:
-            print(v)
-        print()
-
     # TODO: Maybe some graph would be a more appropriate structure?
     # IDEA: Create vertices, beams, etc "globally", and assign only their IDs to some more advanced objects
     # that can extend the behavior
-
-    if CONFIG['DEBUG']:
-        print('Edges read...')
-        for e in edges:
-            print(e)
-            print('EDGE faces: ', e.face_left, e.face_right)
-        print()
-
-    if CONFIG['DEBUG']:
-        print('Faces read...')
-        for f in faces:
-            print(f)
-        print()
 
     for steady_state in fold.steady_states:
         # TODO: only assignments change between frames?
@@ -106,30 +88,30 @@ def main():
                 continue
             edge.assignment = steady_state.assignments[edge.id]
 
-        # if CONFIG['DEBUG']:
-        print('STARTING NEW FOLDING PROCESS')
-        for v in vertices:
-            v.reset()
+        if CONFIG['DEBUG']:
+            print('STARTING NEW FOLDING PROCESS')
+            for v in vertices:
+                v.reset()
 
-            print('Vertex: ', v)
-            print('Forces: ', v.total_force())
-            print('Velocity: ', v.velocity)
+                print('Vertex: ', v)
+                print('Forces: ', v.total_force())
+                print('Velocity: ', v.velocity)
+                print()
             print()
-        print()
 
-        print('EDGES: ')
-        for e in edges:
-            print(e)
-            print('EDGE faces: ', e.face_left, e.face_right)
-            print(f'l0 = {e.l0}, current length = {e.length}')
-        print()
+            print('EDGES: ')
+            for e in edges:
+                print(e)
+                print('EDGE faces: ', e.face_left, e.face_right)
+                print(f'l0 = {e.l0}, current length = {e.length}')
+            print()
 
-        print('FACES: ')
-        for f in faces:
-            print(f)
-        print()
+            print('FACES: ')
+            for f in faces:
+                print(f)
+            print()
 
-        input()
+            input()
 
         solver = Solver(vertices, edges, faces)
         solver.solve(fold_producer)
