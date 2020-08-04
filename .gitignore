@@ -21,3 +21,4 @@ thesis/thesis.pdf
 
 venv/
 __pycache__/
+.eslintcache
