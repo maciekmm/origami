@@ -65,10 +65,11 @@ def main():
 
     # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_undrve.fold')
     # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_from_flat_undriven.fold')
-    fold = read_fold('../../assets/solver_test_models/fold_unfold_half.fold')
+    # fold = read_fold('../../assets/solver_test_models/fold_unfold_half.fold')
+    fold = read_fold('../../assets/solver_test_models/tulip_base.fold')
 
     vertices = create_vertices(fold.vertices)
-    
+
     fold_producer = FoldProducer(fold)
 
     edges = create_edges(vertices,
@@ -111,9 +112,15 @@ def main():
                 print(f)
             print()
 
-            input()
+            # input()
 
         solver = Solver(vertices, edges, faces)
+
+        # TODO: PROFILING
+        # import cProfile
+        # cProfile.run('solver.solve(fold_producer)', None, locals())
+        # TODO END
+
         solver.solve(fold_producer)
         fold_producer.next_transition()
 

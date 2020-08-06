@@ -15,7 +15,16 @@ def normalize(v: Vector3) -> Vector3:
 
 
 def cross(v1: Vector3, v2: Vector3) -> Vector3:
-    return Vector3.from_vec(np.cross(v1.vec, v2.vec))
+    vec1 = v1.vec
+    vec2 = v2.vec
+
+    res = [0,0,0]
+    x = (vec1[1] * vec2[2] - vec1[2] * vec2[1])
+    y = (vec1[2] * vec2[0] - vec1[0] * vec2[2])
+    z = (vec1[0] * vec2[1] - vec1[1] * vec2[0])
+
+    return Vector3(x, y, z)
+    # return Vector3.from_vec(np.cross(v1.vec, v2.vec))
 
 
 def dot(v1: Vector3, v2: Vector3) -> float:

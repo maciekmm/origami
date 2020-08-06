@@ -66,8 +66,8 @@ class Solver:
                 print(cur_forces)
             output.accept(copy.deepcopy(self.vertices))
 
-            if CONFIG['DEBUG']:
-                if plot_idx % 20 == 0:
+            if CONFIG['DEBUG_PLOT']:
+                if plot_idx % CONFIG['DEBUG_PLOT_ITER'] == 0:
                     plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
                 plot_idx += 1
 

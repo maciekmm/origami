@@ -2,11 +2,17 @@
 
 CONFIG = {
     'DEBUG': False,
+    'DEBUG_PLOT': False,
     'DEBUG_FORCES': False,
-    'AXIAL_STIFFNESS_EA': 30.0,
-    'FACET_STIFFNESS': 15.0,
+    'DEBUG_PLOT_NORMALS': False,
+    'DEBUG_PLOT_FORCES': True,
+    'DEBUG_PLOT_ITER': 500,
+
+
+    'AXIAL_STIFFNESS_EA': 20.0,
+    'FACET_STIFFNESS': 0.7,
     'FOLD_STIFFNESS': 0.7,
     'FACE_STIFFNESS': 0.2,
     'SOLVER_EPSILON': 1.0e-6,
-    'DAMPING_PERCENT': 0.5,
+    'DAMPING_PERCENT': 0.3,
 }

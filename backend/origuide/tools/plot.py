@@ -2,6 +2,7 @@ from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
+from config import CONFIG
 from matplotlib import collections as mc
 
 from geometry.geometry_models import Vertex, Edge, Face
@@ -62,10 +63,12 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
     ax.scatter(xs, ys, zs)
 
     # Plot forces
-    ax.quiver(xs, ys, zs, us, vs, ws)
+    if CONFIG['DEBUG_PLOT_FORCES']:
+        ax.quiver(xs, ys, zs, us, vs, ws)
 
     # Plot faces' normals
-    ax.quiver(xns, yns, zns, uns, vns, wns, color='g')
+    if CONFIG['DEBUG_PLOT_NORMALS']:
+        ax.quiver(xns, yns, zns, uns, vns, wns, color='g')
 
     box_lim = 4
 

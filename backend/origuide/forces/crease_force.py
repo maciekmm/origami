@@ -35,12 +35,6 @@ def set_crease_force(edge: Edge):
     left_face = edge.face_left
     right_face = edge.face_right
 
-    if CONFIG['DEBUG']:
-        print(f'Current theta for {edge}. Theta = {theta}, target={theta_target}')
-        # print(f'Edge orientation_vec: {edge.orientation_vec}\n' +\
-        #       f'LEFT face: {left_face}\n FACE right: {right_face}')
-        print()
-
     p1 = find_vertex_not_in_edge(right_face, edge)
     p2 = find_vertex_not_in_edge(left_face, edge)
     p3 = edge.v1
