@@ -60,13 +60,11 @@ def create_faces(vertices, edges, faces_vertices):
 
 
 def main():
-    # TODO: There might be an issue of edges and faces orientation (not hanjkdled correctly)
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-
     # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_undrve.fold')
     # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_from_flat_undriven.fold')
     # fold = read_fold('../../assets/solver_test_models/fold_unfold_half.fold')
-    fold = read_fold('../../assets/solver_test_models/tulip_base.fold')
+    # fold = read_fold('../../assets/solver_test_models/tulip_base.fold')
+    fold = read_fold('../../assets/solver_test_models/tulip_base_amanda.fold')
 
     vertices = create_vertices(fold.vertices)
 
@@ -118,7 +116,7 @@ def main():
 
         # TODO: PROFILING
         # import cProfile
-        # cProfile.run('solver.solve(fold_producer)', None, locals())
+        # cProfile.runctx('solver.solve(fold_producer)', None, locals())
         # TODO END
 
         solver.solve(fold_producer)

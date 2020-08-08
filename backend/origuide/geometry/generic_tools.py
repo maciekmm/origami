@@ -42,8 +42,9 @@ def plane_normal(v1: Vector3, v2: Vector3, v3: Vector3) -> Vector3:
     w1 = vector_from_to(v1, v2)
     w2 = vector_from_to(v1, v3)
 
-    n = np.cross(w1.vec, w2.vec)
-    return Vector3.from_vec(n / np.linalg.norm(n))
+    n = cross(w1, w2)
+    return normalize(n)
+    # return Vector3.from_vec(n / np.linalg.norm(n))
 
 
 def vector_angle(v1: Vector3, v2: Vector3) -> float:
@@ -55,6 +56,16 @@ def signed_vector_angle(v1: Vector3, v2: Vector3, ref_n: Vector3) -> float:
     v2 = normalize(v2)
     ref_n = normalize(ref_n)
     return np.arctan2(dot(cross(v1, v2), ref_n), dot(v1, v2))
+
+    # TODO: Just checking what ORIGAMI simulator seems to be doing differently
+    # v1 = normalize(v1)
+    # v2 = normalize(v2)
+    # ref_n = normalize(ref_n)
+
+    # x = dot(v1, v2)
+    # y = dot(cross(v1, ref_n), v2)
+
+    # return np.arctan2(y, x)
 
 
 def triangle_height(project_onto: Vector3, project_from: Vector3) -> float:
