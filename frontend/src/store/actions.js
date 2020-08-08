@@ -1,0 +1,7 @@
+export const SELECT_FRAME = "selectFrame"
+export const SELECT_PREVIOUS_FRAME = "selectPreviousFrame"
+export const SELECT_NEXT_FRAME = "selectNextFrame"
+export const LOAD_MODEL = "loadModel"
+export const PLAY = "play"
+export const PAUSE = "pause"
+export const STOP = "stop"

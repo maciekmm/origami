@@ -1,7 +1,11 @@
 \subsection{Problem characteristics}
 Origami has been around for a long time. It originated in China and Japan and
 spread all around the world\cite{wiki:history-of-origami}. Origami is
-recognized as the art of paper folding. Recently it is becoming increasingly popular in a scientific context.
+recognized as the art of paper folding.
+Recently it is becoming increasingly popular in a scientific context.
+Although known for centuries, it still exhibits properties that are useful
+in many different contexts, e.g.
+space exploration\cite{origami-in-orbit}, or deploying solar arrays\cite{solar-panel-origami}.
 Mathematicians started recognizing material folding as a distinct
 branch known as \hyperref[dictionary:computational-origami]{\textit{computational origami}}.
 The field has seen a tremendous development in the past couple decades especially in the software space.
@@ -70,13 +74,13 @@ Frontend part will handle user interaction, computations on the origami model,
 3D visualizations, and communication with backend.
 
 We have decided to use well-known and tested technologies.
-For the backend part, we are going to use \textbf{Go} language,
+For the backend part, we are going to use \tech{Go} language,
 using standard library to write the server part.
 
-For the frontend, we will use vanilla \textbf{JavaScript}
+For the frontend, we will use vanilla \tech{JavaScript}
 for user interface and computations,
-and we will perform 3D rendering using \textbf{Three.js} library
-that is built on top of \textbf{WebGL}.
+and we will perform 3D rendering using \tech{Three.js} library
+that is built on top of \tech{WebGL}.
 
 \begin{figure}[H]
 	\caption{Technology stack}
@@ -96,9 +100,9 @@ that is built on top of \textbf{WebGL}.
 
 \subsection{Feasibility Study}
 
-Both \textbf{Go} and \textbf{JavaScript} are widely spread and actively maintained languages.
+Both \tech{Go} and \tech{JavaScript} are widely spread and actively maintained languages.
 There is a strong community surrounding both of them.
-\textbf{Three.js} is the most popular library for 3D \textbf{WebGL} rendering.
+\tech{Three.js} is the most popular library for 3D \tech{WebGL} rendering.
 
 Therefore, we are not expecting problems connected with the tools we have selected.
 
@@ -150,31 +154,5 @@ While challenging it is also rewarding in terms of business value and as a uniqu
 
 \subsection{Dictionary} \label{dictionary}
 
-\begin{description}
-	\item[computational origami] \label{dictionary:computational-origami} - a field of mathematics concerned about algorithms connected with origami folding.
-	\item[crease] - a line segment on a paper.
-	\item[crease pattern] \label{dictionary:crease-pattern} - a pattern of lines formed by creases that is created after unfolding the origami flat.
-	\item[folded state] \label{dictionary:folded-state} - a sheet of paper folded along the crease pattern, an assembled origami model.
-	\item[mountain] - a fold of paper along the crease, such that the facets on the sides of the crease are facing downwards.
-					\begin{figure}[H]
-						\caption{Example of a mountain crease}
-						\centering
-						\begin{tikzpicture}[scale=1.5]
-							\draw[blue, thick] (0,0) -- (1,1);
-							\draw (1,1) -- (1.2, 0) --  (0.2, -1) -- (0,0);
-							\filldraw[fill=gray] (0, 0) -- (-0.2, -0.8) -- (0.09, -0.45) -- cycle;
-						\end{tikzpicture}
-					\end{figure}
-	\item[valley] - a fold of paper along the crease, such that the facets on the sides of the crease are facing upwards.
-					\begin{figure}[H]
-						\caption{Example of a valley crease}
-						\centering
-						\begin{tikzpicture}[scale=1.5]
-							\draw[red, thick] (0,0) -- (1,1);
-							\filldraw[fill=gray] (0, 0) -- (-0.4, 1) -- (0.6, 2) -- (1, 1) -- cycle;
-							\filldraw[fill=white] (1,1) -- (1.2, 2) --  (0.2, 1) -- (0,0);
-						\end{tikzpicture}
-					\end{figure}
-	\item[mountain-valley assignment] - an assignment of mountain or valley to the creases on the crease pattern.
-\end{description}
+\input{dictionary.tex}
 
