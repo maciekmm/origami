@@ -3,13 +3,13 @@ from geometry.generic_models import Vector3
 from geometry.geometry_models import Edge, EDGE_MOUNTAIN, EDGE_VALLEY,\
     EDGE_BOUNDARY, EDGE_FLAT, EDGE_UNKNOWN, angle_from_assignment, Face, ForceName
 from geometry.generic_tools import vector_from_to, triangle_height, cot
+import numpy as np
+
+TWO_PI = 2 * np.pi
+ANGLE_FLIP_THRESHOLD = 5.0
 
 
 def set_crease_force(edge: Edge):
-    # TODO: Add FACET handling here? (Driven by triangulation facet creases)
-#    if edge.assignment != EDGE_MOUNTAIN and edge.assignment != EDGE_VALLEY:
-#        return
-
     if edge.assignment == EDGE_BOUNDARY or edge.assignment == EDGE_UNKNOWN:
         return
 
@@ -21,16 +21,24 @@ def set_crease_force(edge: Edge):
     elif edge.assignment == EDGE_FLAT:
         k_crease = edge.l0 * CONFIG['FACET_STIFFNESS']
 
-
     theta = edge.faces_angle()
     theta_target = angle_from_assignment(edge.assignment)
-    c = k_crease * (theta_target - theta)
 
-    # TODO: Just a desperate experiment to try and make things not flip
-#    sign = lambda x: -1 if x < 0 else 1
-#    if sign(theta) != sign(theta_target):
-#        return
-    # END 
+
+    # This accounts for the case when faces can "flip" (inter-penetrate to the other side)
+    # That is - the angle diff is too huge to be physically possible
+    # so we account for it by adding or subtracting the full flip angle
+    # The diff will never be more than 2 * pi, since we're talking about a
+    # dihedral angle between 2 faces.
+    # It's in the range [0, 2pi] or [-2pi, 0] depending on the edge.
+    diff = theta - edge.last_theta
+    if diff < -ANGLE_FLIP_THRESHOLD:
+        diff += TWO_PI
+    elif diff > ANGLE_FLIP_THRESHOLD:
+        diff -= TWO_PI
+    theta = edge.last_theta + diff
+
+    c = k_crease * (theta_target - theta)
 
     left_face = edge.face_left
     right_face = edge.face_right
@@ -73,6 +81,8 @@ def set_crease_force(edge: Edge):
     p2.set_force(ForceName.CREASE, Vector3.from_vec(f2))
     p3.set_force(ForceName.CREASE, Vector3.from_vec(f3))
     p4.set_force(ForceName.CREASE, Vector3.from_vec(f4))
+
+    edge.last_theta = theta
 
 
 def find_vertex_not_in_edge(face: Face, edge: Edge):

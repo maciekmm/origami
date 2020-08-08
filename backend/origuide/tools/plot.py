@@ -70,11 +70,15 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
     if CONFIG['DEBUG_PLOT_NORMALS']:
         ax.quiver(xns, yns, zns, uns, vns, wns, color='g')
 
-    box_lim = 4
+    box_lim = 2
 
     ax.set_xlim([-box_lim, box_lim])
     ax.set_ylim([-box_lim, box_lim])
     ax.set_zlim([-box_lim, box_lim])
+
+    # Camera settings
+    ax.elev = 60
+
 
     plt.show()
     print("")
