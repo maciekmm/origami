@@ -38,6 +38,9 @@ class Vertex:
         self._total_force = Vector3(0.0, 0.0, 0.0)
         self.velocity = Vector3(0.0, 0.0, 0.0)
 
+        if CONFIG['DEBUG'] and CONFIG['DEBUG_FORCES']:
+            self.forces_by_type = {}
+
     @property
     def x(self):
         return self.pos[0]
@@ -66,20 +69,35 @@ class Vertex:
         return 'Vertex {}: [{}, {}, {}]'.format(self.id, self.x, self.y, self.z)
 
     def set_force(self, name: ForceName, force: Vector3):
-        if CONFIG['DEBUG'] and CONFIG['DEBUG_FORCES']:
-            logging.debug('Setting force {}:{} on {}'.format(
-                name,
-                force,
-                self.__str__()
-            ))
+        # if CONFIG['DEBUG'] and CONFIG['DEBUG_FORCES']:
+        #     logging.debug('Setting force (l={}) {}:{} on {}'.format(
+        #         force.length,
+        #         name,
+        #         force,
+        #         self.__str__()
+        #     ))
 
         self._total_force += force
 
+        if CONFIG['DEBUG'] and CONFIG['DEBUG_FORCES']:
+            if name not in self.forces_by_type:
+                self.forces_by_type[name] = Vector3(0, 0, 0)
+            self.forces_by_type[name] += force
+
     def total_force(self):
+        if CONFIG['DEBUG'] and CONFIG['DEBUG_FORCES']:
+            forces_format = ""
+            for k, v in self.forces_by_type.items():
+                forces_format += f'{k}: (l={v.length}) {v}\n'
+            print(f'Vertex {self.id}: {forces_format}')
+
         return self._total_force
 
     def reset_forces(self):
         self._total_force = Vector3(0.0, 0.0, 0.0)
+
+        if CONFIG['DEBUG'] and CONFIG['DEBUG_FORCES']:
+            self.forces_by_type = {}
 
     def reset_velocity(self):
         self.velocity = Vector3(0.0, 0.0, 0.0)
@@ -112,6 +130,8 @@ class Edge:
             self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
 
         self.damping_coeff = CONFIG['DAMPING_PERCENT'] * 2 * np.sqrt(self.k_axial * min(self.v1.mass, self.v2.mass))
+
+        self.last_theta = 0.0
 
     @property
     def length(self):
