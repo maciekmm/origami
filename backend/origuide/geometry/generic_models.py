@@ -1,13 +1,14 @@
-import numpy as np
+import math
+from typing import List
 
 
 class Vector3:
     def __init__(self, x: float, y: float, z: float):
-        self.vec = np.array([x, y, z])
+        self.vec = [x, y, z]
 
     @classmethod
-    def from_vec(cls, np_vector: np.array):
-        return cls(np_vector[0], np_vector[1], np_vector[2])
+    def from_vec(cls, vec: List[float]):
+        return cls(vec[0], vec[1], vec[2])
 
     @property
     def x(self):
@@ -35,7 +36,7 @@ class Vector3:
 
     @property
     def length(self):
-        return np.linalg.norm(self.vec)
+        return math.sqrt(self.vec[0]**2 + self.vec[1]**2 + self.vec[2]**2)
 
     def __getitem__(self, index):
         if 0 <= index < len(self.vec):
@@ -47,31 +48,51 @@ class Vector3:
             self.vec[index] = value
 
     def __eq__(self, other):
-        return (self.vec == other.vec).all()
+        return self.vec[0] == other.vec[0] and \
+            self.vec[1] == other.vec[1] and \
+            self.vec[2] == other.vec[2]
 
     def __hash__(self):
-        return hash(self.vec.tostring())
+        return hash(tuple(self.vec))
 
     def __add__(self, other):
-        return Vector3.from_vec(self.vec + other.vec)
+        return Vector3(self.vec[0] + other.vec[0],
+                       self.vec[1] + other.vec[1],
+                       self.vec[2] + other.vec[2])
 
     def __sub__(self, other):
-        return Vector3.from_vec(self.vec - other.vec)
+        return Vector3(self.vec[0] - other.vec[0],
+                       self.vec[1] - other.vec[1],
+                       self.vec[2] - other.vec[2])
 
     def __neg__(self):
-        return Vector3.from_vec(-self.vec)
+        return Vector3(-self.vec[0],
+                       -self.vec[1],
+                       -self.vec[2])
 
     def __mul__(self, other):
         other_type = type(other)
         if other_type != float and other_type != int:
             raise TypeError('unsupported operand type(s) for *')
-        return Vector3.from_vec(self.vec * other)
+        return Vector3(self.vec[0] * other,
+                       self.vec[1] * other,
+                       self.vec[2] * other)
 
     def __rmul__(self, other):
         other_type = type(other)
         if other_type != float and other_type != int:
             raise TypeError('unsupported operand type(s) for *')
-        return Vector3.from_vec(self.vec * other)
+        return Vector3(self.vec[0] * other,
+                       self.vec[1] * other,
+                       self.vec[2] * other)
+
+    def __truediv__(self, other):
+        other_type = type(other)
+        if other_type != float and other_type != int:
+            raise TypeError('unsupported operand type(s) for /')
+        return Vector3(self.vec[0] / other,
+                       self.vec[1] / other,
+                       self.vec[2] / other)
 
     def __str__(self):
         return 'Vector3' \

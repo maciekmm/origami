@@ -13,6 +13,7 @@ def set_face_force(face: Face):
 
 
 def set_angle_face_force(angle_vertex: Vertex, alfa0, face: Face, k_face):
+    # TODO: For potential speedup - calculations for the whole face at one time
     alfa = face.angle_for_vertex(angle_vertex)
 
     p1 = face.prev_vertex(angle_vertex)
@@ -28,8 +29,8 @@ def set_angle_face_force(angle_vertex: Vertex, alfa0, face: Face, k_face):
 
     normal = face.normal
 
-    n_x_p21 = cross(normal, p21).vec
-    n_x_p23 = cross(normal, p23).vec
+    n_x_p21 = cross(normal, p21)
+    n_x_p23 = cross(normal, p23)
 
     dp1 = n_x_p21 / p21_len
     dp2 = -n_x_p21 / p21_len + n_x_p23 / p23_len
