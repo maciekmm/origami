@@ -64,3 +64,22 @@ class TestVector3(unittest.TestCase):
         self.assertEqual(v * 2, Vector3(2, 4, 6))
         self.assertEqual(2 * v, Vector3(2, 4, 6))
 
+    def test_length(self):
+        v = Vector3(1, 2, 2)
+        self.assertEqual(v.length, 3)
+        v = Vector3(-1, 2, 2)
+        self.assertEqual(v.length, 3)
+        v = Vector3(1, -2, 2)
+        self.assertEqual(v.length, 3)
+        v = Vector3(1, 2, -2)
+        self.assertEqual(v.length, 3)
+        v = Vector3(0, 0, 3)
+        self.assertEqual(v.length, 3)
+        v = Vector3(3, 0, 0)
+        self.assertEqual(v.length, 3)
+        v = Vector3(0, 3, 0)
+        self.assertEqual(v.length, 3)
+
+    def test_division_by_number(self):
+        v = Vector3(1, 2, 3)
+        self.assertEqual(v / 2, Vector3(0.5, 1, 1.5))

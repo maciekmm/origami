@@ -19,8 +19,6 @@ class Solver:
         self.edges = edges
         self.faces = faces
 
-        # TODO: Maybe add error indicator (like globalError in original simulator) to see how it does
-
         # TODO: Is this needed here if we have it in vertices? (or vice versa)
         self.vertices_velocity = np.zeros((len(vertices), 3))
 
@@ -84,6 +82,7 @@ class Solver:
             v.reset_forces()
 
     def _set_forces(self):
+        # TODO: For potential speedup - beam and damping can be calculated in one place
         set_all_beam_forces(self.edges)
         set_all_damping_forces(self.edges)
         set_all_crease_forces(self.edges)

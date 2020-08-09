@@ -11,7 +11,7 @@ def _set_beam_force(edge: Edge):
 
     m = k_axial * (edge.length - edge.l0)
 
-    f1 = Vector3.from_vec(m * i12.vec)
+    f1 = m * i12
 
     edge.v1.set_force(ForceName.BEAM, f1)
     edge.v2.set_force(ForceName.BEAM, -f1)

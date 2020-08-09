@@ -11,7 +11,7 @@ def normalize(v: Vector3) -> Vector3:
     v_len = v.length
     if v_len == 0:
         return v
-    return Vector3.from_vec(v.vec / v_len)
+    return v / v_len
 
 
 def cross(v1: Vector3, v2: Vector3) -> Vector3:
@@ -28,7 +28,7 @@ def cross(v1: Vector3, v2: Vector3) -> Vector3:
 
 
 def dot(v1: Vector3, v2: Vector3) -> float:
-    return np.dot(v1.vec, v2.vec)
+    return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z
 
 
 def distance(v1: Vector3, v2: Vector3) -> float:
