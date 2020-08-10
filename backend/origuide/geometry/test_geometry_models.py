@@ -7,7 +7,7 @@ from geometry.geometry_models import Vertex, Edge, EDGE_VALLEY, Face, ForceName
 
 class TestVertexForces(unittest.TestCase):
     def setUp(self) -> None:
-        self.v = Vertex(0, 0, 0)
+        self.v = Vertex(0, 0, 0, 0)
 
     def test_forces_manipulation(self):
         self.v.set_force(ForceName.BEAM, Vector3(1, 1, 0))
@@ -23,25 +23,25 @@ class TestVertexForces(unittest.TestCase):
 
 class TestEdgeLength(unittest.TestCase):
     def test_returns_edge_length(self):
-        edge = Edge(Vertex(0, 0, 0), Vertex(1, 0, 0), EDGE_VALLEY)
+        edge = Edge(0, Vertex(0, 0, 0, 0), Vertex(1, 1, 0, 0), EDGE_VALLEY)
         self.assertEqual(edge.length, 1)
 
     def test_returns_zero_length(self):
-        edge = Edge(Vertex(0, 0, 0), Vertex(0, 0, 0), EDGE_VALLEY)
+        edge = Edge(0, Vertex(0, 0, 0, 0), Vertex(1, 0, 0, 0), EDGE_VALLEY)
         self.assertEqual(edge.length, 0)
 
 
 class TestEdgeFacesAngle(unittest.TestCase):
     def setUp(self) -> None:
-        self.v1 = Vertex(0, 0, 0)
-        self.v2 = Vertex(1, 0, 0)
-        self.v3 = Vertex(0, 1, 0)
+        self.v1 = Vertex(0, 0, 0, 0)
+        self.v2 = Vertex(1, 1, 0, 0)
+        self.v3 = Vertex(2, 0, 1, 0)
 
-        self.v4 = Vertex(0, 0, 1)
+        self.v4 = Vertex(0, 0, 0, 1)
 
-        self.edge = Edge(self.v1, self.v3, EDGE_VALLEY)
-        self.face1 = Face(self.v1, self.v2, self.v3)
-        self.face2 = Face(self.v1, self.v3, self.v4)
+        self.edge = Edge(0, self.v1, self.v3, EDGE_VALLEY)
+        self.face1 = Face(1, self.v1, self.v2, self.v3)
+        self.face2 = Face(2, self.v1, self.v3, self.v4)
 
     def setFaces(self):
         self.edge.face_right = self.face1
@@ -64,18 +64,21 @@ class TestEdgeFacesAngle(unittest.TestCase):
 
     def test_it_takes_edge_orientation_into_account(self):
         self.setFaces()
-        self.edge.orientation_vec = -self.edge.orientation_vec
-        self.assertEqual(self.edge.faces_angle(), -math.pi / 2)
+        faces_angle = self.edge.faces_angle()
+
+        self.edge.v1, self.edge.v2 = self.edge.v2, self.edge.v1
+
+        self.assertEqual(self.edge.faces_angle(), -faces_angle)
 
 
 class TestFaceNormal(unittest.TestCase):
     def setUp(self) -> None:
-        self.v1 = Vertex(0, 3, 0)
-        self.v2 = Vertex(0, 4, 0)
-        self.v3 = Vertex(0, 3, 1)
+        self.v1 = Vertex(0, 0, 3, 0)
+        self.v2 = Vertex(1, 0, 4, 0)
+        self.v3 = Vertex(2, 0, 3, 1)
 
-        self.face1 = Face(self.v1, self.v2, self.v3)
-        self.face2 = Face(self.v3, self.v2, self.v1)
+        self.face1 = Face(0, self.v1, self.v2, self.v3)
+        self.face2 = Face(1, self.v3, self.v2, self.v1)
 
     def test_returns_plane_normal(self):
         self.assertEqual(self.face1.normal, Vector3(1, 0, 0))
@@ -86,11 +89,11 @@ class TestFaceNormal(unittest.TestCase):
 
 class TestFaceAngles(unittest.TestCase):
     def setUp(self) -> None:
-        self.v1 = Vertex(0, 0, 0)
-        self.v2 = Vertex(3, 0, 0)
-        self.v3 = Vertex(0, 3, 0)
+        self.v1 = Vertex(0, 0, 0, 0)
+        self.v2 = Vertex(1, 3, 0, 0)
+        self.v3 = Vertex(2, 0, 3, 0)
 
-        self.face = Face(self.v1, self.v2, self.v3)
+        self.face = Face(0, self.v1, self.v2, self.v3)
 
     def test_returns_correct_angles(self):
         self.assertEqual(self.face.angle_for_vertex(self.v1), math.pi / 2)
@@ -100,11 +103,11 @@ class TestFaceAngles(unittest.TestCase):
 
 class TestFaceNextPrevVertex(unittest.TestCase):
     def setUp(self) -> None:
-        self.v1 = Vertex(0, 0, 0)
-        self.v2 = Vertex(3, 0, 0)
-        self.v3 = Vertex(0, 3, 0)
+        self.v1 = Vertex(0, 0, 0, 0)
+        self.v2 = Vertex(1, 3, 0, 0)
+        self.v3 = Vertex(2, 0, 3, 0)
 
-        self.face = Face(self.v1, self.v2, self.v3)
+        self.face = Face(0, self.v1, self.v2, self.v3)
 
     def test_returns_next_vertex(self):
         self.assertEqual(self.face.next_vertex(self.v1), self.v2)

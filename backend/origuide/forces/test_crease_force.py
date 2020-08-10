@@ -8,13 +8,13 @@ from geometry.geometry_models import Vertex, Edge, EDGE_UNKNOWN, Face, EDGE_VALL
 
 class TestCreaseForce(unittest.TestCase):
     def setUp(self) -> None:
-        self.v1 = Vertex(1, -1, 0)
-        self.v2 = Vertex(1, 1, 0)
-        self.v3 = Vertex(-1, 1, 0)
-        self.v4 = Vertex(-1, -1, 0)
-        self.face1 = Face(self.v1, self.v2, self.v4)
-        self.face2 = Face(self.v2, self.v3, self.v4)
-        self.edge = Edge(self.v4, self.v2, EDGE_UNKNOWN)
+        self.v1 = Vertex(0, 1, -1, 0)
+        self.v2 = Vertex(1, 1, 1, 0)
+        self.v3 = Vertex(2, -1, 1, 0)
+        self.v4 = Vertex(3, -1, -1, 0)
+        self.face1 = Face(0, self.v1, self.v2, self.v4)
+        self.face2 = Face(1, self.v2, self.v3, self.v4)
+        self.edge = Edge(2, self.v4, self.v2, EDGE_UNKNOWN)
         self.edge.face_right = self.face1
         self.edge.face_left = self.face2
 

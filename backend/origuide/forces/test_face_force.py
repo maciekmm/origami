@@ -8,10 +8,10 @@ from geometry.geometry_models import Vertex, Face
 
 class TestFaceForce(unittest.TestCase):
     def setUp(self) -> None:
-        self.v1 = Vertex(1, 0, 0)
-        self.v2 = Vertex(-1, 0, 0)
-        self.v3 = Vertex(0, 2, 0)
-        self.face = Face(self.v1, self.v2, self.v3)
+        self.v1 = Vertex(0, 1, 0, 0)
+        self.v2 = Vertex(1, -1, 0, 0)
+        self.v3 = Vertex(2, 0, 2, 0)
+        self.face = Face(0, self.v1, self.v2, self.v3)
 
     def test_is_zero_if_no_position_changed(self):
         set_all_face_forces([self.face])

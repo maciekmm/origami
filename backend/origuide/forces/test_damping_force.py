@@ -8,9 +8,9 @@ from geometry.geometry_models import Vertex, Edge, EDGE_FLAT
 
 class TestDampingForce(unittest.TestCase):
     def setUp(self) -> None:
-        self.v1 = Vertex(0, 0, 0)
-        self.v2 = Vertex(1, 1, 0)
-        self.edge = Edge(self.v1, self.v2, EDGE_FLAT)
+        self.v1 = Vertex(0, 0, 0, 0)
+        self.v2 = Vertex(1, 1, 1, 0)
+        self.edge = Edge(0, self.v1, self.v2, EDGE_FLAT)
 
     def test_is_zero_if_velocity_is_zero(self):
         set_all_damping_forces([self.edge])
