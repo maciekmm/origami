@@ -34,7 +34,7 @@ class TriangulationTestCase(unittest.TestCase):
 
 class TestTriangulation(TriangulationTestCase):
     def test_does_not_change_triangular_face(self):
-        face = [Vertex(1, 0, 0), Vertex(2, 0, 0), Vertex(0, 2, 0)]
+        face = [Vertex(0, 1, 0, 0), Vertex(1, 2, 0, 0), Vertex(2, 0, 2, 0)]
 
         triangulated = triangulate(face)
         self.assertEqual(len(triangulated), 1)
@@ -45,10 +45,10 @@ class TestTriangulation(TriangulationTestCase):
         self.assertEqual(pos_set, triangulated_pos_set)
 
     def test_triangulates_square_along_xy_plane(self):
-        face = [Vertex(0, 0, 0),
-                Vertex(1, 0, 0),
-                Vertex(1, 1, 0),
-                Vertex(0, 1, 0),
+        face = [Vertex(0, 0, 0, 0),
+                Vertex(1, 1, 0, 0),
+                Vertex(2, 1, 1, 0),
+                Vertex(3, 0, 1, 0),
                 ]
 
         diagonal1 = np.array([1, 1, 0])
@@ -58,10 +58,10 @@ class TestTriangulation(TriangulationTestCase):
         self.assertTriangulatesSquare(triangulated, diagonal1, diagonal2)
 
     def test_triangulates_square_along_xz_plane(self):
-        face = [Vertex(0, 0, 0),
-                Vertex(1, 0, 0),
-                Vertex(1, 0, 1),
-                Vertex(0, 0, 1),
+        face = [Vertex(0, 0, 0, 0),
+                Vertex(1, 1, 0, 0),
+                Vertex(2, 1, 0, 1),
+                Vertex(3, 0, 0, 1),
                 ]
         triangulated = triangulate(face)
         diagonal1 = np.array([1, 0, 1])
@@ -70,10 +70,10 @@ class TestTriangulation(TriangulationTestCase):
         self.assertTriangulatesSquare(triangulated, diagonal1, diagonal2)
 
     def test_triangulates_square_along_yz_plane(self):
-        face = [Vertex(0, 0, 0),
-                Vertex(0, 1, 0),
-                Vertex(0, 1, 1),
-                Vertex(0, 0, 1),
+        face = [Vertex(0, 0, 0, 0),
+                Vertex(1, 0, 1, 0),
+                Vertex(2, 0, 1, 1),
+                Vertex(3, 0, 0, 1),
                 ]
         triangulated = triangulate(face)
         diagonal1 = np.array([0, 1, 1])

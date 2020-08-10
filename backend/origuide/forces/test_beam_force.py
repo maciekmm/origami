@@ -8,9 +8,9 @@ from geometry.geometry_models import Edge, Vertex, EDGE_BOUNDARY
 
 class TestBeamForce(unittest.TestCase):
     def setUp(self) -> None:
-        self.v1 = Vertex(0, 0, 0)
-        self.v2 = Vertex(2, 0, 0)
-        self.edge = Edge(self.v1, self.v2, EDGE_BOUNDARY)
+        self.v1 = Vertex(0, 0, 0, 0)
+        self.v2 = Vertex(1, 2, 0, 0)
+        self.edge = Edge(0, self.v1, self.v2, EDGE_BOUNDARY)
 
     def test_is_zero_if_position_did_not_change(self):
         set_all_beam_forces([self.edge])
