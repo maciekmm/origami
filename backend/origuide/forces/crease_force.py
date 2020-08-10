@@ -5,6 +5,9 @@ from geometry.geometry_models import Edge, EDGE_MOUNTAIN, EDGE_VALLEY,\
 from geometry.generic_tools import vector_from_to, triangle_height, cot
 import numpy as np
 
+TWO_PI = 2 * np.pi
+ANGLE_FLIP_THRESHOLD = 5.0
+
 
 def set_crease_force(edge: Edge):
     if edge.assignment == EDGE_BOUNDARY or edge.assignment == EDGE_UNKNOWN:
@@ -29,12 +32,10 @@ def set_crease_force(edge: Edge):
     # dihedral angle between 2 faces.
     # It's in the range [0, 2pi] or [-2pi, 0] depending on the edge.
     diff = theta - edge.last_theta
-    two_pi = 2 * np.pi
-    angle_flip_threshold = 5.0
-    if diff < -angle_flip_threshold:
-        diff += two_pi
-    elif diff > angle_flip_threshold:
-        diff -= two_pi
+    if diff < -ANGLE_FLIP_THRESHOLD:
+        diff += TWO_PI
+    elif diff > ANGLE_FLIP_THRESHOLD:
+        diff -= TWO_PI
     theta = edge.last_theta + diff
 
     c = k_crease * (theta_target - theta)
