@@ -21,11 +21,19 @@ def set_crease_force(edge: Edge):
     theta = edge.faces_angle()
     theta_target = angle_from_assignment(edge.assignment)
 
+
+    # This accounts for the case when faces can "flip" (inter-penetrate to the other side)
+    # That is - the angle diff is too huge to be physically possible
+    # so we account for it by adding or subtracting the full flip angle
+    # The diff will never be more than 2 * pi, since we're talking about a
+    # dihedral angle between 2 faces.
+    # It's in the range [0, 2pi] or [-2pi, 0] depending on the edge.
     diff = theta - edge.last_theta
     two_pi = 2 * np.pi
-    if diff < -5.0:
+    angle_flip_threshold = 5.0
+    if diff < -angle_flip_threshold:
         diff += two_pi
-    elif diff > 5.0:
+    elif diff > angle_flip_threshold:
         diff -= two_pi
     theta = edge.last_theta + diff
 
