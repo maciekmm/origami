@@ -20,3 +20,17 @@ export function markFrameSteady(frame) {
 		frame.frame_classes = [...frame.frame_classes, STEADY_STATE_CLASS]
 	}
 }
+
+export function getNextSteadyFrameId(frames, currentFrameId) {
+	const steadyFrames = getSteadyFrameIds(frames)
+	const lastFrame = steadyFrames[steadyFrames.length - 1]
+	return steadyFrames.find((id) => id > currentFrameId) || lastFrame
+}
+
+export function getPreviousSteadyFrameId(frames, currentFrameId) {
+	const steadyFrames = getSteadyFrameIds(frames)
+	const nextFrameIdx = steadyFrames.indexOf(
+		getNextSteadyFrameId(frames, currentFrameId)
+	)
+	return nextFrameIdx > 0 ? steadyFrames[nextFrameIdx - 1] : 0
+}
