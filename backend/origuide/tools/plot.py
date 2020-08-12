@@ -20,6 +20,7 @@ def assignment_to_color(assignment):
         return 'gray'
 
 def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces):
+    forces = np.array(forces)
     fig = plt.figure(1)
     ax = fig.add_subplot(111, projection='3d')
 
@@ -28,10 +29,15 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
     lc = Line3DCollection(lines, colors=colors, linewidths=2)
 
     xs, ys, zs = [], [], []
+    vel_xs, vel_ys, vel_zs = [], [], []
     for v in vertices + [vertices[0]]:
         xs.append(v.x)
         ys.append(v.y)
         zs.append(v.z)
+
+        vel_xs.append(v.velocity[0])
+        vel_ys.append(v.velocity[1])
+        vel_zs.append(v.velocity[2])
 
     display_forces = np.concatenate((forces, [forces[0, :]]))
 
@@ -70,14 +76,19 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
     if CONFIG['DEBUG_PLOT_NORMALS']:
         ax.quiver(xns, yns, zns, uns, vns, wns, color='g')
 
+    # Plot velocities
+    if CONFIG['DEBUG_PLOT_VELOCITIES']:
+        ax.quiver(xs, ys, zs, vel_xs, vel_ys, vel_zs, color='r')
+
     box_lim = 2
 
     ax.set_xlim([-box_lim, box_lim])
     ax.set_ylim([-box_lim, box_lim])
-    ax.set_zlim([-box_lim, box_lim])
+    ax.set_zlim([-box_lim / 2, box_lim / 2])
 
     # Camera settings
-    ax.elev = 60
+    ax.elev = 20
+    ax.azim = 180
 
 
     plt.show()
