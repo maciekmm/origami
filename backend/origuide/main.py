@@ -64,7 +64,8 @@ def main():
     # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_from_flat_undriven.fold')
     # fold = read_fold('../../assets/solver_test_models/fold_unfold_half.fold')
     # fold = read_fold('../../assets/solver_test_models/tulip_base.fold')
-    fold = read_fold('../../assets/solver_test_models/tulip_base_amanda.fold')
+    # fold = read_fold('../../assets/solver_test_models/tulip_base_amanda.fold')
+    fold = read_fold('../../assets/models/flappingBird.fold')
 
     vertices = create_vertices(fold.vertices)
 

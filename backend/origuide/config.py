@@ -7,7 +7,7 @@ CONFIG = {
     'DEBUG_PLOT_FORCES': False,
     'DEBUG_PLOT_NORMALS': False,
     'DEBUG_PLOT_VELOCITIES': False,
-    'DEBUG_PLOT_ITER': 1,
+    'DEBUG_PLOT_EVERY': 1,
     'DEBUG_PLOT_FROM': 0,
 
 
