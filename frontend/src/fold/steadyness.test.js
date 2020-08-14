@@ -75,6 +75,15 @@ describe("getNextSteadyFrameId", () => {
 		const nextSteadyFrameId = getNextSteadyFrameId(frames, currentFrameId)
 		expect(nextSteadyFrameId).toStrictEqual(4)
 	})
+
+	it("should return the current frame if current frame is steady", () => {
+		const steadyFrame = { frame_classes: [STEADY_STATE_CLASS] }
+		const frames = [steadyFrame, {}, steadyFrame, steadyFrame, {}]
+		const currentFrameId = 2
+
+		const nextSteadyFrameId = getNextSteadyFrameId(frames, currentFrameId)
+		expect(nextSteadyFrameId).toStrictEqual(2)
+	})
 })
 
 describe("getPreviousSteadyFrameId", () => {
@@ -83,8 +92,11 @@ describe("getPreviousSteadyFrameId", () => {
 		const frames = [steadyFrame, {}, {}, steadyFrame, {}]
 		const currentFrameId = 4
 
-		const nextSteadyFrameId = getPreviousSteadyFrameId(frames, currentFrameId)
-		expect(nextSteadyFrameId).toStrictEqual(3)
+		const previousSteadyFrameId = getPreviousSteadyFrameId(
+			frames,
+			currentFrameId
+		)
+		expect(previousSteadyFrameId).toStrictEqual(3)
 	})
 
 	it("should return the first frame if current frame is before the first steady frame", () => {
@@ -92,8 +104,23 @@ describe("getPreviousSteadyFrameId", () => {
 		const frames = [{}, {}, {}, steadyFrame, {}]
 		const currentFrameId = 1
 
-		const nextSteadyFrameId = getPreviousSteadyFrameId(frames, currentFrameId)
-		expect(nextSteadyFrameId).toStrictEqual(0)
+		const previousSteadyFrameId = getPreviousSteadyFrameId(
+			frames,
+			currentFrameId
+		)
+		expect(previousSteadyFrameId).toStrictEqual(0)
+	})
+
+	it("should return the current frame if current frame is steady", () => {
+		const steadyFrame = { frame_classes: [STEADY_STATE_CLASS] }
+		const frames = [steadyFrame, {}, steadyFrame, steadyFrame, {}]
+		const currentFrameId = 3
+
+		const previousSteadyFrameId = getPreviousSteadyFrameId(
+			frames,
+			currentFrameId
+		)
+		expect(previousSteadyFrameId).toStrictEqual(3)
 	})
 })
 
