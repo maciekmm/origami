@@ -36,6 +36,12 @@ class Frame:
     def faces(self):
         return self.raw['faces_vertices']
 
+    @property
+    def edges_fold_angles(self):
+        if 'edges_foldAngles' in self.raw:
+            return self.raw['edges_foldAngles']
+        return None
+
 
 class Fold(Frame):
     def __init__(self, json_representation):
