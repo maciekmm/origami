@@ -23,14 +23,11 @@ export function markFrameSteady(frame) {
 
 export function getNextSteadyFrameId(frames, currentFrameId) {
 	const steadyFrames = getSteadyFrameIds(frames)
-	const lastFrame = steadyFrames[steadyFrames.length - 1]
-	return steadyFrames.find((id) => id > currentFrameId) || lastFrame
+	const lastFrameId = frames.length - 1
+	return steadyFrames.find((id) => id > currentFrameId) || lastFrameId
 }
 
 export function getPreviousSteadyFrameId(frames, currentFrameId) {
-	const steadyFrames = getSteadyFrameIds(frames)
-	const nextFrameIdx = steadyFrames.indexOf(
-		getNextSteadyFrameId(frames, currentFrameId)
-	)
-	return nextFrameIdx > 0 ? steadyFrames[nextFrameIdx - 1] : 0
+	const steadyFramesReversed = getSteadyFrameIds(frames).reverse()
+	return steadyFramesReversed.find((id) => id < currentFrameId) || 0
 }
