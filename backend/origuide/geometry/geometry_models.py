@@ -118,6 +118,7 @@ class Edge:
         self.v2 = v2
         self.assignment = assignment
         self.l0 = self.length
+        self.target_angle = 0
 
         self.face_left = None   # face on the left as defined by edge orientation
         self.face_right = None   # face on the right as defined by edge orientation
