@@ -17,6 +17,7 @@ import preprocessFOLDModel from "../../fold/preprocess"
 import {
 	getNextSteadyFrameId,
 	getPreviousSteadyFrameId,
+	isSteady,
 } from "../../fold/steadyness"
 
 export default function Header() {
@@ -49,7 +50,8 @@ export default function Header() {
 						stop={stop}
 						nextFrame={nextFrame}
 						prevFrame={prevFrame}
-						currentFrame={frame}
+						currentFrameId={frame}
+						isCurrentFrameSteady={isSteady(model.file_frames[frame])}
 						previousSteadyFrameId={getPreviousSteadyFrameId(
 							model.file_frames,
 							frame
