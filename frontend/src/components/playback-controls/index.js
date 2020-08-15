@@ -6,7 +6,6 @@ import ArrowRight from "@material-ui/icons/ArrowRight"
 import ArrowLeft from "@material-ui/icons/ArrowLeft"
 import Slider from "@material-ui/core/Slider"
 import Grid from "@material-ui/core/Grid"
-import styles from "./styles.css"
 
 export default function PlaybackControls({
 	playing,
@@ -20,6 +19,7 @@ export default function PlaybackControls({
 	previousSteadyFrameId,
 	nextSteadyFrameId,
 	selectFrame,
+	isLastFrame,
 }) {
 	const handleScrubbing = (_, newFrame) => {
 		pause()
@@ -27,12 +27,13 @@ export default function PlaybackControls({
 	}
 
 	const firstStepOfTransition =
-		previousSteadyFrameId === 0 ? 0 : previousSteadyFrameId + 1
-
-	const lastStepOfTransition =
-		isCurrentFrameSteady && currentFrameId !== 0
+		isCurrentFrameSteady && !isLastFrame
 			? currentFrameId
-			: nextSteadyFrameId
+			: previousSteadyFrameId
+
+	const lastStepOfTransition = isLastFrame
+		? currentFrameId
+		: nextSteadyFrameId - 1
 
 	return (
 		<Grid
