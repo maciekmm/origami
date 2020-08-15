@@ -88,7 +88,7 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
 
     # Camera settings
     ax.elev = 20
-    ax.azim = 180
+    ax.azim = 120
 
 
     plt.show()
