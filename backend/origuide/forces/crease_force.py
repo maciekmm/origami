@@ -62,8 +62,8 @@ def set_crease_force(edge: Edge):
     alfa431 = right_face.angle_for_vertex(p4)
     alfa423 = left_face.angle_for_vertex(p4)
 
-    dp1 = right_face.normal.vec / h1
-    dp2 = left_face.normal.vec / h2
+    dp1 = right_face.normal / h1
+    dp2 = left_face.normal / h2
 
     mul1 = dp1 / (cot(alfa314) + cot(alfa431))
     mul2 = dp2 / (cot(alfa342) + cot(alfa423))
@@ -76,10 +76,10 @@ def set_crease_force(edge: Edge):
     f3 = c * dp3
     f4 = c * dp4
 
-    p1.set_force(ForceName.CREASE, Vector3.from_vec(f1))
-    p2.set_force(ForceName.CREASE, Vector3.from_vec(f2))
-    p3.set_force(ForceName.CREASE, Vector3.from_vec(f3))
-    p4.set_force(ForceName.CREASE, Vector3.from_vec(f4))
+    p1.set_force(ForceName.CREASE, f1)
+    p2.set_force(ForceName.CREASE, f2)
+    p3.set_force(ForceName.CREASE, f3)
+    p4.set_force(ForceName.CREASE, f4)
 
     edge.last_theta = theta
 

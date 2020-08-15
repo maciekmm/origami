@@ -9,6 +9,8 @@ from forces.face_force import set_all_face_forces
 from geometry.generic_models import Vector3
 from geometry.geometry_models import Vertex, Edge, Face, angle_from_assignment
 
+import concurrent.futures
+
 import copy
 import math
 import numpy as np
@@ -77,7 +79,7 @@ class Solver:
             prev_forces = cur_forces.copy()
             cur_forces = self._total_forces_vecs()
 
-            output.accept(copy.deepcopy(self.vertices))
+            output.accept(self.vertices)
 
 
         print('FINISHED')
@@ -110,7 +112,6 @@ class Solver:
                     e.target_angle = angle_from_assignment(e.assignment)
                 else:
                     e.target_angle = fold_angle
-
 
     def _total_forces_vecs(self):
         return list(map(lambda v: v.total_force().vec, self.vertices))

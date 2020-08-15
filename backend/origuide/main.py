@@ -36,7 +36,7 @@ def create_faces(vertices, edges, faces_vertices):
         for face_vertices in triangles:
             face = Face(i, *face_vertices) # TODO: ? This makes id in Face not unique (which might not be a problem)
 
-            face_edges = zip(face_vertices, np.roll(face_vertices, -1))
+            face_edges = zip(face_vertices, list(face_vertices[1:]) + [face_vertices[0]])
             for p in face_edges:
                 v1 = p[0].id#tuple(p[0].pos)
                 v2 = p[1].id#tuple(p[1].pos)
@@ -63,7 +63,7 @@ def main():
     # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_undrve.fold')
     # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_from_flat_undriven.fold')
     # fold = read_fold('../../assets/solver_test_models/fold_unfold_half.fold')
-    # fold = read_fold('../../assets/solver_test_models/tulip_base.fold')
+    fold = read_fold('../../assets/solver_test_models/tulip_base.fold')
     # fold = read_fold('../../assets/solver_test_models/tulip_base_amanda.fold')
     # fold = read_fold('../../assets/models/flappingBird.fold')
     # fold = read_fold('../../assets/models/traditionalCrane_foldangle.fold')
@@ -117,12 +117,12 @@ def main():
 
         solver = Solver(vertices, edges, faces, steady_state.edges_fold_angles)
 
-        # TODO: PROFILING
-        # import cProfile
-        # cProfile.runctx('solver.solve(fold_producer)', None, locals())
-        # TODO END
+        if CONFIG['PROFILE']:
+            import cProfile
+            cProfile.runctx('solver.solve(fold_producer)', None, locals(), sort='cumulative')
+        else:
+            solver.solve(fold_producer)
 
-        solver.solve(fold_producer)
         fold_producer.next_transition()
 
     with open("/tmp/test.fold", "w") as file:

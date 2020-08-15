@@ -1,7 +1,7 @@
 import logging
 from enum import unique, Enum, auto
 
-import numpy as np
+import math
 
 from config import CONFIG
 from geometry.generic_models import Vector3
@@ -25,9 +25,9 @@ class ForceName(Enum):
 
 def angle_from_assignment(assignment):
     if assignment == EDGE_VALLEY:
-        return np.pi
+        return math.pi
     elif assignment == EDGE_MOUNTAIN:
-        return -np.pi
+        return -math.pi
     return 0
 
 
@@ -130,7 +130,7 @@ class Edge:
         else:
             self.k_axial = CONFIG['AXIAL_STIFFNESS_EA'] / self.l0
 
-        self.damping_coeff = CONFIG['DAMPING_PERCENT'] * 2 * np.sqrt(self.k_axial * min(self.v1.mass, self.v2.mass))
+        self.damping_coeff = CONFIG['DAMPING_PERCENT'] * 2 * math.sqrt(self.k_axial * min(self.v1.mass, self.v2.mass))
 
         self.last_theta = 0.0
 

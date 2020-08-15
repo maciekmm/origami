@@ -3,8 +3,7 @@ from typing import List
 
 
 class Vector3:
-    def __init__(self, x: float, y: float, z: float):
-        self.vec = [x, y, z]
+    def __init__(self, x: float, y: float, z: float): self.vec = [x, y, z]
 
     @classmethod
     def from_vec(cls, vec: List[float]):
