@@ -24,7 +24,6 @@ def set_crease_force(edge: Edge):
     theta = edge.faces_angle()
     theta_target = edge.target_angle
 
-
     # This accounts for the case when faces can "flip" (inter-penetrate to the other side)
     # That is - the angle diff is too huge to be physically possible
     # so we account for it by adding or subtracting the full flip angle

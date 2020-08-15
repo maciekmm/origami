@@ -55,20 +55,21 @@ class Solver:
 
                 v.velocity = v_next
 
-                # if CONFIG['DEBUG']:
-                    # print(v)
-                    # print('VELOCITY: ', v.velocity)
-                    # print('TOTAL FORCE: ', v.total_force())
-                    # print('a = ', a)
-                    # print()
+                if CONFIG['DEBUG']:
+                    print(v)
+                    print('VELOCITY: ', v.velocity)
+                    print('TOTAL FORCE: ', v.total_force())
+                    print('a = ', a)
+                    print()
 
             if CONFIG['DEBUG_PLOT']:
                 if plot_idx >= CONFIG['DEBUG_PLOT_FROM'] and plot_idx % CONFIG['DEBUG_PLOT_EVERY'] == 0:
                     plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
                 plot_idx += 1
+            print(plot_idx)
 
-            # if CONFIG['DEBUG']:
-            #     print('---')
+            if CONFIG['DEBUG']:
+                print('---')
 
             self._reset_forces()
             self._set_forces()

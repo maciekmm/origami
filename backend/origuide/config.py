@@ -1,13 +1,13 @@
 # TODO: Probably split into something like program-config, and simulation parameters
 
 CONFIG = {
-    'DEBUG': True,
+    'DEBUG': False,
     'DEBUG_PLOT': True,
     'DEBUG_FORCES': False,
     'DEBUG_PLOT_FORCES': True,
     'DEBUG_PLOT_NORMALS': False,
     'DEBUG_PLOT_VELOCITIES': False,
-    'DEBUG_PLOT_EVERY': 100,
+    'DEBUG_PLOT_EVERY': 5000,
     'DEBUG_PLOT_FROM': 0,
 
 
