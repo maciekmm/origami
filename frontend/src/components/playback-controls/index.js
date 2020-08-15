@@ -15,7 +15,8 @@ export default function PlaybackControls({
 	nextFrame,
 	pause,
 	stop,
-	currentFrame,
+	currentFrameId,
+	isCurrentFrameSteady,
 	previousSteadyFrameId,
 	nextSteadyFrameId,
 	selectFrame,
@@ -24,6 +25,14 @@ export default function PlaybackControls({
 		pause()
 		selectFrame(newFrame)
 	}
+
+	const firstStepOfTransition =
+		previousSteadyFrameId === 0 ? 0 : previousSteadyFrameId + 1
+
+	const lastStepOfTransition =
+		isCurrentFrameSteady && currentFrameId !== 0
+			? currentFrameId
+			: nextSteadyFrameId
 
 	return (
 		<Grid
@@ -35,10 +44,10 @@ export default function PlaybackControls({
 		>
 			<Grid item xs={6}>
 				<Slider
-					value={currentFrame}
+					value={currentFrameId}
 					onChange={handleScrubbing}
-					min={previousSteadyFrameId}
-					max={nextSteadyFrameId - 1}
+					min={firstStepOfTransition}
+					max={lastStepOfTransition}
 					aria-labelledby="continuous-slider"
 				/>
 			</Grid>
