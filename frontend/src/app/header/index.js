@@ -58,6 +58,7 @@ export default function Header() {
 						)}
 						nextSteadyFrameId={getNextSteadyFrameId(model.file_frames, frame)}
 						selectFrame={selectFrame}
+						isLastFrame={frame === model.file_frames.length - 1}
 					/>
 				</Grid>
 			)}
