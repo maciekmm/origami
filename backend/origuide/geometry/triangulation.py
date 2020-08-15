@@ -6,10 +6,9 @@ import numpy as np
 from geometry.geometry_models import Vertex
 
 
+# TODO: Get rid of numpy
+
 def triangulate(face: List[Vertex]):
-    """
-    @param face: np.array of Vertex instances
-    """
     if len(face) == 3:
         return [face]
 

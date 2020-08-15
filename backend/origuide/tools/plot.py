@@ -2,12 +2,13 @@ from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
-from config import CONFIG
 from matplotlib import collections as mc
+from mpl_toolkits.mplot3d.art3d import Line3DCollection
+
+from config import CONFIG
 
 from geometry.geometry_models import Vertex, Edge, Face
 from geometry.generic_models import Vector3
-from mpl_toolkits.mplot3d.art3d import Line3DCollection
 
 def assignment_to_color(assignment):
     if assignment == 'M':
@@ -90,8 +91,4 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
     ax.elev = 20
     ax.azim = 120
 
-
     plt.show()
-    print("")
-
-
