@@ -5,7 +5,7 @@ import FigureEdges from "../figure-edges"
 
 const POLYGON_OFFSET_FACTOR = 1
 
-export default function Figure({ frame, model }) {
+export default function Figure({ frame, model, onClick }) {
 	const [foldGeometry] = useState(() => new FoldGeometry())
 
 	const fileFrame = model.file_frames[frame]

@@ -8,9 +8,15 @@ import {
 	STOP,
 } from "./actions"
 
+import preprocessFOLDModel from "../fold/preprocess"
+
+const initialModel = preprocessFOLDModel(
+	require("../../../assets/models/diagonal_fold_animated.fold")
+)
+
 export const initialState = {
-	model: null,
-	frame: -1,
+	model: initialModel,
+	frame: 0,
 	playing: false,
 }
 

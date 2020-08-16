@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react"
 import * as THREE from "three"
+import { useResource, useThree } from "react-three-fiber"
 
-export default function EdgeSet({ vertices, edges, color }) {
+export default function EdgeSet({ vertices, edges, color, assignment }) {
 	const [geometry] = useState(() => new THREE.BufferGeometry())
+	const { raycaster } = useThree()
+	const [segmentsRef, segments] = useResource()
 
 	useEffect(() => {
-		const edgesToVertexIndices = new Uint16Array(vertices.length * 2)
+		const edgesToVertexIndices = new Uint16Array(edges.length * 2)
 		edges.forEach(([vertexFromId, vertexToId], i) => {
 			edgesToVertexIndices[2 * i] = vertexFromId
 			edgesToVertexIndices[2 * i + 1] = vertexToId
@@ -17,6 +20,8 @@ export default function EdgeSet({ vertices, edges, color }) {
 			"position",
 			new THREE.BufferAttribute(vertexPositions, 3)
 		)
+
+		geometry.setDrawRange(0, edges.length * 2)
 	}, [edges])
 
 	useEffect(() => {
@@ -35,7 +40,11 @@ export default function EdgeSet({ vertices, edges, color }) {
 	useEffect(() => () => geometry.dispose(), [geometry])
 
 	return (
-		<lineSegments renderOrder={1}>
+		<lineSegments
+			renderOrder={1}
+			ref={segmentsRef}
+			userData={{ assignment: assignment }}
+		>
 			<primitive attach="geometry" object={geometry} />
 			<lineBasicMaterial
 				linewidth={1}

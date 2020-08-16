@@ -1,9 +1,9 @@
 import React from "react"
-import TimelineStep from "../../components/timeline-step"
-import { useStore } from "../../store"
-import { getSteadyFrameIds } from "../../fold/steadyness"
+import TimelineStep from "../../../components/timeline-step"
+import { useStore } from "../../../store"
+import { getSteadyFrameIds } from "../../../fold/steadyness"
 import styles from "./styles.css"
-import { SELECT_FRAME } from "../../store/actions"
+import { SELECT_FRAME } from "../../../store/actions"
 
 export default function Timeline() {
 	const [{ model, frame }, dispatch] = useStore()

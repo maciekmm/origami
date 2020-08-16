@@ -1,10 +1,10 @@
 import React from "react"
-import { useStore } from "../store"
+import { useStore } from "../../store"
 import Header from "./header"
 import Player from "./player"
 import Timeline from "./timeline"
 
-export default function App() {
+export default function GuideViewer() {
 	const [{ model }] = useStore()
 
 	return (
