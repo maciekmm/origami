@@ -39,6 +39,10 @@ module.exports = {
 				test: /public\/.*\.css$/,
 				use: ["style-loader", "css-loader"],
 			},
+			{
+				test: /\.fold$/i,
+				loader: "json-loader",
+			},
 		],
 	},
 	plugins: [

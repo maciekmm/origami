@@ -1,6 +1,12 @@
 import React, { useRef } from "react"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
-import { Canvas, extend, useThree, useFrame } from "react-three-fiber"
+import {
+	Canvas,
+	extend,
+	useThree,
+	useFrame,
+	useResource,
+} from "react-three-fiber"
 import Figure from "../../components/figure"
 
 extend({ OrbitControls })
@@ -11,7 +17,7 @@ function SceneConfiguration() {
 		gl: { domElement },
 	} = useThree()
 
-	const lightRef = useRef()
+	const [lightRef, light] = useResource()
 
 	useFrame(() => {
 		lightRef.current.position.copy(camera.position)
@@ -20,8 +26,8 @@ function SceneConfiguration() {
 	return (
 		<>
 			<orbitControls args={[camera, domElement]} />
-			<ambientLight />
-			<pointLight ref={lightRef} intensity={0.5} position={[5, 5, 5]} />
+			<ambientLight intensity={0.3} />
+			<pointLight ref={lightRef} intensity={0.8} />
 		</>
 	)
 }
