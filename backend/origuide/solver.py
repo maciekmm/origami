@@ -106,7 +106,10 @@ class Solver:
                 e.target_angle = angle_from_assignment(e.assignment)
         else:
             for (e, fold_angle) in zip(self.edges, self.edges_fold_angles):
-                e.target_angle = fold_angle
+                if fold_angle is None:
+                    e.target_angle = angle_from_assignment(e.assignment)
+                else:
+                    e.target_angle = fold_angle
 
 
     def _total_forces_vecs(self):
