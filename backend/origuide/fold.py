@@ -6,7 +6,7 @@ def is_steady_state(frame):
 
 
 def extract_root_frame(root):
-    return {k: v for k, v in root.items() if k != 'file_frames'}
+    return {k: v for k, v in root.items() if not k.startswith('file_')}
 
 
 class Frame:
