@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react"
 import * as THREE from "three"
 import FoldGeometry from "../../three/fold-geometry"
+import FigureEdges from "../figure-edges"
+
+const POLYGON_OFFSET_FACTOR = 1
 
 export default function Figure({ frame, model }) {
 	const [foldGeometry] = useState(() => new FoldGeometry())
@@ -30,21 +33,26 @@ export default function Figure({ frame, model }) {
 
 	return (
 		<mesh>
+			<FigureEdges frame={frame} model={model}></FigureEdges>
 			<meshPhongMaterial
 				side={THREE.FrontSide}
-				color={0xff0000}
+				color={0x22ff22}
 				vertexColors={THREE.FaceColors}
-				flatShading={true}
 				attach="material"
+				polygonOffset={true}
+				flatShading={true}
+				polygonOffsetFactor={POLYGON_OFFSET_FACTOR}
 			></meshPhongMaterial>
 			<primitive attach="geometry" object={foldGeometry.geometry} />
 			<mesh>
 				<meshPhongMaterial
 					side={THREE.BackSide}
-					color={0x00ff00}
+					color={0xeeeeee}
 					vertexColors={THREE.FaceColors}
 					attach="material"
 					flatShading={true}
+					polygonOffset={true}
+					polygonOffsetFactor={POLYGON_OFFSET_FACTOR}
 				></meshPhongMaterial>
 				<primitive attach="geometry" object={foldGeometry.geometry} />
 			</mesh>

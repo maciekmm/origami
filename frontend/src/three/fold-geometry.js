@@ -36,19 +36,12 @@ export default class FoldGeometry {
 			vertices
 		)
 		triangulated.forEach((indices) =>
-			this.faces.push(
-				new THREE.Face3(
-					...indices,
-					null,
-					new THREE.Color(
-						Math.max(0.2, Math.random()),
-						Math.max(0.2, Math.random()),
-						Math.max(0.2, Math.random())
-					)
-				)
-			)
+			this.faces.push(new THREE.Face3(...indices, null))
 		)
 		this.geometry.elementsNeedUpdate = true
+		this.geometry.normalsNeedUpdate = true
+		this.geometry.uvsNeedUpdate = true
+		this.geometry.computeVertexNormals()
 	}
 
 	setVertexPosition(id, x, y, z) {
@@ -60,5 +53,8 @@ export default class FoldGeometry {
 		vertex.y = y
 		vertex.z = z
 		this.geometry.verticesNeedUpdate = true
+		this.geometry.normalsNeedUpdate = true
+		this.geometry.uvsNeedUpdate = true
+		this.geometry.computeVertexNormals()
 	}
 }
