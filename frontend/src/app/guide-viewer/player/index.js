@@ -1,11 +1,11 @@
 import React from "react"
-import Viewer from "../../../components/viewer"
+import Viewer from "@dom-components/viewer"
 import { useStore } from "../../../store"
-import { isSteady } from "../../../fold/steadyness"
+import { isSteady } from "@fold/steadyness"
 import { useAfter } from "../../../hooks"
 import styles from "./styles.css"
 import { SELECT_NEXT_FRAME, PAUSE } from "../../../store/actions"
-import { FRAME_RATE_PROPERTY } from "../../../fold/properties"
+import { FRAME_RATE_PROPERTY } from "@fold/properties"
 
 export default function Player() {
 	const [{ model, frame, playing }, dispatch] = useStore()

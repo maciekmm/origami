@@ -7,6 +7,13 @@ module.exports = {
 		path: path.resolve(__dirname, "dist"),
 		filename: "index.js",
 	},
+	resolve: {
+		alias: {
+			"@dom-components": path.resolve("src/components/dom/"),
+			"@three-components": path.resolve("src/components/three/"),
+			"@fold": path.resolve("src/fold/"),
+		},
+	},
 	devServer: {
 		contentBase: "./dist",
 	},

@@ -1,15 +1,9 @@
 import React from "react"
-import TimelineStep from "../../../components/timeline-step"
-import { useStore } from "../../../store"
-import { getSteadyFrameIds } from "../../../fold/steadyness"
+import TimelineStep from "../timeline-step"
+import { getSteadyFrameIds } from "@fold/steadyness"
 import styles from "./styles.css"
-import { SELECT_FRAME } from "../../../store/actions"
 
-export default function Timeline() {
-	const [{ model, frame }, dispatch] = useStore()
-
-	const selectFrame = (frame) => dispatch({ type: SELECT_FRAME, frame: frame })
-
+export default function Timeline({ model, frame, selectFrame }) {
 	const steadyIds = model ? getSteadyFrameIds(model.file_frames) : []
 
 	const steps = steadyIds.map((steadyFrameId, seq) => {
@@ -24,6 +18,7 @@ export default function Timeline() {
 				model={model}
 				frame={steadyFrameId}
 				progress={fracOfFramesCovered}
+				title={"Step" + frame}
 				onClick={() => selectFrame(steadyFrameId)}
 				key={steadyFrameId}
 			/>

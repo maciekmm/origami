@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from "react"
+import React, { useState, useMemo } from "react"
 import * as THREE from "three"
 import {
 	getComputedProperty,
 	findEdgeIdFromVertexIndices,
-} from "../../fold/properties"
-import EdgeSet from "./edge-set"
+} from "@fold/properties"
+import EdgeSet from "../figure-edge-set"
 import { useThree, useResource } from "react-three-fiber"
 
 const ASSIGNMENT_COLORS = {

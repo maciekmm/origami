@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import * as THREE from "three"
-import FoldGeometry from "../../three/fold-geometry"
+import FoldGeometry from "../../../three/fold-geometry"
 import FigureEdges from "../figure-edges"
 
 const POLYGON_OFFSET_FACTOR = 1

@@ -1,6 +1,6 @@
 import React from "react"
-import PlaybackControls from "../../../components/playback-controls"
-import ModelLoader from "../../../components/model-loader"
+import PlaybackControls from "@dom-components/playback-controls"
+import ModelLoader from "@dom-components/model-loader"
 import { useStore } from "../../../store"
 import styles from "./styles.css"
 import {
@@ -11,7 +11,7 @@ import {
 	SELECT_PREVIOUS_FRAME,
 	LOAD_MODEL,
 } from "../../../store/actions"
-import preprocessFOLDModel from "../../../fold/preprocess"
+import preprocessFOLDModel from "@fold/preprocess"
 
 export default function Header() {
 	const [{ playing, model }, dispatch] = useStore()

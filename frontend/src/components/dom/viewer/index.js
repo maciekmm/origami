@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React from "react"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import {
 	Canvas,
@@ -7,7 +7,7 @@ import {
 	useFrame,
 	useResource,
 } from "react-three-fiber"
-import Figure from "../../components/figure"
+import Figure from "@three-components/figure"
 
 extend({ OrbitControls })
 
@@ -32,11 +32,11 @@ function SceneConfiguration() {
 	)
 }
 
-export default function Viewer(props) {
+export default function Viewer({ model, frame }) {
 	return (
 		<Canvas>
 			<SceneConfiguration />
-			<Figure {...props} />
+			<Figure model={model} frame={frame} />
 		</Canvas>
 	)
 }
