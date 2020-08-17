@@ -1,6 +1,7 @@
 import React, { useState } from "react"
-import ControlsHeader from "@dom-components/controls-header"
-import Player from "./player"
+import ViewerHeader from "@dom-components/viewer-header"
+import PlaybackControls from "@dom-components/playback-controls"
+import Player from "@dom-components/player"
 import preprocessFoldModel from "@fold/preprocess"
 import Timeline from "@dom-components/timeline"
 
@@ -29,17 +30,20 @@ export default function GuideViewer() {
 
 	return (
 		<>
-			<ControlsHeader
-				playing={playing}
-				model={model}
-				stop={stop}
-				selectFrame={selectFrame}
-				selectNextFrame={selectNextFrame}
-				selectPreviousFrame={selectPreviousFrame}
-				play={play}
-				pause={pause}
-				loadModel={loadModel}
-			/>
+			<ViewerHeader model={model} loadModel={loadModel}>
+				{model && (
+					<PlaybackControls
+						model={model}
+						stop={stop}
+						selectFrame={selectFrame}
+						selectNextFrame={selectNextFrame}
+						selectPreviousFrame={selectPreviousFrame}
+						play={play}
+						pause={pause}
+						loadModel={loadModel}
+					/>
+				)}
+			</ViewerHeader>
 			{model && (
 				<Player
 					step={selectNextFrame}
