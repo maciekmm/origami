@@ -1,9 +1,5 @@
 import React, { useState, useMemo } from "react"
 import * as THREE from "three"
-import {
-	getComputedProperty,
-	findEdgeIdFromVertexIndices,
-} from "@fold/properties"
 import EdgeSet from "../figure-edge-set"
 import { useThree, useResource } from "react-three-fiber"
 
@@ -18,7 +14,12 @@ const ASSIGNMENT_COLORS = {
 
 const RAYCASTER_LINE_THRESHOLD = 0.1
 
-export default function FigureEdges({ frame, model, onEdgeSelect }) {
+export default function FigureEdges({
+	edgesVertices,
+	edgesAssignment,
+	vertices,
+	onEdgeSelect,
+}) {
 	const { camera, mouse } = useThree()
 	const [raycaster] = useState(() => {
 		const raycaster = new THREE.Raycaster()
@@ -27,16 +28,6 @@ export default function FigureEdges({ frame, model, onEdgeSelect }) {
 	})
 	const [edgeSetsRef, edgeSets] = useResource()
 
-	const currentFrame = model.file_frames[frame]
-	// NOTE: assumption is made that edge to vertex association never changes
-	const baseFrame = model.file_frames[0]
-
-	const edgesAssignment = getComputedProperty(
-		model.file_frames,
-		frame,
-		"edges_assignment"
-	)
-
 	const edgesPerAssignment = useMemo(() => {
 		const edgesPerAssignment = {}
 		for (let assignment in ASSIGNMENT_COLORS) {
@@ -44,10 +35,10 @@ export default function FigureEdges({ frame, model, onEdgeSelect }) {
 		}
 
 		edgesAssignment.forEach((assignment, i) => {
-			edgesPerAssignment[assignment].push(baseFrame["edges_vertices"][i])
+			edgesPerAssignment[assignment].push(edgesVertices[i])
 		})
 		return edgesPerAssignment
-	}, [edgesAssignment, baseFrame])
+	}, [edgesAssignment, edgesVertices])
 
 	const handleEdgeSelection = () => {
 		if (!onEdgeSelect) {
@@ -64,14 +55,20 @@ export default function FigureEdges({ frame, model, onEdgeSelect }) {
 		const idxNear = idx % 2 === 0 ? idx + 1 : idx - 1
 
 		const geometry = intersects[0].object.geometry
-		const [vertexFrom, vertexTo] = [
-			geometry.index.array[idx],
-			geometry.index.array[idxNear],
-		]
+		const [v1, v2] = [geometry.index.array[idx], geometry.index.array[idxNear]]
 
-		onEdgeSelect(
-			findEdgeIdFromVertexIndices(model.file_frames, vertexFrom, vertexTo)
+		const edgeId = edgesVertices.findIndex(
+			([eV1, eV2]) => (eV1 == v1 && eV2 == v2) || (eV1 == v2 && eV2 == v1)
 		)
+		if (edgeId === -1) {
+			console.warn(
+				"Edge clicked, but no assignment was found",
+				intersects[0].object
+			)
+			return
+		}
+
+		onEdgeSelect(edgeId)
 	}
 
 	return (
@@ -81,7 +78,7 @@ export default function FigureEdges({ frame, model, onEdgeSelect }) {
 				.map((assignment) => (
 					<EdgeSet
 						key={assignment}
-						vertices={currentFrame.vertices_coords}
+						vertices={vertices}
 						edges={edgesPerAssignment[assignment]}
 						color={ASSIGNMENT_COLORS[assignment]}
 						assignment={assignment}

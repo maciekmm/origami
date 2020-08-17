@@ -1,39 +1,45 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import * as THREE from "three"
 import FoldGeometry from "../../../three/fold-geometry"
 import FigureEdges from "../figure-edges"
 
 const POLYGON_OFFSET_FACTOR = 1
 
-export default function Figure({ frame, model, onClick }) {
+export default function Figure({
+	verticesCoords,
+	facesVertices,
+	edgesVertices,
+	edgesAssignment,
+	onEdgeSelect,
+}) {
 	const [foldGeometry] = useState(() => new FoldGeometry())
-
-	const fileFrame = model.file_frames[frame]
 
 	useEffect(() => {
 		foldGeometry.clear()
-		const baseFrame = model.file_frames[0]
 
-		fileFrame.vertices_coords.forEach((position) => {
+		verticesCoords.forEach((position) => {
 			foldGeometry.addVertex(...position)
 		})
 
-		baseFrame.faces_vertices.forEach((vertices) =>
-			foldGeometry.addFace(vertices)
-		)
-	}, [model])
+		facesVertices.forEach((vertices) => foldGeometry.addFace(vertices))
+	}, [verticesCoords, facesVertices])
 
 	useEffect(() => {
-		fileFrame.vertices_coords.forEach((position, id) =>
+		verticesCoords.forEach((position, id) =>
 			foldGeometry.setVertexPosition(id, ...position)
 		)
-	}, [fileFrame])
+	}, [verticesCoords])
 
 	useEffect(() => () => foldGeometry.dispose(), [foldGeometry])
 
 	return (
 		<mesh>
-			<FigureEdges frame={frame} model={model}></FigureEdges>
+			<FigureEdges
+				edgesAssignment={edgesAssignment}
+				edgesVertices={edgesVertices}
+				vertices={verticesCoords}
+				onEdgeSelect={onEdgeSelect}
+			></FigureEdges>
 			<meshPhongMaterial
 				side={THREE.FrontSide}
 				color={0x22ff22}

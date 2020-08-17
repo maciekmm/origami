@@ -6,6 +6,10 @@ export function getComputedProperty(frames, frameId, property) {
 	}
 
 	const frame = frames[frameId]
+	if (!frame) {
+		return undefined
+	}
+
 	if (property in frame) {
 		return frame[property]
 	}
@@ -15,11 +19,4 @@ export function getComputedProperty(frames, frameId, property) {
 	}
 
 	return undefined
-}
-
-export function findEdgeIdFromVertexIndices(frames, v1, v2) {
-	const edges = frames[0].edges_vertices
-	return edges.findIndex(
-		([eV1, eV2]) => (eV1 == v1 && eV2 == v2) || (eV1 == v2 && eV2 == v1)
-	)
 }

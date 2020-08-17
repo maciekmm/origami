@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import {
 	Canvas,
@@ -8,6 +8,7 @@ import {
 	useResource,
 } from "react-three-fiber"
 import Figure from "@three-components/figure"
+import { getComputedProperty } from "@fold/properties"
 
 extend({ OrbitControls })
 
@@ -33,10 +34,35 @@ function SceneConfiguration() {
 }
 
 export default function Viewer({ model, frame }) {
+	const facesVertices = useMemo(
+		() => getComputedProperty(model.file_frames, 0, "faces_vertices"),
+		[model]
+	)
+
+	const edgesVertices = useMemo(
+		() => getComputedProperty(model.file_frames, 0, "edges_vertices"),
+		[model]
+	)
+
+	const verticesCoords = useMemo(
+		() => getComputedProperty(model.file_frames, frame, "vertices_coords"),
+		[model, frame]
+	)
+
+	const edgesAssignment = useMemo(
+		() => getComputedProperty(model.file_frames, frame, "edges_assignment"),
+		[model, frame]
+	)
+
 	return (
 		<Canvas>
 			<SceneConfiguration />
-			<Figure model={model} frame={frame} />
+			<Figure
+				verticesCoords={verticesCoords}
+				facesVertices={facesVertices}
+				edgesAssignment={edgesAssignment}
+				edgesVertices={edgesVertices}
+			/>
 		</Canvas>
 	)
 }

@@ -19,7 +19,7 @@ export default function EdgeSet({ vertices, edges, color, assignment }) {
 		)
 
 		geometry.setDrawRange(0, edges.length * 2)
-	}, [edges])
+	}, [edges, vertices.length])
 
 	useEffect(() => {
 		const vertexPositions = geometry.attributes.position.array
@@ -40,7 +40,7 @@ export default function EdgeSet({ vertices, edges, color, assignment }) {
 		<lineSegments renderOrder={1} userData={{ assignment: assignment }}>
 			<primitive attach="geometry" object={geometry} />
 			<lineBasicMaterial
-				linewidth={1}
+				linewidth={2}
 				color={color}
 				attach="material"
 			></lineBasicMaterial>

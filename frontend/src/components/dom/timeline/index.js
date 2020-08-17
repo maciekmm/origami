@@ -18,7 +18,7 @@ export default function Timeline({ model, frame, selectFrame }) {
 				model={model}
 				frame={steadyFrameId}
 				progress={fracOfFramesCovered}
-				title={"Step" + frame}
+				title={"Step" + steadyFrameId}
 				onClick={() => selectFrame(steadyFrameId)}
 				key={steadyFrameId}
 			/>
