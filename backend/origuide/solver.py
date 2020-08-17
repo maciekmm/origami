@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from tools import plot
 from forces.beam_force import set_all_beam_forces
@@ -7,7 +7,7 @@ from forces.crease_force import set_all_crease_forces
 from forces.damping_force import set_all_damping_forces
 from forces.face_force import set_all_face_forces
 from geometry.generic_models import Vector3
-from geometry.geometry_models import Vertex, Edge, Face
+from geometry.geometry_models import Vertex, Edge, Face, angle_from_assignment
 
 import copy
 import math
@@ -15,10 +15,11 @@ import numpy as np
 
 
 class Solver:
-    def __init__(self, vertices: List[Vertex], edges: List[Edge], faces: List[Face]):
+    def __init__(self, vertices: List[Vertex], edges: List[Edge], faces: List[Face], edges_fold_angles: List[Optional[float]]):
         self.vertices = vertices
         self.edges = edges
         self.faces = faces
+        self.edges_fold_angles = edges_fold_angles
 
         # TODO: Getting k_axial, getting min node mass
         max_k_axial = max(map(lambda e: e.k_axial, self.edges))
@@ -29,6 +30,7 @@ class Solver:
         self._reset_forces()
         self._reset_velocities()
         self._set_forces()
+        self._set_target_angles()
         prev_forces = None
         cur_forces = self._total_forces_vecs()
 
@@ -64,6 +66,7 @@ class Solver:
                 if plot_idx >= CONFIG['DEBUG_PLOT_FROM'] and plot_idx % CONFIG['DEBUG_PLOT_EVERY'] == 0:
                     plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
                 plot_idx += 1
+            print(plot_idx)
 
             if CONFIG['DEBUG']:
                 print('---')
@@ -96,6 +99,18 @@ class Solver:
         set_all_damping_forces(self.edges)
         set_all_crease_forces(self.edges)
         set_all_face_forces(self.faces)
+
+    def _set_target_angles(self):
+        if self.edges_fold_angles is None:
+            for e in self.edges:
+                e.target_angle = angle_from_assignment(e.assignment)
+        else:
+            for (e, fold_angle) in zip(self.edges, self.edges_fold_angles):
+                if fold_angle is None:
+                    e.target_angle = angle_from_assignment(e.assignment)
+                else:
+                    e.target_angle = fold_angle
+
 
     def _total_forces_vecs(self):
         return list(map(lambda v: v.total_force().vec, self.vertices))

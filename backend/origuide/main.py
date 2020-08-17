@@ -65,7 +65,9 @@ def main():
     # fold = read_fold('../../assets/solver_test_models/fold_unfold_half.fold')
     # fold = read_fold('../../assets/solver_test_models/tulip_base.fold')
     # fold = read_fold('../../assets/solver_test_models/tulip_base_amanda.fold')
-    fold = read_fold('../../assets/models/flappingBird.fold')
+    # fold = read_fold('../../assets/models/flappingBird.fold')
+    # fold = read_fold('../../assets/models/traditionalCrane_foldangle.fold')
+    fold = read_fold('../../assets/solver_test_models/diagonal_fold_target_angle.fold')
 
     vertices = create_vertices(fold.vertices)
 
@@ -113,7 +115,7 @@ def main():
 
             # input()
 
-        solver = Solver(vertices, edges, faces)
+        solver = Solver(vertices, edges, faces, steady_state.edges_fold_angles)
 
         # TODO: PROFILING
         # import cProfile

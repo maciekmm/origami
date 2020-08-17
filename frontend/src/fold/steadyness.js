@@ -20,3 +20,14 @@ export function markFrameSteady(frame) {
 		frame.frame_classes = [...frame.frame_classes, STEADY_STATE_CLASS]
 	}
 }
+
+export function getNextSteadyFrameId(frames, currentFrameId) {
+	const steadyFrames = getSteadyFrameIds(frames)
+	const lastFrameId = frames.length - 1
+	return steadyFrames.find((id) => id > currentFrameId) || lastFrameId
+}
+
+export function getPreviousSteadyFrameId(frames, currentFrameId) {
+	const steadyFramesReversed = getSteadyFrameIds(frames).reverse()
+	return steadyFramesReversed.find((id) => id < currentFrameId) || 0
+}

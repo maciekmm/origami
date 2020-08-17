@@ -3,7 +3,7 @@ import unittest
 from forces.crease_force import set_all_crease_forces
 from geometry.generic_models import Vector3
 from geometry.generic_tools import same_direction_vec
-from geometry.geometry_models import Vertex, Edge, EDGE_UNKNOWN, Face, EDGE_VALLEY, EDGE_MOUNTAIN
+from geometry.geometry_models import Vertex, Edge, EDGE_UNKNOWN, Face, EDGE_VALLEY, EDGE_MOUNTAIN, angle_from_assignment
 
 
 class TestCreaseForce(unittest.TestCase):
@@ -28,6 +28,7 @@ class TestCreaseForce(unittest.TestCase):
 
     def test_creates_upward_force_for_valley_assignment(self):
         self.edge.assignment = EDGE_VALLEY
+        self.edge.target_angle = angle_from_assignment(self.edge.assignment)
         set_all_crease_forces([self.edge])
 
         self.assertTrue(same_direction_vec(self.v1.total_force(), Vector3(0, 0, 1)))
@@ -37,6 +38,7 @@ class TestCreaseForce(unittest.TestCase):
 
     def test_creates_downwards_force_for_mountain_assignment(self):
         self.edge.assignment = EDGE_MOUNTAIN
+        self.edge.target_angle = angle_from_assignment(self.edge.assignment)
         set_all_crease_forces([self.edge])
 
         self.assertTrue(same_direction_vec(self.v1.total_force(), Vector3(0, 0, -1)))

@@ -22,8 +22,7 @@ def set_crease_force(edge: Edge):
         k_crease = edge.l0 * CONFIG['FACET_STIFFNESS']
 
     theta = edge.faces_angle()
-    theta_target = angle_from_assignment(edge.assignment)
-
+    theta_target = edge.target_angle
 
     # This accounts for the case when faces can "flip" (inter-penetrate to the other side)
     # That is - the angle diff is too huge to be physically possible

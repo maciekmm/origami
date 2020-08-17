@@ -4,23 +4,65 @@ import Pause from "@material-ui/icons/Pause"
 import Stop from "@material-ui/icons/Stop"
 import ArrowRight from "@material-ui/icons/ArrowRight"
 import ArrowLeft from "@material-ui/icons/ArrowLeft"
-import styles from "./styles.css"
+import Slider from "@material-ui/core/Slider"
+import Grid from "@material-ui/core/Grid"
 
 export default function PlaybackControls({
 	playing,
-	prevFrame,
+	selectPreviousFrame,
 	play,
-	nextFrame,
+	selectNextFrame,
 	pause,
 	stop,
+	currentFrameId,
+	isCurrentFrameSteady,
+	previousSteadyFrameId,
+	nextSteadyFrameId,
+	selectFrame,
+	isLastFrame,
 }) {
+	const handleScrubbing = (_, newFrame) => {
+		pause()
+		selectFrame(newFrame)
+	}
+
+	const firstStepOfTransition =
+		isCurrentFrameSteady && !isLastFrame
+			? currentFrameId
+			: previousSteadyFrameId
+
+	const lastStepOfTransition = isLastFrame
+		? currentFrameId
+		: nextSteadyFrameId - 1
+
 	return (
-		<div className={styles.controls}>
-			{!playing && <ArrowLeft onClick={prevFrame} />}
+		<Grid
+			container
+			justify="flex-end"
+			alignItems="center"
+			spacing={5}
+			style={{ width: "100%" }}
+		>
+			<Grid item xs={6}>
+				<Slider
+					value={currentFrameId}
+					onChange={handleScrubbing}
+					min={firstStepOfTransition}
+					max={lastStepOfTransition}
+					aria-labelledby="continuous-slider"
+				/>
+			</Grid>
+			<ArrowLeft
+				onClick={selectPreviousFrame}
+				color={playing ? "disabled" : "inherit"}
+			/>
 			{!playing && <PlayArrow onClick={play} />}
-			{!playing && <ArrowRight onClick={nextFrame} />}
 			{playing && <Pause onClick={pause} />}
+			<ArrowRight
+				onClick={selectNextFrame}
+				color={playing ? "disabled" : "inherit"}
+			/>
 			<Stop onClick={stop} />
-		</div>
+		</Grid>
 	)
 }

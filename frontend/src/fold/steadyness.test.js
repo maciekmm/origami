@@ -3,6 +3,8 @@ import {
 	STEADY_STATE_CLASS,
 	getSteadyFrameIds,
 	markFrameSteady,
+	getNextSteadyFrameId,
+	getPreviousSteadyFrameId,
 } from "./steadyness"
 
 describe("isSteady", () => {
@@ -52,6 +54,73 @@ describe("getSteadyFrameIds", () => {
 		const steadyFrames = getSteadyFrameIds(frames)
 		// then
 		expect(steadyFrames).toStrictEqual([0, 3])
+	})
+})
+
+describe("getNextSteadyFrameId", () => {
+	it("should return id of the next steady frame", () => {
+		const steadyFrame = { frame_classes: [STEADY_STATE_CLASS] }
+		const frames = [steadyFrame, {}, {}, steadyFrame, {}]
+		const currentFrameId = 1
+
+		const nextSteadyFrameId = getNextSteadyFrameId(frames, currentFrameId)
+		expect(nextSteadyFrameId).toStrictEqual(3)
+	})
+
+	it("should return the last frame if current frame is after the last steady frame", () => {
+		const steadyFrame = { frame_classes: [STEADY_STATE_CLASS] }
+		const frames = [steadyFrame, {}, {}, {}, {}]
+		const currentFrameId = 1
+
+		const nextSteadyFrameId = getNextSteadyFrameId(frames, currentFrameId)
+		expect(nextSteadyFrameId).toStrictEqual(4)
+	})
+
+	it("should return the next steady frame if current frame is steady", () => {
+		const steadyFrame = { frame_classes: [STEADY_STATE_CLASS] }
+		const frames = [steadyFrame, {}, steadyFrame, steadyFrame, {}]
+		const currentFrameId = 2
+
+		const nextSteadyFrameId = getNextSteadyFrameId(frames, currentFrameId)
+		expect(nextSteadyFrameId).toStrictEqual(3)
+	})
+})
+
+describe("getPreviousSteadyFrameId", () => {
+	it("should return id of the previous steady frame", () => {
+		const steadyFrame = { frame_classes: [STEADY_STATE_CLASS] }
+		const frames = [steadyFrame, {}, {}, steadyFrame, {}]
+		const currentFrameId = 4
+
+		const previousSteadyFrameId = getPreviousSteadyFrameId(
+			frames,
+			currentFrameId
+		)
+		expect(previousSteadyFrameId).toStrictEqual(3)
+	})
+
+	it("should return the first frame if current frame is before the first steady frame", () => {
+		const steadyFrame = { frame_classes: [STEADY_STATE_CLASS] }
+		const frames = [{}, {}, {}, steadyFrame, {}]
+		const currentFrameId = 1
+
+		const previousSteadyFrameId = getPreviousSteadyFrameId(
+			frames,
+			currentFrameId
+		)
+		expect(previousSteadyFrameId).toStrictEqual(0)
+	})
+
+	it("should return the previous steady frame if current frame is steady", () => {
+		const steadyFrame = { frame_classes: [STEADY_STATE_CLASS] }
+		const frames = [steadyFrame, {}, steadyFrame, steadyFrame, {}]
+		const currentFrameId = 3
+
+		const previousSteadyFrameId = getPreviousSteadyFrameId(
+			frames,
+			currentFrameId
+		)
+		expect(previousSteadyFrameId).toStrictEqual(2)
 	})
 })
 

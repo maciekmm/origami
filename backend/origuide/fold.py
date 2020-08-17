@@ -6,13 +6,7 @@ def is_steady_state(frame):
 
 
 def extract_root_frame(root):
-    return {
-        'vertices_coords': root['vertices_coords'],
-        'faces_vertices': root['faces_vertices'],
-        'edges_vertices': root['edges_vertices'],
-        'edges_assignment': root['edges_assignment'],
-        'frame_classes': root.get('frame_classes')
-    }
+    return {k: v for k, v in root.items() if not k.startswith('file_')}
 
 
 class Frame:
@@ -35,6 +29,12 @@ class Frame:
     @property
     def faces(self):
         return self.raw['faces_vertices']
+
+    @property
+    def edges_fold_angles(self):
+        if 'edges_foldAngles' in self.raw:
+            return self.raw['edges_foldAngles']
+        return None
 
 
 class Fold(Frame):

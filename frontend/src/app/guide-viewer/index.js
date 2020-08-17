@@ -5,6 +5,12 @@ import Player from "@dom-components/player"
 import preprocessFoldModel from "@fold/preprocess"
 import Timeline from "@dom-components/timeline"
 
+import {
+	getNextSteadyFrameId,
+	getPreviousSteadyFrameId,
+	isSteady,
+} from "../../fold/steadyness"
+
 export default function GuideViewer() {
 	const [model, setModel] = useState()
 	const [frame, setFrame] = useState(() => -1)
@@ -33,14 +39,22 @@ export default function GuideViewer() {
 			<ViewerHeader model={model} loadModel={loadModel}>
 				{model && (
 					<PlaybackControls
-						model={model}
 						stop={stop}
 						selectFrame={selectFrame}
 						selectNextFrame={selectNextFrame}
 						selectPreviousFrame={selectPreviousFrame}
 						play={play}
+						currentFrameId={frame}
+						playing={playing}
 						pause={pause}
 						loadModel={loadModel}
+						isCurrentFrameSteady={isSteady(model.file_frames[frame])}
+						previousSteadyFrameId={getPreviousSteadyFrameId(
+							model.file_frames,
+							frame
+						)}
+						nextSteadyFrameId={getNextSteadyFrameId(model.file_frames, frame)}
+						isLastFrame={frame === model.file_frames.length - 1}
 					/>
 				)}
 			</ViewerHeader>

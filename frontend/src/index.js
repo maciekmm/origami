@@ -9,8 +9,8 @@ import GuideCreator from "./app/guide-creator"
 
 export default function AppWithStore() {
 	return (
-		<GuideCreator />
-		// <GuideViewer />
+		// <GuideCreator />
+		<GuideViewer />
 	)
 }
 
