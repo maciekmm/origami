@@ -33,7 +33,7 @@ function SceneConfiguration() {
 	)
 }
 
-export default function Viewer({ model, frame }) {
+export default function Viewer({ model, frame, onEdgeSelect }) {
 	const facesVertices = useMemo(
 		() => getComputedProperty(model.file_frames, 0, "faces_vertices"),
 		[model]
@@ -62,6 +62,7 @@ export default function Viewer({ model, frame }) {
 				facesVertices={facesVertices}
 				edgesAssignment={edgesAssignment}
 				edgesVertices={edgesVertices}
+				onEdgeSelect={onEdgeSelect}
 			/>
 		</Canvas>
 	)
