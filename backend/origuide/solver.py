@@ -9,8 +9,6 @@ from forces.face_force import set_all_face_forces
 from geometry.generic_models import Vector3
 from geometry.geometry_models import Vertex, Edge, Face, angle_from_assignment
 
-import concurrent.futures
-
 import copy
 import math
 import numpy as np
@@ -67,7 +65,7 @@ class Solver:
             if CONFIG['DEBUG_PLOT']:
                 if plot_idx >= CONFIG['DEBUG_PLOT_FROM'] and plot_idx % CONFIG['DEBUG_PLOT_EVERY'] == 0:
                     plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
-                plot_idx += 1
+            plot_idx += 1
             print(plot_idx)
 
             if CONFIG['DEBUG']:
