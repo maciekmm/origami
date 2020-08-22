@@ -10,6 +10,7 @@ from fold_producer import FoldProducer
 def create_vertices(coords):
     return [Vertex(iden, c[0], c[1], c[2]) for iden, c in enumerate(coords)]
 
+
 def create_edges(vertices, edges_vertices, edges_assignment):
     edges = []
     for i, edge_vertices in enumerate(edges_vertices):
@@ -34,12 +35,12 @@ def create_faces(vertices, edges, faces_vertices):
         triangles = triangulate(face_to_triangulate)
 
         for face_vertices in triangles:
-            face = Face(i, *face_vertices) # TODO: ? This makes id in Face not unique (which might not be a problem)
+            face = Face(i, *face_vertices)  # TODO: ? This makes id in Face not unique (which might not be a problem)
 
             face_edges = zip(face_vertices, list(face_vertices[1:]) + [face_vertices[0]])
             for p in face_edges:
-                v1 = p[0].id#tuple(p[0].pos)
-                v2 = p[1].id#tuple(p[1].pos)
+                v1 = p[0].id
+                v2 = p[1].id
 
                 # Introduce new edges
                 if (v1, v2) not in edges_bag and (v2, v1) not in edges_bag:
@@ -60,14 +61,11 @@ def create_faces(vertices, edges, faces_vertices):
 
 
 def main():
-    # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_undrve.fold')
-    # fold = read_fold('../../assets/solver_test_models/diagonal_fold_twice_from_flat_undriven.fold')
-    # fold = read_fold('../../assets/solver_test_models/fold_unfold_half.fold')
-    fold = read_fold('../../assets/solver_test_models/tulip_base.fold')
-    # fold = read_fold('../../assets/solver_test_models/tulip_base_amanda.fold')
-    # fold = read_fold('../../assets/models/flappingBird.fold')
-    # fold = read_fold('../../assets/models/traditionalCrane_foldangle.fold')
-    fold = read_fold('../../assets/solver_test_models/diagonal_fold_target_angle.fold')
+    if len(sys.argv) != 2:
+        print('Usage: python main.py <fold_file>')
+
+    fold_path = sys.argv[1]
+    fold = read_fold(fold_path)
 
     vertices = create_vertices(fold.vertices)
 
@@ -113,8 +111,6 @@ def main():
                 print(f)
             print()
 
-            # input()
-
         solver = Solver(vertices, edges, faces, steady_state.edges_fold_angles)
 
         if CONFIG['PROFILE']:
@@ -123,24 +119,12 @@ def main():
         else:
             solver.solve(fold_producer)
 
+        fold_producer.encode_transition(2, 1.5, 20)
         fold_producer.next_transition()
 
     with open("/tmp/test.fold", "w") as file:
         file.write(fold_producer.save())
 
-def test_beam():
-    v1 = Vertex(0, -1, 0)
-    v2 = Vertex(0, 1, 0)
-
-    vertices = [v1, v2]
-    edge = Edge(v1, v2, EDGE_FLAT)
-
-    v1.y = -2
-
-    solver = Solver(vertices, [edge], [])
-    solver.solve()
-
 
 if __name__ == '__main__':
-    # test_beam()
     main()

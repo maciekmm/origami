@@ -66,7 +66,6 @@ class Solver:
                 if plot_idx >= CONFIG['DEBUG_PLOT_FROM'] and plot_idx % CONFIG['DEBUG_PLOT_EVERY'] == 0:
                     plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
             plot_idx += 1
-            print(plot_idx)
 
             if CONFIG['DEBUG']:
                 print('---')
