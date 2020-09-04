@@ -10,29 +10,26 @@ import {
 	getPreviousSteadyFrameId,
 	isSteady,
 } from "../../fold/steadyness"
+import { useStore } from "../../store"
+import { LOAD_MODEL, SELECT_FRAME } from "../../store/viewer/actions"
+import {
+	PAUSE,
+	PLAY,
+	SELECT_NEXT_FRAME,
+	SELECT_PREVIOUS_FRAME,
+	STOP,
+} from "../../store/player/actions"
 
 export default function GuideViewer() {
-	const [model, setModel] = useState()
-	const [frame, setFrame] = useState(() => -1)
-	const [playing, setPlaying] = useState(() => false)
+	const [{ model, frame, playing }, dispatch] = useStore()
 
-	const stop = () => {
-		setPlaying(false)
-		setFrame(0)
-	}
-	const loadModel = (model) => {
-		stop()
-		setModel(preprocessFoldModel(model))
-	}
-	const play = () => setPlaying(true)
-	const pause = () => setPlaying(false)
-	const selectNextFrame = () =>
-		setFrame(Math.min(frame + 1, model.file_frames.length - 1))
-	const selectPreviousFrame = () => setFrame(Math.max(frame - 1, 0))
-	const selectFrame = (frame) => {
-		setFrame(frame)
-		pause()
-	}
+	const loadModel = (model) => dispatch({ type: LOAD_MODEL, model: model })
+	const play = () => dispatch({ type: PLAY })
+	const pause = () => dispatch({ type: PAUSE })
+	const stop = () => dispatch({ type: STOP })
+	const selectNextFrame = () => dispatch({ type: SELECT_NEXT_FRAME })
+	const selectPreviousFrame = () => dispatch({ type: SELECT_PREVIOUS_FRAME })
+	const selectFrame = (frame) => dispatch({ type: SELECT_FRAME, frame: frame })
 
 	return (
 		<>

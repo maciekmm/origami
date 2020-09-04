@@ -4,8 +4,7 @@ import FileConfiguration from "@dom-components/configuration-file"
 import StepConfiguration from "@dom-components/configuration-step"
 import styles from "./styles.css"
 import { useStore } from "../../../store"
-import interpolateModel from "@fold/export"
-import { convertToFileName, downloadTextFile } from "../../../download"
+import { downloadModel } from "../../../download"
 import { getComputedProperty } from "@fold/properties"
 import {
 	SET_EDGE_ASSIGNMENT,
@@ -21,13 +20,6 @@ export default function ConfigurationSidebar() {
 	const [{ model, frame, selectedEdge }, dispatch] = useStore()
 
 	const currentStep = model && model.file_frames[frame]
-
-	const exportModel = () => {
-		const exported = interpolateModel(model)
-		const title = model.file_title || "model"
-		const exportableTitle = convertToFileName(title)
-		downloadTextFile(JSON.stringify(exported), `${exportableTitle}.fold`)
-	}
 
 	const getEdgeArrayProperty = (property) => {
 		if (selectedEdge === null) return null
@@ -83,7 +75,7 @@ export default function ConfigurationSidebar() {
 				onDescriptionChange={setStepDescription}
 			/>
 			<FileConfiguration
-				onSave={exportModel}
+				onSave={() => downloadModel(model)}
 				author={model.file_author}
 				onAuthorChange={setFileAuthor}
 				title={model.file_title}

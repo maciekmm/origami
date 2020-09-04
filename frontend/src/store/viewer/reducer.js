@@ -1,8 +1,9 @@
 import { SELECT_FRAME, LOAD_MODEL } from "./actions"
 import preprocessFOLDModel from "@fold/preprocess"
+import crane from "../../../../assets/models/crane.fold"
 
 export const initialState = {
-	model: null,
+	model: preprocessFOLDModel(crane),
 	frame: 0,
 }
 
@@ -13,16 +14,6 @@ export function reducer(state, action) {
 				...state,
 				frame: action.frame,
 			}
-		// case SELECT_NEXT_FRAME:
-		//     return {
-		//         ...state,
-		//         frame: Math.min(state.frame + 1, state.viewer.file_frames.length - 1),
-		//     }
-		// case SELECT_PREVIOUS_FRAME:
-		//     return {
-		//         ...state,
-		//         frame: Math.max(state.frame - 1, 0),
-		//     }
 		case LOAD_MODEL:
 			return {
 				...state,

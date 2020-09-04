@@ -1,0 +1,5 @@
+export const SELECT_NEXT_FRAME = "select_next_frame"
+export const SELECT_PREVIOUS_FRAME = "select_previous_frame"
+export const STOP = "stop"
+export const PAUSE = "pause"
+export const PLAY = "play"
