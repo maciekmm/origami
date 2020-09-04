@@ -1,10 +1,9 @@
 import sys
 
-from fold import read_fold
+from fold import read_fold, FoldProducer, LogFoldEncoder
 from geometry.geometry_models import *
 from solver import Solver
 from geometry.triangulation import triangulate
-from fold_producer import FoldProducer
 
 
 def create_vertices(coords):
@@ -63,23 +62,20 @@ def create_faces(vertices, edges, faces_vertices):
 def main():
     if len(sys.argv) != 2:
         print('Usage: python main.py <fold_file>')
+        sys.exit(1)
 
     fold_path = sys.argv[1]
     fold = read_fold(fold_path)
 
     vertices = create_vertices(fold.vertices)
 
-    fold_producer = FoldProducer(fold)
+    fold_producer = FoldProducer(fold, LogFoldEncoder(4, 1.25, 40))
 
     edges = create_edges(vertices,
                          fold.edges,
                          fold.assignments)
 
     faces = create_faces(vertices, edges, fold.faces)
-
-    # TODO: Maybe some graph would be a more appropriate structure?
-    # IDEA: Create vertices, beams, etc "globally", and assign only their IDs to some more advanced objects
-    # that can extend the behavior
 
     for steady_state in fold.steady_states:
         # TODO: only assignments change between frames?
@@ -119,7 +115,6 @@ def main():
         else:
             solver.solve(fold_producer)
 
-        fold_producer.encode_transition(2, 1.5, 20)
         fold_producer.next_transition()
 
     with open("/tmp/test.fold", "w") as file:
