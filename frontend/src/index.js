@@ -1,15 +1,17 @@
 import React from "react"
 import ReactDOM from "react-dom"
 
-// import { StoreProvider } from "./store"
-// import reducer, { initialState } from "./store/reducer"
+import { reducer, initialState } from "./store/creator/reducer"
 import "../public/style.css"
 import GuideViewer from "./app/guide-viewer"
 import GuideCreator from "./app/guide-creator"
+import { StoreProvider } from "./store"
 
-export default function AppWithStore() {
+function AppWithStore() {
 	return (
-		<GuideCreator />
+		<StoreProvider reducer={reducer} initialState={initialState}>
+			<GuideCreator />
+		</StoreProvider>
 		// <GuideViewer />
 	)
 }

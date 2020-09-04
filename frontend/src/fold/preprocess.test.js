@@ -70,7 +70,7 @@ describe("moveRootFrameToFileFrames", () => {
 		expect(model.file_frames).toStrictEqual(framesAfterTransformation)
 	})
 
-	it("should not prepend frames if model does not contain a root frame", () => {
+	it("should not prepend frames if viewer does not contain a root frame", () => {
 		// given
 		const model = {
 			file_author: "Dummy",
@@ -89,7 +89,7 @@ describe("moveRootFrameToFileFrames", () => {
 })
 
 describe("setDefaultFrameRate", () => {
-	it("should set default framerate if model does not specify it", () => {
+	it("should set default framerate if viewer does not specify it", () => {
 		// given
 		const model = {}
 		// when
@@ -98,7 +98,7 @@ describe("setDefaultFrameRate", () => {
 		expect(model[FRAME_RATE_PROPERTY]).toStrictEqual(DEFAULT_FRAME_RATE)
 	})
 
-	it("should not set default framerate if model specifies its own", () => {
+	it("should not set default framerate if viewer specifies its own", () => {
 		// given
 		const model = {}
 		model[FRAME_RATE_PROPERTY] = "44"

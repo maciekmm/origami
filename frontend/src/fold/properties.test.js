@@ -49,4 +49,19 @@ describe("getComputedProperty", () => {
 		const value = getComputedProperty(frames, 2, "prop")
 		expect(value).toStrictEqual("value")
 	})
+
+	it("should interpolate array null values if frame_inheritDeep is defined", () => {
+		const frames = [
+			{ prop: [5, 3] },
+			{
+				frame_inherit: true,
+				frame_inheritDeep: true,
+				frame_parent: 0,
+				prop: [null, 1],
+			},
+		]
+
+		const value = getComputedProperty(frames, 1, "prop")
+		expect(value).toStrictEqual([5, 1])
+	})
 })

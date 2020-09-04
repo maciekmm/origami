@@ -4,7 +4,7 @@ module.exports = {
 		es6: true,
 	},
 	ignorePatterns: ["dist/", "node_modules/"],
-	extends: ["plugin:prettier/recommended", "plugin:react/recommended", "prettier", "plugin:jest/recommended"],
+	extends: ["plugin:prettier/recommended", "plugin:react/recommended", "prettier", "plugin:jest/recommended", "plugin:react-hooks/recommended"],
 	globals: {
 		Atomics: "readonly",
 		SharedArrayBuffer: "readonly",

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react"
 import * as THREE from "three"
 
-export default function EdgeSet({ vertices, edges, color, assignment }) {
+export default function EdgeSet({
+	vertices,
+	edges,
+	color,
+	assignment,
+	lineWidth,
+}) {
 	const [geometry] = useState(() => new THREE.BufferGeometry())
 
 	useEffect(() => {
@@ -12,14 +18,16 @@ export default function EdgeSet({ vertices, edges, color, assignment }) {
 		})
 		geometry.setIndex(new THREE.BufferAttribute(edgesToVertexIndices, 1))
 
+		geometry.setDrawRange(0, edges.length * 2)
+	}, [edges, geometry])
+
+	useEffect(() => {
 		const vertexPositions = new Float32Array(vertices.length * 3)
 		geometry.setAttribute(
 			"position",
 			new THREE.BufferAttribute(vertexPositions, 3)
 		)
-
-		geometry.setDrawRange(0, edges.length * 2)
-	}, [edges, vertices.length])
+	}, [vertices.length, geometry])
 
 	useEffect(() => {
 		const vertexPositions = geometry.attributes.position.array
@@ -32,15 +40,20 @@ export default function EdgeSet({ vertices, edges, color, assignment }) {
 		geometry.attributes.position.needsUpdate = true
 		geometry.computeBoundingBox()
 		geometry.computeBoundingSphere()
-	}, [vertices])
+	}, [vertices, geometry])
 
-	useEffect(() => () => geometry.dispose(), [geometry])
+	useEffect(
+		() => () => {
+			geometry.dispose()
+		},
+		[geometry]
+	)
 
 	return (
 		<lineSegments renderOrder={1} userData={{ assignment: assignment }}>
 			<primitive attach="geometry" object={geometry} />
 			<lineBasicMaterial
-				linewidth={2}
+				linewidth={lineWidth || 2}
 				color={color}
 				attach="material"
 			></lineBasicMaterial>

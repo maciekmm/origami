@@ -1,7 +1,7 @@
 .timeline {
 	width: 100%;
-	overflow-x: hidden;
+	height: 100%;
+	overflow-y: hidden;
 	display: flex;
-	flex: 0 1 150px;
-	justify-content: center;
+	flex: 0 0 150px;
 }

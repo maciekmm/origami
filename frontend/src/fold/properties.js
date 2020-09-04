@@ -10,13 +10,36 @@ export function getComputedProperty(frames, frameId, property) {
 		return undefined
 	}
 
-	if (property in frame) {
-		return frame[property]
+	const value = frame[property]
+
+	const inherit =
+		!!frame["frame_inherit"] && typeof frame["frame_parent"] === "number"
+	if (!inherit) {
+		return value
 	}
 
-	if (!!frame["frame_inherit"]) {
+	const isPropertyDefined = property in frame
+	const deepInherit = !!frame["frame_inheritDeep"] && Array.isArray(value)
+	if (isPropertyDefined && !deepInherit) {
+		return value
+	}
+
+	if (!isPropertyDefined) {
 		return getComputedProperty(frames, frame["frame_parent"], property)
 	}
 
-	return undefined
+	const containsNulls = value.includes(null)
+	if (!containsNulls) {
+		return value
+	}
+
+	const inherited = getComputedProperty(frames, frame["frame_parent"], property)
+	if (!inherited) {
+		return value
+	}
+
+	return value.map((value, i) => {
+		if (value !== null) return value
+		return inherited[i]
+	})
 }

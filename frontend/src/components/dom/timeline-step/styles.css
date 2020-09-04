@@ -1,22 +1,37 @@
 .step {
-	background: var(--color-background-mild);
-	width: 150px;
-	height: 100%;
-	padding: 0.5em 0.2em;
+    background: var(--color-background-mild);
+    width: 150px;
+    height: 100%;
+    padding: 0.5em 0.2em;
+    cursor: pointer;
+    border-bottom: 4px solid transparent;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    flex-shrink: 0;
+    position: relative;
+}
 
-	cursor: pointer;
-	display: flex;
-	flex: 0 auto;
-	flex-direction: column;
+.selected {
+    border-bottom-color: var(--color-accent-mild);
 }
 
 .step:not(:last-child) {
-	border-right: 1px solid var(--color-background);
+    margin-right: 1px;
 }
 
 .description {
-	display: inline-block;
-	text-transform: uppercase;
-	text-align: center;
-	font-size: 10pt;
+    display: inline-block;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 8pt;
+    word-break: break-word;
+}
+
+.delete {
+    position: absolute;
+    z-index: 2;
+    right: 10px;
+    top: 10px;
+    display: inline;
 }

@@ -33,25 +33,25 @@ function SceneConfiguration() {
 	)
 }
 
-export default function Viewer({ model, frame, onEdgeSelect }) {
+export default function Viewer({ model, frame, onEdgeSelect, selectedEdge }) {
 	const facesVertices = useMemo(
 		() => getComputedProperty(model.file_frames, 0, "faces_vertices"),
-		[model]
+		[model.file_frames]
 	)
 
 	const edgesVertices = useMemo(
 		() => getComputedProperty(model.file_frames, 0, "edges_vertices"),
-		[model]
+		[model.file_frames]
 	)
 
 	const verticesCoords = useMemo(
 		() => getComputedProperty(model.file_frames, frame, "vertices_coords"),
-		[model, frame]
+		[model.file_frames, frame]
 	)
 
 	const edgesAssignment = useMemo(
 		() => getComputedProperty(model.file_frames, frame, "edges_assignment"),
-		[model, frame]
+		[model.file_frames, frame]
 	)
 
 	return (
@@ -63,6 +63,7 @@ export default function Viewer({ model, frame, onEdgeSelect }) {
 				edgesAssignment={edgesAssignment}
 				edgesVertices={edgesVertices}
 				onEdgeSelect={onEdgeSelect}
+				selectedEdge={selectedEdge}
 			/>
 		</Canvas>
 	)

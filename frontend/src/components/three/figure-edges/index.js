@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useEffect, useRef } from "react"
 import * as THREE from "three"
 import EdgeSet from "../figure-edge-set"
 import { useThree, useResource } from "react-three-fiber"
@@ -12,20 +12,17 @@ const ASSIGNMENT_COLORS = {
 	C: 0x00ff00,
 }
 
-const RAYCASTER_LINE_THRESHOLD = 0.1
+const RAYCASTER_LINE_THRESHOLD = 0.02
+const MAXIMUM_MOUSE_DISPLACEMENT_FOR_EDGE_TO_SELECT = 0.01
 
 export default function FigureEdges({
 	edgesVertices,
 	edgesAssignment,
 	vertices,
+	selectedEdge,
 	onEdgeSelect,
 }) {
 	const { camera, mouse } = useThree()
-	const [raycaster] = useState(() => {
-		const raycaster = new THREE.Raycaster()
-		raycaster.params.Line.threshold = RAYCASTER_LINE_THRESHOLD
-		return raycaster
-	})
 	const [edgeSetsRef, edgeSets] = useResource()
 
 	const edgesPerAssignment = useMemo(() => {
@@ -35,18 +32,35 @@ export default function FigureEdges({
 		}
 
 		edgesAssignment.forEach((assignment, i) => {
+			if (i === selectedEdge) return
 			edgesPerAssignment[assignment].push(edgesVertices[i])
 		})
 		return edgesPerAssignment
-	}, [edgesAssignment, edgesVertices])
+	}, [edgesAssignment, edgesVertices, selectedEdge])
 
-	const handleEdgeSelection = () => {
-		if (!onEdgeSelect) {
+	const mousePosition = useRef(mouse)
+
+	const handleEdgePreSelect = () => (mousePosition.current = mouse.clone())
+
+	const raycaster = useMemo(() => {
+		const raycaster = new THREE.Raycaster()
+		raycaster.params.Line.threshold = RAYCASTER_LINE_THRESHOLD
+		return raycaster
+	}, [])
+
+	const handleEdgeSelect = (e) => {
+		if (
+			!onEdgeSelect ||
+			mousePosition.current.distanceTo(mouse) >
+				MAXIMUM_MOUSE_DISPLACEMENT_FOR_EDGE_TO_SELECT
+		) {
 			return
 		}
-		raycaster.setFromCamera(mouse, camera)
-		const intersects = raycaster.intersectObjects(edgeSets.children)
+		e.stopPropagation()
 
+		raycaster.setFromCamera(mouse, camera)
+
+		const intersects = raycaster.intersectObjects(edgeSets.children)
 		if (intersects.length === 0) {
 			return
 		}
@@ -60,6 +74,7 @@ export default function FigureEdges({
 		const edgeId = edgesVertices.findIndex(
 			([eV1, eV2]) => (eV1 == v1 && eV2 == v2) || (eV1 == v2 && eV2 == v1)
 		)
+
 		if (edgeId === -1) {
 			console.warn(
 				"Edge clicked, but no assignment was found",
@@ -72,7 +87,11 @@ export default function FigureEdges({
 	}
 
 	return (
-		<group ref={edgeSetsRef} onClick={handleEdgeSelection}>
+		<group
+			ref={edgeSetsRef}
+			onPointerDown={handleEdgePreSelect}
+			onClick={handleEdgeSelect}
+		>
 			{Object.keys(edgesPerAssignment)
 				.filter((assignment) => edgesPerAssignment[assignment].length > 0)
 				.map((assignment) => (
@@ -84,6 +103,16 @@ export default function FigureEdges({
 						assignment={assignment}
 					></EdgeSet>
 				))}
+			{(selectedEdge === 0 || !!selectedEdge) && (
+				<EdgeSet
+					key={selectedEdge}
+					vertices={vertices}
+					edges={[edgesVertices[selectedEdge]]}
+					color={ASSIGNMENT_COLORS[edgesAssignment[selectedEdge]]}
+					lineWidth={10}
+					assignment={edgesAssignment[selectedEdge]}
+				></EdgeSet>
+			)}
 		</group>
 	)
 }

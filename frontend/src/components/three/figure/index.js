@@ -11,6 +11,7 @@ export default function Figure({
 	edgesVertices,
 	edgesAssignment,
 	onEdgeSelect,
+	selectedEdge,
 }) {
 	const [foldGeometry] = useState(() => new FoldGeometry())
 
@@ -22,13 +23,13 @@ export default function Figure({
 		})
 
 		facesVertices.forEach((vertices) => foldGeometry.addFace(vertices))
-	}, [verticesCoords, facesVertices])
+	}, [facesVertices, verticesCoords, foldGeometry])
 
 	useEffect(() => {
 		verticesCoords.forEach((position, id) =>
 			foldGeometry.setVertexPosition(id, ...position)
 		)
-	}, [verticesCoords])
+	}, [verticesCoords, foldGeometry])
 
 	useEffect(() => () => foldGeometry.dispose(), [foldGeometry])
 
@@ -39,6 +40,7 @@ export default function Figure({
 				edgesVertices={edgesVertices}
 				vertices={verticesCoords}
 				onEdgeSelect={onEdgeSelect}
+				selectedEdge={selectedEdge}
 			></FigureEdges>
 			<meshPhongMaterial
 				side={THREE.FrontSide}

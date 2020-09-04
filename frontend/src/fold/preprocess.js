@@ -2,6 +2,7 @@ import { markFrameSteady } from "./steadyness"
 import { FRAME_RATE_PROPERTY } from "./properties"
 
 export const DEFAULT_FRAME_RATE = 24
+export const DEFAULT_CREATOR = "Origuide - https://origami.wtf"
 
 export default function preprocessFOLDModel(foldModel) {
 	moveRootFrameToFileFrames(foldModel)
@@ -10,8 +11,13 @@ export default function preprocessFOLDModel(foldModel) {
 	markFrameSteady(foldModel.file_frames[foldModel.file_frames.length - 1])
 
 	setDefaultFrameRate(foldModel)
+	setDefaultCreator(foldModel)
 
 	return foldModel
+}
+
+export function setDefaultCreator(foldModel) {
+	foldModel["file_creator"] = DEFAULT_CREATOR
 }
 
 export function setDefaultFrameRate(foldModel) {
