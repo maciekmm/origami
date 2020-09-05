@@ -19,7 +19,8 @@ export function getComputedProperty(frames, frameId, property) {
 	}
 
 	const isPropertyDefined = property in frame
-	const deepInherit = !!frame["frame_inheritDeep"] && Array.isArray(value)
+	const deepInherit =
+		!!frame["frame_inheritDeep"] && (!isPropertyDefined || Array.isArray(value))
 	if (isPropertyDefined && !deepInherit) {
 		return value
 	}

@@ -34,10 +34,13 @@ export default function ConfigurationSidebar() {
 		return value[selectedEdge]
 	}
 
+	/* eslint-disable react-hooks/exhaustive-deps */
 	const assignment = useMemo(() => getEdgeArrayProperty("assignment"), [
 		selectedEdge,
 		model.file_frames,
 	])
+
+	/* eslint-disable react-hooks/exhaustive-deps */
 	const targetAngle = useMemo(() => getEdgeArrayProperty("targetAngle"), [
 		selectedEdge,
 		model.file_frames,

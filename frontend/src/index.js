@@ -2,22 +2,22 @@ import React from "react"
 import ReactDOM from "react-dom"
 
 import {
-	reducer as creatorReducer,
 	initialState as creatorInitialState,
+	reducer as creatorReducer,
 } from "./store/creator/reducer"
 import {
-	reducer as playerReducer,
 	initialState as playerInitialState,
+	reducer as playerReducer,
 } from "./store/player/reducer"
 import "../public/style.css"
-import GuideViewer from "./app/guide-player"
+import GuidePlayer from "./app/guide-player"
 import GuideCreator from "./app/guide-creator"
 import { StoreProvider } from "./store"
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom"
+import { BrowserRouter, Route } from "react-router-dom"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
-import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
+import ButtonLink from "@dom-components/button-link"
 
 function AppWithStore() {
 	return (
@@ -25,32 +25,23 @@ function AppWithStore() {
 			<AppBar position="static">
 				<Toolbar variant="dense">
 					<Typography variant="h6">Origuide</Typography>
-					<Link to="/">
-						<Button style={{ color: "#fff" }}>View</Button>
-					</Link>
-					<Link to="/create">
-						<Button style={{ color: "#fff" }}>Create</Button>
-					</Link>
+					<ButtonLink to="/" exact title="View" />
+					<ButtonLink to="/create" title="Create" />
 				</Toolbar>
 			</AppBar>
-			<Switch>
+			<StoreProvider reducer={playerReducer} initialState={playerInitialState}>
 				<Route exact path="/">
-					<StoreProvider
-						reducer={playerReducer}
-						initialState={playerInitialState}
-					>
-						<GuideViewer />
-					</StoreProvider>
+					<GuidePlayer />
 				</Route>
+			</StoreProvider>
+			<StoreProvider
+				reducer={creatorReducer}
+				initialState={creatorInitialState}
+			>
 				<Route path="/create">
-					<StoreProvider
-						reducer={creatorReducer}
-						initialState={creatorInitialState}
-					>
-						<GuideCreator />
-					</StoreProvider>
+					<GuideCreator />
 				</Route>
-			</Switch>
+			</StoreProvider>
 		</BrowserRouter>
 	)
 }

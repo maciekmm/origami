@@ -14,6 +14,7 @@ const ASSIGNMENT_COLORS = {
 
 const RAYCASTER_LINE_THRESHOLD = 0.02
 const MAXIMUM_MOUSE_DISPLACEMENT_FOR_EDGE_TO_SELECT = 0.01
+const LINE_WIDTH = 10
 
 export default function FigureEdges({
 	edgesVertices,
@@ -62,6 +63,7 @@ export default function FigureEdges({
 
 		const intersects = raycaster.intersectObjects(edgeSets.children)
 		if (intersects.length === 0) {
+			onEdgeSelect(null)
 			return
 		}
 
@@ -109,7 +111,7 @@ export default function FigureEdges({
 					vertices={vertices}
 					edges={[edgesVertices[selectedEdge]]}
 					color={ASSIGNMENT_COLORS[edgesAssignment[selectedEdge]]}
-					lineWidth={10}
+					lineWidth={LINE_WIDTH}
 					assignment={edgesAssignment[selectedEdge]}
 				></EdgeSet>
 			)}

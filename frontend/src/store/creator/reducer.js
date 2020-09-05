@@ -75,6 +75,7 @@ export function reducer(state, action) {
 						},
 					],
 				},
+				frame: state.model.file_frames.length,
 			}
 		case REMOVE_STEP:
 			return {

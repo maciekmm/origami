@@ -1,4 +1,4 @@
-import interpolateModel from "@fold/export"
+import interpolateModel from "@fold/interpolate"
 
 function downloadTextFile(text, name) {
 	const a = document.createElement("a")

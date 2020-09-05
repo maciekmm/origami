@@ -1,4 +1,4 @@
-import { getComputedProperty } from "@fold/properties"
+import { getComputedProperty } from "./properties"
 
 function interpolateFrameValues(frames, frameId) {
 	const interpolated = {}

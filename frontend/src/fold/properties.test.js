@@ -64,4 +64,61 @@ describe("getComputedProperty", () => {
 		const value = getComputedProperty(frames, 1, "prop")
 		expect(value).toStrictEqual([5, 1])
 	})
+
+	it("should interpolate transient fields", () => {
+		// given
+		const frames = [
+			{
+				frame_values: [1, 2, 3],
+			},
+			{
+				frame_inherit: true,
+				frame_parent: 0,
+				frame_inheritDeep: true,
+			},
+			{
+				frame_values: [null, 4, null],
+				frame_inherit: true,
+				frame_parent: 1,
+				frame_inheritDeep: true,
+			},
+		]
+		const interpolated = getComputedProperty(frames, 2, "frame_values")
+
+		expect(interpolated).toStrictEqual([1, 4, 3])
+	})
+
+	it("should keep nulls if parent frame has nulls", () => {
+		// given
+		const frames = [
+			{
+				frame_values: [null, 2, 3],
+			},
+			{
+				frame_inherit: true,
+				frame_parent: 0,
+				frame_inheritDeep: true,
+				frame_values: [null, 4, null],
+			},
+		]
+		const interpolated = getComputedProperty(frames, 1, "frame_values")
+
+		expect(interpolated).toStrictEqual([null, 4, 3])
+	})
+
+	it("should keep nulls if parent has no such property", () => {
+		// given
+		const frames = [
+			{},
+			{
+				frame_inherit: true,
+				frame_parent: 0,
+				frame_inheritDeep: true,
+				frame_values: [null, 4, null],
+			},
+		]
+		const interpolated = getComputedProperty(frames, 1, "frame_values")
+
+		expect(interpolated).toStrictEqual([null, 4, null])
+	})
 })
