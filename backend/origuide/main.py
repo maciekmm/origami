@@ -69,7 +69,10 @@ def main():
 
     vertices = create_vertices(fold.vertices)
 
-    fold_producer = FoldProducer(fold, LogFoldEncoder(4, 1.25, 40))
+    fold_producer = FoldProducer(fold, LogFoldEncoder(frame_drop_rate=4,
+                                                      frame_drop_multiplier=1.25,
+                                                      frame_drop_change_iter=40)
+                                )
 
     edges = create_edges(vertices,
                          fold.edges,
