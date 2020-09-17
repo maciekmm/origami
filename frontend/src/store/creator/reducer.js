@@ -144,7 +144,10 @@ export function reducer(state, action) {
 		case LOAD_MODEL:
 			const viewerState = viewerReducer(state, action)
 			markFramesToInheritDeeply(viewerState.model)
-			return viewerState
+			return {
+				...viewerState,
+				selectedEdge: null,
+			}
 		default:
 			return viewerReducer(state, action)
 	}
