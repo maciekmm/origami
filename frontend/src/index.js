@@ -13,15 +13,18 @@ import "../public/style.css"
 import GuidePlayer from "./app/guide-player"
 import GuideCreator from "./app/guide-creator"
 import { StoreProvider } from "./store"
-import { BrowserRouter, Route } from "react-router-dom"
+import { BrowserRouter, HashRouter, Route } from "react-router-dom"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
 import ButtonLink from "@dom-components/button-link"
 
+const Router =
+	process.env.NODE_ENV !== "production" ? HashRouter : BrowserRouter
+
 function AppWithStore() {
 	return (
-		<BrowserRouter>
+		<Router>
 			<AppBar position="static">
 				<Toolbar variant="dense">
 					<Typography variant="h6">Origuide</Typography>
@@ -42,7 +45,7 @@ function AppWithStore() {
 					<GuideCreator />
 				</Route>
 			</StoreProvider>
-		</BrowserRouter>
+		</Router>
 	)
 }
 

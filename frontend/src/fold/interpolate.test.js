@@ -11,7 +11,7 @@ describe("moveRootFrameToFileFrames", () => {
 				{
 					frame_inherit: true,
 					frame_parent: 0,
-					frame_inheritDeep: true,
+					"frame_og:inheritDeep": true,
 					frame_values: [null, 4, null],
 				},
 			],
@@ -21,17 +21,17 @@ describe("moveRootFrameToFileFrames", () => {
 		expect(interpolated.file_frames[1].frame_values).toStrictEqual([1, 4, 3])
 	})
 
-	it("remove frame_inheritDeep parameter", () => {
+	it("removes DEEP_INHERITANCE parameter", () => {
 		// given
 		const model = {
 			file_frames: [
 				{
-					frame_inheritDeep: true,
+					"frame_og:inheritDeep": true,
 				},
 			],
 		}
 		const interpolated = interpolateModel(model)
 
-		expect(interpolated.file_frames[0].frame_inheritDeep).toBeUndefined()
+		expect(interpolated.file_frames[0]["frame_og:inheritDeep"]).toBeUndefined()
 	})
 })

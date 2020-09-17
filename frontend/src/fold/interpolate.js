@@ -5,7 +5,7 @@ function interpolateFrameValues(frames, frameId) {
 	const frame = frames[frameId]
 	for (let property in frame) {
 		// An Origuide exclusive temporary property we are going to discard
-		if (property === "frame_inheritDeep") continue
+		if (property === "frame_og:inheritDeep") continue
 		interpolated[property] = getComputedProperty(frames, frameId, property)
 	}
 	return interpolated

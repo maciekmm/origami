@@ -16,9 +16,16 @@ import {
 	initialState as viewerInitialState,
 } from "../viewer/reducer"
 import { STEADY_STATE_CLASS } from "@fold/steadyness"
+import { LOAD_MODEL } from "../viewer/actions"
+import { markFramesToInheritDeeply } from "@fold/preprocess"
 
 export const initialState = {
 	...viewerInitialState,
+	model: (() => {
+		const model = viewerInitialState.model
+		markFramesToInheritDeeply(model)
+		return model
+	})(),
 	selectedEdge: null,
 }
 
@@ -69,7 +76,7 @@ export function reducer(state, action) {
 						...state.model.file_frames,
 						{
 							frame_inherit: true,
-							frame_inheritDeep: true,
+							"frame_og:inheritDeep": true,
 							frame_parent: state.model.file_frames.length - 1,
 							frame_classes: [STEADY_STATE_CLASS],
 						},
@@ -134,6 +141,10 @@ export function reducer(state, action) {
 			return setEdgeArrayProperty("targetAngle", action.targetAngle)
 		case SET_EDGE_ASSIGNMENT:
 			return setEdgeArrayProperty("assignment", action.assignment)
+		case LOAD_MODEL:
+			const viewerState = viewerReducer(state, action)
+			markFramesToInheritDeeply(viewerState.model)
+			return viewerState
 		default:
 			return viewerReducer(state, action)
 	}

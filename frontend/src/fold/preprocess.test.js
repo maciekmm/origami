@@ -2,28 +2,29 @@ import preprocessFOLDModel, {
 	setDefaultFrameRate,
 	moveRootFrameToFileFrames,
 	DEFAULT_FRAME_RATE,
+	markFramesToInheritDeeply,
 } from "./preprocess"
 
 import { FRAME_RATE_PROPERTY } from "./properties"
 
-describe("moveRootFrameToFileFrames", () => {
-	const modelFactory = () => {
-		return {
-			file_author: "Origuide",
-			file_classes: ["animation", "origuide:guide"],
-			frame_title: "",
-			frame_classes: ["creasePattern", "origuide:steady_state"],
-			frame_attributes: ["3D"],
-			vertices_coords: [[-1, -1, 0]],
-			file_frames: [
-				{
-					frame_title: "",
-					vertices_coords: [[-1, -1, 0]],
-				},
-			],
-		}
+const modelFactory = () => {
+	return {
+		file_author: "Origuide",
+		file_classes: ["animation", "origuide:guide"],
+		frame_title: "",
+		frame_classes: ["creasePattern", "origuide:steady_state"],
+		frame_attributes: ["3D"],
+		vertices_coords: [[-1, -1, 0]],
+		file_frames: [
+			{
+				frame_title: "",
+				vertices_coords: [[-1, -1, 0]],
+			},
+		],
 	}
+}
 
+describe("moveRootFrameToFileFrames", () => {
 	it("should remove frame from root", () => {
 		// given
 		const model = modelFactory()
@@ -119,5 +120,18 @@ describe("preprocessFOLDModel", () => {
 		const output = preprocessFOLDModel(model)
 		// then
 		expect(output).toBe(model)
+	})
+})
+
+describe("markFramesToInheritDeeply", () => {
+	it("should mark all frames as deeply inherent", () => {
+		const model = modelFactory()
+		const preprocessedModel = preprocessFOLDModel(model)
+
+		markFramesToInheritDeeply(preprocessedModel)
+
+		preprocessedModel.file_frames.forEach((frame) => {
+			expect(frame).toHaveProperty("frame_og:inheritDeep")
+		})
 	})
 })

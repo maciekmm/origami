@@ -50,12 +50,12 @@ describe("getComputedProperty", () => {
 		expect(value).toStrictEqual("value")
 	})
 
-	it("should interpolate array null values if frame_inheritDeep is defined", () => {
+	it("should interpolate array null values if frame_og:inheritDeep is defined", () => {
 		const frames = [
 			{ prop: [5, 3] },
 			{
 				frame_inherit: true,
-				frame_inheritDeep: true,
+				"frame_og:inheritDeep": true,
 				frame_parent: 0,
 				prop: [null, 1],
 			},
@@ -74,13 +74,13 @@ describe("getComputedProperty", () => {
 			{
 				frame_inherit: true,
 				frame_parent: 0,
-				frame_inheritDeep: true,
+				"frame_og:inheritDeep": true,
 			},
 			{
 				frame_values: [null, 4, null],
 				frame_inherit: true,
 				frame_parent: 1,
-				frame_inheritDeep: true,
+				"frame_og:inheritDeep": true,
 			},
 		]
 		const interpolated = getComputedProperty(frames, 2, "frame_values")
@@ -97,7 +97,7 @@ describe("getComputedProperty", () => {
 			{
 				frame_inherit: true,
 				frame_parent: 0,
-				frame_inheritDeep: true,
+				"frame_og:inheritDeep": true,
 				frame_values: [null, 4, null],
 			},
 		]
@@ -113,7 +113,7 @@ describe("getComputedProperty", () => {
 			{
 				frame_inherit: true,
 				frame_parent: 0,
-				frame_inheritDeep: true,
+				"frame_og:inheritDeep": true,
 				frame_values: [null, 4, null],
 			},
 		]

@@ -16,6 +16,12 @@ export default function preprocessFOLDModel(foldModel) {
 	return foldModel
 }
 
+export function markFramesToInheritDeeply(foldModel) {
+	for (let frame of foldModel.file_frames) {
+		frame["frame_og:inheritDeep"] = true
+	}
+}
+
 export function setDefaultCreator(foldModel) {
 	foldModel["file_creator"] = DEFAULT_CREATOR
 }
