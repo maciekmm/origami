@@ -11,7 +11,7 @@ const EDGE_ASSIGNMENTS = {
 	V: "Valley",
 	M: "Mountain",
 	F: "Flat",
-	B: "Boundry",
+	B: "Boundary",
 }
 
 export default function EdgeConfiguration({

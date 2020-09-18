@@ -48,9 +48,9 @@ export function reducer(state, action) {
 	}
 
 	const setEdgeArrayProperty = (property, value) => {
-		if (!state.selectedEdge) {
+		if (state.selectedEdge !== 0 && !state.selectedEdge) {
 			console.warn(`Tried to change ${property} of null edge`)
-			return
+			return state
 		}
 		const prefixedProperty = "edges_" + property
 		const currentStep = state.model.file_frames[state.frame]
