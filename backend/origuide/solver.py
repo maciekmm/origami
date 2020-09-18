@@ -15,7 +15,8 @@ import numpy as np
 
 
 class Solver:
-    def __init__(self, vertices: List[Vertex], edges: List[Edge], faces: List[Face], edges_fold_angles: List[Optional[float]]):
+    def __init__(self, vertices: List[Vertex], edges: List[Edge], faces: List[Face],
+                 edges_fold_angles: List[Optional[float]]):
         self.vertices = vertices
         self.edges = edges
         self.faces = faces
@@ -23,7 +24,8 @@ class Solver:
 
         # TODO: Getting k_axial, getting min node mass
         max_k_axial = max(map(lambda e: e.k_axial, self.edges))
-        self.d_t = 1 / (2 * math.pi * math.sqrt(max_k_axial / self.vertices[0].mass)) * 1.0 # TODO: Fine tune this parameter
+        self.d_t = 1 / (2 * math.pi * math.sqrt(
+            max_k_axial / self.vertices[0].mass)) * 1.0  # TODO: Fine tune this parameter
         self.epsilon = CONFIG['SOLVER_EPSILON']
 
     def solve(self, output):
@@ -31,7 +33,6 @@ class Solver:
         self._reset_velocities()
         self._set_forces()
         self._set_target_angles()
-        prev_forces = None
         cur_forces = self._total_forces_vecs()
 
         if CONFIG['DEBUG']:
@@ -39,7 +40,8 @@ class Solver:
             print('FORCES: ', cur_forces)
 
         plot_idx = 0
-        while self._should_continue(prev_forces, cur_forces):
+        finished = False
+        while not finished:
             if CONFIG['DEBUG']:
                 print(cur_forces)
 
@@ -65,8 +67,7 @@ class Solver:
             if CONFIG['DEBUG_PLOT']:
                 if plot_idx >= CONFIG['DEBUG_PLOT_FROM'] and plot_idx % CONFIG['DEBUG_PLOT_EVERY'] == 0:
                     plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
-                plot_idx += 1
-            print(plot_idx)
+            plot_idx += 1
 
             if CONFIG['DEBUG']:
                 print('---')
@@ -77,8 +78,8 @@ class Solver:
             prev_forces = cur_forces.copy()
             cur_forces = self._total_forces_vecs()
 
-            output.accept(copy.deepcopy(self.vertices))
-
+            finished = self._should_end(prev_forces, cur_forces)
+            output.accept(self.vertices, finished)
 
         print('FINISHED')
         for v in self.vertices:
@@ -111,14 +112,9 @@ class Solver:
                 else:
                     e.target_angle = fold_angle
 
-
     def _total_forces_vecs(self):
         return list(map(lambda v: v.total_force().vec, self.vertices))
 
-    def _should_continue(self, prev_forces, cur_forces):
-        # TODO: Add iteration count also as a stop condition?
-        if prev_forces is None:
-            return True
-
+    def _should_end(self, prev_forces, cur_forces):
         diff = np.abs(np.array(cur_forces) - np.array(prev_forces))
-        return np.any(diff > self.epsilon)
+        return np.all(diff <= self.epsilon)
