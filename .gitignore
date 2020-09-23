@@ -2,6 +2,7 @@
 node_modules/
 frontend/dist/
 frontend/.eslintcache
+**/.vscode/
 
 *.gz
 *.lot
