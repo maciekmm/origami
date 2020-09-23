@@ -1,6 +1,6 @@
 import sys
 
-from fold import read_fold, FoldProducer, LogFoldEncoder
+from fold import read_fold, FoldProducer, LogFoldEncoder, FoldEncoder
 from geometry.geometry_models import *
 from solver import Solver
 from geometry.triangulation import triangulate
@@ -69,10 +69,13 @@ def main():
 
     vertices = create_vertices(fold.vertices)
 
-    fold_producer = FoldProducer(fold, LogFoldEncoder(frame_drop_rate=4,
-                                                      frame_drop_multiplier=1.25,
-                                                      frame_drop_change_iter=40)
-                                )
+    if CONFIG['DEBUG_USE_DUMB_ENCODER']:
+        fold_producer = FoldProducer(fold, FoldEncoder())
+    else:
+        fold_producer = FoldProducer(fold, LogFoldEncoder(frame_drop_rate=4,
+                                                          frame_drop_multiplier=1.25,
+                                                          frame_drop_change_iter=40),
+                                     )
 
     edges = create_edges(vertices,
                          fold.edges,

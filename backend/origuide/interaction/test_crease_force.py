@@ -1,6 +1,6 @@
 import unittest
 
-from forces.crease_force import set_all_crease_forces
+from interaction.crease_force import set_all_crease_forces
 from geometry.generic_models import Vector3
 from geometry.generic_tools import same_direction_vec
 from geometry.geometry_models import Vertex, Edge, EDGE_UNKNOWN, Face, EDGE_VALLEY, EDGE_MOUNTAIN, angle_from_assignment

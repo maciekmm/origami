@@ -1,6 +1,6 @@
 import unittest
 
-from forces.face_force import set_all_face_forces
+from interaction.face_force import set_all_face_forces
 from geometry.generic_models import Vector3
 from geometry.generic_tools import same_direction_vec
 from geometry.geometry_models import Vertex, Face

@@ -1,11 +1,12 @@
 from typing import List, Optional
 
+from interaction.collision_detection import collide
 from tools import plot
-from forces.beam_force import set_all_beam_forces
+from interaction.beam_force import set_all_beam_forces
 from config import CONFIG
-from forces.crease_force import set_all_crease_forces
-from forces.damping_force import set_all_damping_forces
-from forces.face_force import set_all_face_forces
+from interaction.crease_force import set_all_crease_forces
+from interaction.damping_force import set_all_damping_forces
+from interaction.face_force import set_all_face_forces
 from geometry.generic_models import Vector3
 from geometry.geometry_models import Vertex, Edge, Face, angle_from_assignment
 
@@ -72,6 +73,16 @@ class Solver:
             if CONFIG['DEBUG']:
                 print('---')
 
+            if CONFIG['COLLISION_DETECTION_ENABLE']:
+                for i in range(len(self.faces)):
+                    for j in range(i + 1, len(self.faces)):
+                        # We shouldn't need collision detection for adjacent faces
+                        # TODO: This _should_check_collision should be precomputed (which faces should be checked for here)
+                        if self._should_check_collision(self.faces[i], self.faces[j]):
+                            if collide(self.faces[i], self.faces[j]):
+                                print('COLLISION DETECTED!!!')
+                                return
+
             self._reset_forces()
             self._set_forces()
 
@@ -118,3 +129,10 @@ class Solver:
     def _should_end(self, prev_forces, cur_forces):
         diff = np.abs(np.array(cur_forces) - np.array(prev_forces))
         return np.all(diff <= self.epsilon)
+
+    def _should_check_collision(self, face1, face2):
+        for v in face1.vertices:
+            for u in face2.vertices:
+                if v == u:
+                    return False
+        return True

@@ -1,6 +1,6 @@
 import unittest
 
-from forces.damping_force import set_all_damping_forces
+from interaction.damping_force import set_all_damping_forces
 from geometry.generic_models import Vector3
 from geometry.generic_tools import same_direction_vec
 from geometry.geometry_models import Vertex, Edge, EDGE_FLAT

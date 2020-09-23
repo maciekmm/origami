@@ -1,16 +1,14 @@
-import abc
-
-
-class FoldEncoder(abc.ABC):
-    @abc.abstractmethod
+class FoldEncoder:
+    """
+    A dummy encoder returning what it gets.
+    Base class for encoders.
+    """
     def encode(self, frame, last_frame: bool):
-        pass
+        return frame
 
-    @abc.abstractmethod
     def next_step(self):
         pass
 
-    @abc.abstractmethod
     def advance(self):
         pass
 

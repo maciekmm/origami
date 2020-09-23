@@ -6,6 +6,7 @@ from geometry.generic_models import Vector3
 def vector_from_to(v1: Vector3, v2: Vector3) -> Vector3:
     return v2 - v1
 
+
 def normalize(v: Vector3) -> Vector3:
     v_len = v.length
     if v_len == 0:
@@ -17,13 +18,11 @@ def cross(v1: Vector3, v2: Vector3) -> Vector3:
     vec1 = v1.vec
     vec2 = v2.vec
 
-    res = [0,0,0]
     x = (vec1[1] * vec2[2] - vec1[2] * vec2[1])
     y = (vec1[2] * vec2[0] - vec1[0] * vec2[2])
     z = (vec1[0] * vec2[1] - vec1[1] * vec2[0])
 
     return Vector3(x, y, z)
-    # return Vector3.from_vec(np.cross(v1.vec, v2.vec))
 
 
 def dot(v1: Vector3, v2: Vector3) -> float:
@@ -43,7 +42,6 @@ def plane_normal(v1: Vector3, v2: Vector3, v3: Vector3) -> Vector3:
 
     n = cross(w1, w2)
     return normalize(n)
-    # return Vector3.from_vec(n / np.linalg.norm(n))
 
 
 def vector_angle(v1: Vector3, v2: Vector3) -> float:
@@ -55,16 +53,6 @@ def signed_vector_angle(v1: Vector3, v2: Vector3, ref_n: Vector3) -> float:
     v2 = normalize(v2)
     ref_n = normalize(ref_n)
     return math.atan2(dot(cross(v1, v2), ref_n), dot(v1, v2))
-
-    # TODO: Just checking what ORIGAMI simulator seems to be doing differently
-    # v1 = normalize(v1)
-    # v2 = normalize(v2)
-    # ref_n = normalize(ref_n)
-
-    # x = dot(v1, v2)
-    # y = dot(cross(v1, ref_n), v2)
-
-    # return np.arctan2(y, x)
 
 
 def triangle_height(project_onto: Vector3, project_from: Vector3) -> float:

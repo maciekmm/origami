@@ -1,6 +1,6 @@
 import unittest
 
-from forces.beam_force import set_all_beam_forces
+from interaction.beam_force import set_all_beam_forces
 from geometry.generic_models import Vector3
 from geometry.generic_tools import same_direction_vec
 from geometry.geometry_models import Edge, Vertex, EDGE_BOUNDARY
