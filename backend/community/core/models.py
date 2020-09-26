@@ -8,6 +8,7 @@ class Guide(models.Model):
     class ProcessingStatus(models.TextChoices):
         QUEUED = 'QUE', 'Queued'
         PROCESSING = 'PRO', 'Processing'
+        TIMEOUT = 'TMO', 'Timeout'
         ERROR = 'ERR', 'Error'
         DONE = 'DON', 'Done'
 
