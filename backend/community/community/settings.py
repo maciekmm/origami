@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework'
+    'rest_framework',
+    'django_rest_passwordreset'
 ]
+
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = '1025'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -75,8 +79,7 @@ ROOT_URLCONF = 'community.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates', 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

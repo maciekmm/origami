@@ -2,6 +2,7 @@ from django.db import transaction
 from rest_framework import viewsets
 
 from core.models import Guide
+from core.permissions import IsOwnerOrPublic
 from core.serializers import GuideSerializer, GuideUploadSerializer
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
@@ -10,10 +11,9 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 class GuideViewSet(viewsets.ModelViewSet):
     queryset = Guide.objects.all().order_by('-published_at')
     serializer_class = GuideSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrPublic]
 
     def get_serializer_class(self):
-        print(self.action)
         if self.action == 'create':
             return GuideUploadSerializer
         return GuideSerializer
