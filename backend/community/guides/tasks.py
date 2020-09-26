@@ -5,7 +5,7 @@ from celery.exceptions import SoftTimeLimitExceeded
 from django.core.files.storage import default_storage
 from origuide.loader import solve_fold
 
-from core.models import Guide
+from guides.models import Guide
 
 
 def path_to_name(path: str) -> str:

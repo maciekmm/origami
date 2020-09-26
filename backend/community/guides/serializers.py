@@ -3,11 +3,11 @@ from django.contrib.auth.models import Group
 from django.db import transaction
 from rest_framework import serializers
 
-from core.fields.foldFileField import FoldFileField
-from core.fold import Fold
-from core.models import Guide
+from guides.fields.foldfilefield import FoldFileField
+from guides.fold import Fold
+from guides.models import Guide
 
-from core.tasks import process_guide
+from guides.tasks import process_guide
 
 
 class GuideSerializer(serializers.ModelSerializer):

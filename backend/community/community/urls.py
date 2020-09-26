@@ -20,11 +20,11 @@ from django.urls import path, include
 from rest_framework import routers
 
 from accounts import urls as account_urls
-from core.urls import router as core_router
+from guides.urls import router as guides_router
 
 api_router = routers.DefaultRouter()
 api_router.registry.extend(account_urls.router.registry)
-api_router.registry.extend(core_router.registry)
+api_router.registry.extend(guides_router.registry)
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
