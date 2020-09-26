@@ -1,15 +1,28 @@
-from django.test import TestCase
-
-# Create your tests here.
+from django.core import mail
 from django.urls import reverse
-from rest_framework.test import APITestCase, APIClient
 from rest_framework import status
+from rest_framework.test import APITestCase
+
 from accounts.models import User
 
 
 class RetrieveUserTest(APITestCase):
     def setUp(self):
         self.test_user = User.objects.create_user('test', 'test@example.com', 'password')
+
+    def test_get_user_me_should_retrieve_current_user(self):
+        """
+        Ensure we can retrieve current user
+        """
+        self.client.force_authenticate(user=self.test_user)
+        retrieve_url = reverse('user-detail', args=['me'])
+        response = self.client.get(retrieve_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertEqual(response.data['username'], self.test_user.username)
+        self.assertEqual(response.data['email'], self.test_user.email)
+        self.assertFalse('password' in response.data)
 
     def test_get_user_should_retrieve_user(self):
         """
@@ -156,3 +169,21 @@ class ChangePasswordTest(APITestCase):
 
         response = self.client.put(self.change_password_url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class ResetPasswordTest(APITestCase):
+
+    def setUp(self):
+        self.test_user = User.objects.create_user('test', 'test@example.com', 'password')
+        self.reset_password_url = reverse("password_reset:reset-password-request")
+
+    def test_reset_password_sends_email(self):
+        data = {
+            'email': 'test@example.com'
+        }
+        
+        response = self.client.post(self.reset_password_url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(mail.outbox) == 1)
+        self.assertIn(self.test_user.email, mail.outbox[0].to)

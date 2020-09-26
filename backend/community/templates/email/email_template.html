@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            background: #fff;
+            font-family: sans-serif;
+            font-size: 14px;
+        }
+
+        .layout {
+            border-spacing: 0;
+        }
+
+        td {
+        }
+
+        .header {
+            font-size: 3em;
+            background: #004459;
+            color: #E9F0F2;
+            text-align: center;
+        }
+
+        .header td {
+            padding: 0.3em 0;
+        }
+
+        body {
+            max-width: 700px;
+            margin: 0 auto;
+            font-size: 15px;
+            background: #F0F0F0;
+            line-height: 2;
+        }
+
+        .content td {
+            padding: 1.8em;
+        }
+
+        hr {
+            border: 0;
+            border-bottom: 2px solid #E9F0F2;
+            outline: 0;
+            width: 60%;
+            margin: 0.2em auto;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.6em;
+            background: #007FA6;
+        }
+
+        .cta {
+            text-align: center;
+        }
+
+        .cta a:link, a:visited {
+            color: #F0F0F0;
+            text-decoration: none;
+        }
+
+        .cta td {
+            padding: 0.5em 0 1em 0;
+        }
+
+    </style>
+</head>
+<body>
+<table class="layout" style="width: 100%;">
+    <thead>
+    <tr class="header">
+        <td colspan="3" valign="middle">Origuide
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="content">
+        <td colspan="3">
+            <h2>{% block title %}{% endblock %}</h2>
+            {% block content %}{% endblock %}
+        </td>
+    </tr>
+    <tr class="cta">
+        <td colspan="3">
+            {% block cta %}{% endblock %}
+        </td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <tr class="footer">
+        <td colspan="3">
+        </td>
+    </tr>
+    </tfoot>
+</table>
+</body>
+</html>
