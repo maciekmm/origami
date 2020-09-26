@@ -1,6 +1,9 @@
+from django.test import override_settings
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APITransactionTestCase
+from unittest.mock import patch
+import base64
 
 from accounts.models import User
 from guides.models import Guide
@@ -188,3 +191,37 @@ class ListGuidesTest(APITestCase):
         self.assertEqual(len(response.data), 1)
         print(response.data)
         self.assertEqual(response.data[0]['id'], self.public_guide_1.id)
+
+
+class CreateGuideTest(APITransactionTestCase):
+    def setUp(self):
+        self.test_user = User.objects.create_user('test', 'test@example.com', 'password')
+
+        sample_fold_encoded = base64.b64encode(
+            '{"file_spec":1,"file_creator":"Origuide - https://origami.wtf","file_author":"Maciej Mionskowski",'
+            '"file_classes":["animation","origuide:guide"],"file_frames":[{"frame_title":"","frame_classes":['
+            '"creasePattern","origuide:steady_state"],"frame_attributes":["3D"],"vertices_coords":[[0,-1,-1],[0,-1,'
+            '1],[0,1,1],[0,1,-1]],"faces_vertices":[[0,1,2],[2,3,0]],"edges_vertices":[[0,1],[1,2],[2,3],[3,0],[0,'
+            '2]],"edges_assignment":["B","B","B","B","V"]},{"frame_inherit":true,"frame_parent":0,"frame_classes":['
+            '"origuide:steady_state"],"edges_assignment":["B","B","B","B","M"]},{"frame_inherit":true,'
+            '"frame_parent":1,"frame_classes":["origuide:steady_state"],"edges_assignment":["B","B","B","B","B"]},'
+            '{"frame_inherit":true,"frame_parent":2,"frame_classes":["origuide:steady_state"],"edges_assignment":['
+            '"B","B","B","B","V"]}],"file_og:frameRate":24,"file_title":"Flat Fold",'
+            '"file_description":"Hello"}'.encode('ascii')).decode('ascii')
+        self.sample_data = {
+            'guide_file': f'data:text/json;base64,{sample_fold_encoded}'
+        }
+
+    def test_create_guide_should_fail_if_not_authorized(self):
+        create_url = reverse('guide-list')
+        response = self.client.post(create_url, self.sample_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    @override_settings(CELERY_ALWAYS_EAGER=True)
+    @patch('guides.tasks.process_guide.delay')
+    def test_create_guide_should_create_guide_and_start_processing_task(self, task):
+        self.client.force_authenticate(user=self.test_user)
+        create_url = reverse('guide-list')
+        response = self.client.post(create_url, self.sample_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        task.assert_called_once()
