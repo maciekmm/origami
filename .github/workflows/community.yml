@@ -41,4 +41,5 @@ jobs:
     - name: Unit tests
       run: |
         cd community
-        ENV_PATH=env.test python manage.py test
+        export $(cat community/.env.test | xargs)
+        python manage.py test
