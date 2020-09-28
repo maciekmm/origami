@@ -1,6 +1,5 @@
 from typing import List, Optional
 
-from origuide.tools import plot
 from origuide.forces.beam_force import set_all_beam_forces
 from origuide.config import CONFIG
 from origuide.forces.crease_force import set_all_crease_forces
@@ -65,6 +64,7 @@ class Solver:
 
             if CONFIG['DEBUG_PLOT']:
                 if plot_idx >= CONFIG['DEBUG_PLOT_FROM'] and plot_idx % CONFIG['DEBUG_PLOT_EVERY'] == 0:
+                    from origuide.tools import plot
                     plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
             plot_idx += 1
 
