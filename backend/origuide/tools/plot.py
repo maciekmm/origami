@@ -2,13 +2,13 @@ from typing import List
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib import collections as mc
 from mpl_toolkits.mplot3d.art3d import Line3DCollection
 
 from config import CONFIG
 
 from geometry.geometry_models import Vertex, Edge, Face
 from geometry.generic_models import Vector3
+
 
 def assignment_to_color(assignment):
     if assignment == 'M':
@@ -19,6 +19,7 @@ def assignment_to_color(assignment):
         return 'yellow'
     else:
         return 'gray'
+
 
 def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces):
     forces = np.array(forces)
@@ -81,7 +82,7 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
     if CONFIG['DEBUG_PLOT_VELOCITIES']:
         ax.quiver(xs, ys, zs, vel_xs, vel_ys, vel_zs, color='r')
 
-    box_lim = 2
+    box_lim = 4
 
     ax.set_xlim([-box_lim, box_lim])
     ax.set_ylim([-box_lim, box_lim])

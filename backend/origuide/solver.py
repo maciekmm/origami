@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from geometry.generic_tools import normalize, dot, distance, vector_from_to
 from interaction.collision_detection import collide
 from tools import plot
 from interaction.beam_force import set_all_beam_forces
@@ -10,9 +11,27 @@ from interaction.face_force import set_all_face_forces
 from geometry.generic_models import Vector3
 from geometry.geometry_models import Vertex, Edge, Face, angle_from_assignment
 
-import copy
 import math
 import numpy as np
+
+
+def project_onto_vec(to_project: Vector3, onto: Vector3):
+    onto_i = normalize(onto)
+    d_len = dot(to_project, onto_i)
+    projected = d_len * onto_i
+    return projected
+
+
+def exclude_forces_in_direction(v: Vertex, opposite_face: Face):
+    closest = opposite_face.vertices[0]
+    initial_d = distance(v.pos, closest.pos)
+    for w in opposite_face.vertices[1:]:
+        if distance(v.pos, w.pos) < initial_d:
+            closest = w
+
+    directional_vec = vector_from_to(v.pos, closest.pos)
+    projected = project_onto_vec(v.total_force(), directional_vec)
+    v._total_force -= projected
 
 
 class Solver:
@@ -73,6 +92,11 @@ class Solver:
             if CONFIG['DEBUG']:
                 print('---')
 
+            self._reset_forces()
+            self._set_forces()
+
+            prev_forces = cur_forces.copy()
+
             if CONFIG['COLLISION_DETECTION_ENABLE']:
                 for i in range(len(self.faces)):
                     for j in range(i + 1, len(self.faces)):
@@ -81,12 +105,16 @@ class Solver:
                         if self._should_check_collision(self.faces[i], self.faces[j]):
                             if collide(self.faces[i], self.faces[j]):
                                 print('COLLISION DETECTED!!!')
-                                return
+                                for v in self.faces[i].vertices:
+                                    exclude_forces_in_direction(v, self.faces[j])
+                                for v in self.faces[j].vertices:
+                                    exclude_forces_in_direction(v, self.faces[i])
+                                # print(self.faces[i])
+                                # print(self.faces[j])
+                                # for v in self.faces[i].vertices + self.faces[j].vertices:
+                                #     v.reset()
+                                # plot.plot3d(self.vertices, self.edges, self.faces, cur_forces)
 
-            self._reset_forces()
-            self._set_forces()
-
-            prev_forces = cur_forces.copy()
             cur_forces = self._total_forces_vecs()
 
             finished = self._should_end(prev_forces, cur_forces)

@@ -12,10 +12,10 @@ def collide(face1: Face, face2: Face) -> bool:
     https://github.com/erich666/jgt-code/blob/master/Volume_08/Number_1/Shen2003/tri_tri_test/include/Moller97.c
     """
 
-    print('---')
-    print('Checking faces')
-    print('face1: ', face1)
-    print('face2: ', face2)
+    # print('---')
+    # print('Checking faces')
+    # print('face1: ', face1)
+    # print('face2: ', face2)
 
     [v0, v1, v2] = face1.vertices
     [u0, u1, u2] = face2.vertices
@@ -100,7 +100,7 @@ def collide(face1: Face, face2: Face) -> bool:
 
     # Special case check for coplanar triangles
     if is_coplanar:
-        print('It is coplanar?')
+        # print('It is coplanar?')
         return coplanar_intersect()
 
     if isect1_0 > isect1_1:
@@ -112,9 +112,9 @@ def collide(face1: Face, face2: Face) -> bool:
     if isect1_1 <= isect2_0 or isect2_1 <= isect1_0:
         return False
 
-    print('NORMAL RET ')
-    print('isect1:', isect1_0, isect1_1)
-    print('isect2:', isect2_0, isect2_1)
+    # print('NORMAL RET ')
+    # print('isect1:', isect1_0, isect1_1)
+    # print('isect2:', isect2_0, isect2_1)
     return True
 
 
