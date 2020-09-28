@@ -1,4 +1,3 @@
-from django.db import transaction
 from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
@@ -29,6 +28,5 @@ class GuideViewSet(viewsets.ModelViewSet):
             return GuideUploadSerializer
         return GuideSerializer
 
-    @transaction.atomic
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
