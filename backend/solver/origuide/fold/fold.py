@@ -7,8 +7,9 @@ def is_steady_state(frame):
 
 def extract_root_frame(root):
     frame = {k: v for k, v in root.items() if not k.startswith('file_')}
-    return frame if frame == {} else None
-        
+    return frame if frame != {} else None
+
+
 class Frame:
     def __init__(self, json_representation):
         self.raw = json_representation
@@ -44,8 +45,7 @@ class Fold:
 
         maybe_root_frame = extract_root_frame(self.raw)
         if maybe_root_frame:
-            self.frames = [self.root_frame] + self.frames
-            
+            self.frames = [maybe_root_frame] + self.frames
 
         self.steady_states = list(
             filter(lambda frame: frame.is_steady, self.frames)
