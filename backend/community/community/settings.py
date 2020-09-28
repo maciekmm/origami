@@ -9,8 +9,21 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-
 from pathlib import Path
+
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False),
+    EMAIL_USE_TLS=(bool, True),
+    EMAIL_HOST_USER=(str, ''),
+    EMAIL_HOST_PASSWORD=(str, ''),
+    DATABASE_USER=(str, ''),
+    DATABASE_PASSWORD=(str, ''),
+    DATABASE_HOST=(str, ''),
+    DATABASE_PORT=(int, 0),
+)
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -18,17 +31,39 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'c6+ybqo17+#2fylje&%h&ixe0x54h7$#$4n@v$g=&k0!ja&%-+'
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env('DEBUG')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 
-ALLOWED_HOSTS = []
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')  # redis://localhost:6379'
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')  # redis://localhost:6379'
 
-AUTH_USER_MODEL = 'accounts.User'
+ALLOWED_HOSTS = ['*']  # Reverse proxy is used to filter out hosts
+MEDIA_ROOT = env('MEDIA_ROOT')
+
+
+# Database
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+
+DATABASES = {
+    'default': {
+        'ENGINE': env('DATABASE_ENGINE'),  # 'django.db.backends.sqlite3',
+        'NAME': env('DATABASE_NAME'),  # 'django.db.backends.sqlite3',
+        'USER': env('DATABASE_USER'),  # BASE_DIR / 'db.sqlite3',
+        'PASSWORD': env('DATABASE_PASSWORD'),  # BASE_DIR / 'db.sqlite3',
+        'HOST': env('DATABASE_HOST'),  # BASE_DIR / 'db.sqlite3',
+        'PORT': env('DATABASE_PORT'),  # BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # Application definition
+
+AUTH_USER_MODEL = 'accounts.User'
 
 INSTALLED_APPS = [
     'guides.apps.GuidesConfig',
@@ -43,22 +78,17 @@ INSTALLED_APPS = [
     'django_rest_passwordreset'
 ]
 
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = '1025'
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ],
@@ -70,8 +100,6 @@ REST_FRAMEWORK = {
     ]
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -96,18 +124,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'community.wsgi.application'
-MEDIA_ROOT = '/tmp/folds'
 MEDIA_URL = 'uploads/'
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
