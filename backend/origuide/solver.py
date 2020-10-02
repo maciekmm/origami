@@ -12,26 +12,23 @@ from geometry.generic_models import Vector3
 from geometry.geometry_models import Vertex, Edge, Face, angle_from_assignment
 
 import math
+
 import numpy as np
 
 
-def project_onto_vec(to_project: Vector3, onto: Vector3):
-    onto_i = normalize(onto)
-    d_len = dot(to_project, onto_i)
-    projected = d_len * onto_i
-    return projected
+def vecs_on_same_orientation_plane(v1: Vector3, v2: Vector3):
+    return dot(normalize(v1), normalize(v2)) < math.pi
 
 
 def exclude_forces_in_direction(v: Vertex, opposite_face: Face):
-    closest = opposite_face.vertices[0]
-    initial_d = distance(v.pos, closest.pos)
-    for w in opposite_face.vertices[1:]:
-        if distance(v.pos, w.pos) < initial_d:
-            closest = w
+    face_n = opposite_face.normal
+    v_forces = v.total_force()
+    if not vecs_on_same_orientation_plane(v_forces, face_n):
+        face_n = -face_n
 
-    directional_vec = vector_from_to(v.pos, closest.pos)
-    projected = project_onto_vec(v.total_force(), directional_vec)
-    v._total_force -= projected
+    v_forces = v_forces - face_n * dot(face_n, v_forces)
+    v._total_force = v_forces
+    v.reset_velocity()
 
 
 class Solver:
