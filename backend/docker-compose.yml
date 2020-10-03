@@ -3,6 +3,7 @@ version: '3'
 volumes:
   postgres:
   redis:
+  guides:
 
 services:
   postgres:
@@ -23,7 +24,7 @@ services:
       dockerfile: Dockerfile.worker
     env_file: .env
     volumes:
-      - /tmp/origuide:/files:rw
+      - guides:/files
     depends_on:
       - postgres
       - migrations
@@ -33,7 +34,7 @@ services:
       dockerfile: Dockerfile.community
     env_file: .env
     volumes:
-      - /tmp/origuide:/files:rw
+      - guides:/files
     ports:
       - "8000:8000"
     depends_on:
