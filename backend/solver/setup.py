@@ -11,7 +11,6 @@ setup(
     description='Origami simulator',
     install_requires=[
         "cffi>=1.14,<2",
-        # "greenlet>=0.4,<1",
         "numpy>=1.19,<2",
         "readline>=6.2,<7",
         "scipy>=1.5,<2"

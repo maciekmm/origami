@@ -1,0 +1,25 @@
+FROM python:3.8
+
+RUN apt-get update
+
+RUN mkdir /build
+WORKDIR /build
+COPY requirements.txt .
+
+RUN pip install pip --upgrade
+RUN pip install -r requirements.txt
+RUN pip install setuptools --upgrade
+
+COPY ./solver ./solver 
+WORKDIR /build/solver
+
+RUN python setup.py bdist_wheel
+RUN pip install dist/*.whl
+RUN mkdir /app
+
+WORKDIR /community
+COPY ./community .
+
+RUN pip install uwsgi
+
+CMD ["uwsgi", "--ini", "uwsgi.ini"]

@@ -1,0 +1,49 @@
+version: '3'
+
+volumes:
+  postgres:
+  redis:
+
+services:
+  postgres:
+    image: postgres:13
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  redis:
+    image: redis:6
+    volumes:
+      - redis:/data
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    env_file: .env
+    volumes:
+      - /tmp/origuide:/files:rw
+    depends_on:
+      - postgres
+      - migrations
+  community:
+    build:
+      context: .
+      dockerfile: Dockerfile.community
+    env_file: .env
+    volumes:
+      - /tmp/origuide:/files:rw
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - migrations
+  migrations:
+    build:
+      context: .
+      dockerfile: Dockerfile.community
+    env_file: .env
+    command: python /community/manage.py migrate
+    depends_on:
+      - postgres

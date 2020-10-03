@@ -1,0 +1,24 @@
+FROM pypy:3.7
+
+RUN apt-get update
+RUN apt-get install -y libblas-dev liblapack-dev gfortran
+
+RUN mkdir /build
+WORKDIR /build
+COPY requirements.txt .
+
+RUN pip install pip --upgrade
+RUN pip install -r requirements.txt
+RUN pip install setuptools --upgrade
+
+COPY ./solver ./solver 
+WORKDIR /build/solver
+
+RUN pypy3 setup.py bdist_wheel
+RUN pip install dist/*.whl
+RUN mkdir /app
+
+WORKDIR /community
+COPY ./community .
+
+CMD ["celery", "-A", "community", "worker", "--loglevel=info"]
