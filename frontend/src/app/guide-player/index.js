@@ -1,8 +1,7 @@
-import React, { useState } from "react"
+import React from "react"
 import ViewerHeader from "@dom-components/viewer-header"
 import PlaybackControls from "@dom-components/playback-controls"
 import Player from "@dom-components/player"
-import preprocessFoldModel from "@fold/preprocess"
 import Timeline from "@dom-components/timeline"
 
 import {
@@ -10,7 +9,7 @@ import {
 	getPreviousSteadyFrameId,
 	isSteady,
 } from "../../fold/steadyness"
-import { useStore } from "../../store"
+import { usePlayerStore } from "@store/player"
 import { LOAD_MODEL, SELECT_FRAME } from "../../store/viewer/actions"
 import {
 	PAUSE,
@@ -21,7 +20,7 @@ import {
 } from "../../store/player/actions"
 
 export default function GuideViewer() {
-	const [{ model, frame, playing }, dispatch] = useStore()
+	const [{ model, frame, playing }, dispatch] = usePlayerStore()
 
 	const loadModel = (model) => dispatch({ type: LOAD_MODEL, model: model })
 	const play = () => dispatch({ type: PLAY })

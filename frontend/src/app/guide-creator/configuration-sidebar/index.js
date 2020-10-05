@@ -3,7 +3,7 @@ import EdgeConfiguration from "@dom-components/configuration-edge"
 import FileConfiguration from "@dom-components/configuration-file"
 import StepConfiguration from "@dom-components/configuration-step"
 import styles from "./styles.css"
-import { useStore } from "../../../store"
+import { useCreatorStore } from "@store/creator"
 import { downloadModel } from "../../../download"
 import { getComputedProperty } from "@fold/properties"
 import {
@@ -17,7 +17,7 @@ import {
 } from "../../../store/creator/actions"
 
 export default function ConfigurationSidebar() {
-	const [{ model, frame, selectedEdge }, dispatch] = useStore()
+	const [{ model, frame, selectedEdge }, dispatch] = useCreatorStore()
 
 	const currentStep = model && model.file_frames[frame]
 

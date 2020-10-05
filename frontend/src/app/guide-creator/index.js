@@ -1,17 +1,17 @@
-import React, { useEffect } from "react"
+import React from "react"
 import ViewerHeader from "@dom-components/viewer-header"
 import Viewer from "@dom-components/viewer"
 import Timeline from "@dom-components/timeline"
 import Grid from "@material-ui/core/Grid"
 import ConfigurationSidebar from "./configuration-sidebar"
 import { TimelineStepAdd } from "@dom-components/timeline-step-add"
-import { useStore } from "../../store"
+import { useCreatorStore } from "@store/creator"
 import { LOAD_MODEL, SELECT_FRAME } from "../../store/viewer/actions"
 import { ADD_STEP, REMOVE_STEP, SELECT_EDGE } from "../../store/creator/actions"
 import styles from "./style.css"
 
 export default function GuideCreator() {
-	const [{ model, frame, selectedEdge }, dispatch] = useStore()
+	const [{ model, frame, selectedEdge }, dispatch] = useCreatorStore()
 
 	const selectEdge = (edge) => dispatch({ type: SELECT_EDGE, edge: edge })
 	const selectFrame = (frame) => dispatch({ type: SELECT_FRAME, frame: frame })

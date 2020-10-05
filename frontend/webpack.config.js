@@ -13,6 +13,7 @@ module.exports = {
 			"@dom-components": path.resolve("src/components/dom/"),
 			"@three-components": path.resolve("src/components/three/"),
 			"@fold": path.resolve("src/fold/"),
+			"@store": path.resolve("src/store/"),
 		},
 	},
 	devServer: {
