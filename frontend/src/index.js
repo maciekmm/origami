@@ -9,6 +9,7 @@ import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
 import ButtonLink from "@dom-components/button-link"
 import { StoreProvider } from "@store"
+import Button from "@material-ui/core/Button"
 
 const Router =
 	process.env.NODE_ENV !== "production" ? HashRouter : BrowserRouter
@@ -22,6 +23,9 @@ function AppWithStore() {
 						<Typography variant="h6">Origuide</Typography>
 						<ButtonLink to="/" exact title="View" />
 						<ButtonLink to="/create" title="Create" />
+						<Button color="inherit" style={{ marginLeft: "auto" }}>
+							Login
+						</Button>
 					</Toolbar>
 				</AppBar>
 				<Route exact path="/">
@@ -30,6 +34,8 @@ function AppWithStore() {
 				<Route path="/create">
 					<GuideCreator />
 				</Route>
+				<Route path="/login"></Route>
+				<Route path="/register"></Route>
 			</Router>
 		</StoreProvider>
 	)
