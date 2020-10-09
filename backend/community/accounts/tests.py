@@ -3,12 +3,13 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from accounts.factories import UserFactory
 from accounts.models import User
 
 
 class RetrieveUserTest(APITestCase):
     def setUp(self):
-        self.test_user = User.objects.create_user('test', 'test@example.com', 'password')
+        self.test_user = UserFactory()
 
     def test_get_user_me_should_retrieve_current_user(self):
         """
@@ -51,7 +52,7 @@ class RetrieveUserTest(APITestCase):
         """
         Ensure we can only retrieve self
         """
-        additional_user = User.objects.create_user('test2', 'test2@example.com', 'password')
+        additional_user = UserFactory()
         self.client.force_authenticate(user=additional_user)
         retrieve_url = reverse('user-detail', args=[self.test_user.id])
         response = self.client.get(retrieve_url)
@@ -61,7 +62,7 @@ class RetrieveUserTest(APITestCase):
 
 class CreateUserTest(APITestCase):
     def setUp(self):
-        self.test_user = User.objects.create_user('test', 'test@example.com', 'password')
+        self.test_user = UserFactory()
         self.create_url = reverse('user-list')
 
     def test_create_user_should_create_user(self):
@@ -92,7 +93,7 @@ class CreateUserTest(APITestCase):
         Ensure we can create a new user
         """
         data = {
-            'username': 'test',
+            'username': self.test_user.username,
             'email': 'test_create_user@example.com',
             'password': 'password'
         }
@@ -107,7 +108,7 @@ class CreateUserTest(APITestCase):
         """
         data = {
             'username': 'test_user',
-            'email': 'test@example.com',
+            'email': self.test_user.username,
             'password': 'password'
         }
 
@@ -118,7 +119,8 @@ class CreateUserTest(APITestCase):
 
 class ChangePasswordTest(APITestCase):
     def setUp(self):
-        self.test_user = User.objects.create_user('test', 'test@example.com', 'password')
+        self.test_password = 'password'
+        self.test_user = UserFactory.create(password=self.test_password)
         self.create_url = reverse('user-list')
         self.change_password_url = reverse('user-change-password', args=[self.test_user.id])
 
@@ -129,7 +131,7 @@ class ChangePasswordTest(APITestCase):
         self.client.force_authenticate(user=self.test_user)
 
         data = {
-            'old_password': 'password',
+            'old_password': self.test_password,
             'new_password': 'newPassword'
         }
 
@@ -159,7 +161,7 @@ class ChangePasswordTest(APITestCase):
         """
         Ensure we can't change password if we are not logged in as the user we want to change the password for
         """
-        new_user = User.objects.create_user('new_user', 'new_user@example.com', 'password')
+        new_user = UserFactory(password='password')
         self.client.force_authenticate(user=new_user)
 
         data = {
@@ -174,7 +176,7 @@ class ChangePasswordTest(APITestCase):
 class ResetPasswordTest(APITestCase):
 
     def setUp(self):
-        self.test_user = User.objects.create_user('test', 'test@example.com', 'password')
+        self.test_user = UserFactory(email='test@example.com')
         self.reset_password_url = reverse("password_reset:reset-password-request")
 
     def test_reset_password_sends_email(self):
