@@ -1,5 +1,14 @@
 version: '3'
 
+x-shared_environment: &shared-environment
+  CELERY_BROKER_URL: redis://redis:6379
+  CELERY_RESULT_BACKEND: redis://redis:6379
+  MEDIA_ROOT: /files
+  DATABASE_ENGINE: django.db.backends.postgresql
+  DATABASE_NAME: origuide
+  DATABASE_HOST: postgres
+  DATABASE_PORT: 5432
+
 volumes:
   postgres:
   redis:
@@ -23,6 +32,8 @@ services:
       context: .
       dockerfile: Dockerfile.worker
     env_file: .env
+    environment:
+      <<: *shared-environment
     volumes:
       - guides:/files
     depends_on:
@@ -33,6 +44,8 @@ services:
       context: .
       dockerfile: Dockerfile.community
     env_file: .env
+    environment:
+      <<: *shared-environment
     volumes:
       - guides:/files
     ports:
@@ -45,6 +58,8 @@ services:
       context: .
       dockerfile: Dockerfile.community
     env_file: .env
+    environment:
+      <<: *shared-environment
     command: python /community/manage.py migrate
     depends_on:
       - postgres

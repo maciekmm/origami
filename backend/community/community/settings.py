@@ -11,19 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 from pathlib import Path
 
-import environ
-
-env = environ.Env(
-    DEBUG=(bool, False),
-    EMAIL_USE_TLS=(bool, True),
-    EMAIL_HOST_USER=(str, ''),
-    EMAIL_HOST_PASSWORD=(str, ''),
-    DATABASE_USER=(str, ''),
-    DATABASE_PASSWORD=(str, ''),
-    DATABASE_HOST=(str, ''),
-    DATABASE_PORT=(int, 0),
-)
-environ.Env.read_env()
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,20 +19,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG')
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG') == 'true'
 
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = env('EMAIL_PORT')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'true'
 
-CELERY_BROKER_URL = env('CELERY_BROKER_URL')  # redis://localhost:6379'
-CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')  # redis://localhost:6379'
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  # redis://localhost:6379'
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')  # redis://localhost:6379'
 
 ALLOWED_HOSTS = ['*']  # Reverse proxy is used to filter out hosts
-MEDIA_ROOT = env('MEDIA_ROOT')
+MEDIA_ROOT = os.getenv('MEDIA_ROOT')
 
 
 # Database
@@ -52,12 +40,12 @@ MEDIA_ROOT = env('MEDIA_ROOT')
 
 DATABASES = {
     'default': {
-        'ENGINE': env('DATABASE_ENGINE'),  # 'django.db.backends.sqlite3',
-        'NAME': env('DATABASE_NAME'),  # 'django.db.backends.sqlite3',
-        'USER': env('DATABASE_USER'),  # BASE_DIR / 'db.sqlite3',
-        'PASSWORD': env('DATABASE_PASSWORD'),  # BASE_DIR / 'db.sqlite3',
-        'HOST': env('DATABASE_HOST'),  # BASE_DIR / 'db.sqlite3',
-        'PORT': env('DATABASE_PORT'),  # BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DATABASE_ENGINE'),  # 'django.db.backends.sqlite3',
+        'NAME': os.getenv('DATABASE_NAME'),  # 'django.db.backends.sqlite3',
+        'USER': os.getenv('DATABASE_USER'),  # BASE_DIR / 'db.sqlite3',
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),  # BASE_DIR / 'db.sqlite3',
+        'HOST': os.getenv('DATABASE_HOST'),  # BASE_DIR / 'db.sqlite3',
+        'PORT': int(os.getenv('DATABASE_PORT')),  # BASE_DIR / 'db.sqlite3',
     }
 }
 

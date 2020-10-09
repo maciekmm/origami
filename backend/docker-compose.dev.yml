@@ -1,0 +1,15 @@
+services:
+  community:
+    build:
+      context: .
+      dockerfile: Dockerfile.community
+    command: python /community/manage.py runserver 0.0.0.0:8000 
+    env_file: .env
+    volumes:
+      - guides:/files
+      - ./community:/community
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - migrations
