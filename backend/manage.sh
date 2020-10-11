@@ -16,6 +16,6 @@ if [ -z "$community_container" ]; then
     fi
 fi
 
-manage_arg=$1
+manage_arg=$@
 
 docker exec -it ${community_container} python manage.py ${manage_arg}
