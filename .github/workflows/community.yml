@@ -40,6 +40,6 @@ jobs:
         flake8 community/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Unit tests
       run: |
-        cd community
         export $(cat .env.example | xargs)
+        cd community
         python manage.py test
