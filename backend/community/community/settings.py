@@ -23,7 +23,10 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'true'
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
+
+if os.getenv('EMAIL_PORT') != "":
+    EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
+
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'true'
@@ -45,7 +48,7 @@ DATABASES = {
         'USER': os.getenv('DATABASE_USER'),  # BASE_DIR / 'db.sqlite3',
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),  # BASE_DIR / 'db.sqlite3',
         'HOST': os.getenv('DATABASE_HOST'),  # BASE_DIR / 'db.sqlite3',
-        'PORT': int(os.getenv('DATABASE_PORT')),  # BASE_DIR / 'db.sqlite3',
+        'PORT': int(os.getenv('DATABASE_PORT')) if os.getenv('DATABASE_PORT') else None,  # BASE_DIR / 'db.sqlite3',
     }
 }
 
