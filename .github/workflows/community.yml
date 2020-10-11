@@ -4,11 +4,11 @@ on:
   push:
     branches: [ master ]
     paths:
-    - 'backend/community/**'
+    - 'backend/**'
   pull_request:
     branches: [ master ]
     paths:
-    - 'backend/community/**'
+    - 'backend/**'
 
 defaults:
   run:
@@ -39,7 +39,14 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 community/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Unit tests
-      run: |
-        cd community
-        export $(cat community/.env.test | xargs)
-        python manage.py test
+      env:
+        DEBUG: "false"
+        SECRET_KEY: "invalid-secret-key"
+        EMAIL_HOST: "localhost"
+        EMAIL_PORT: "1025"
+        EMAIL_USE_TLS: "false"
+        DATABASE_USER: "origuide"
+        DATABASE_PASSWORD: "password"
+        DATABASE_NAME: "origuide"
+        DATABASE_PORT: "9999"
+      run: python community/manage.py test
