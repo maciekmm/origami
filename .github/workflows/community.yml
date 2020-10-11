@@ -38,8 +38,9 @@ jobs:
         flake8 community/ --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 community/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Unit tests
+    - name: Start stack
       run: |
-        export $(cat .env.example | xargs)
-        cd community
-        python manage.py test
+        cp .env.example .env
+        docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+    - name: Unit tests
+      run: ./manage.sh test
