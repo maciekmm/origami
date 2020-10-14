@@ -44,12 +44,8 @@ class GuideReadSerializer(serializers.ModelSerializer):
 
 
 class GuideWriteSerializer(GuideReadSerializer):
-    ALLOWED_PUBLIC_FIELDS = ('liked', 'solved')
-
     guide_file = FoldFileField()
     name = serializers.CharField(required=False)
-    liked = serializers.BooleanField(required=False)
-    solved = serializers.BooleanField(required=False)
 
     @transaction.atomic
     def create(self, validated_data):
@@ -60,12 +56,6 @@ class GuideWriteSerializer(GuideReadSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
-        user = self.context['request'].user
-        for (key, field) in (('liked', instance.liked_by), ('solved', instance.solved_by)):
-            val = validated_data.get(key)
-            if val is not None:
-                self._relation_update(field, user, val)
-
         if validated_data.get('guide_file') is not None:
             fold = Fold.from_fold_file(validated_data['guide_file'])
             validated_data['name'] = fold.title
@@ -73,9 +63,3 @@ class GuideWriteSerializer(GuideReadSerializer):
             transaction.on_commit(lambda: process_guide.delay(instance.pk))
 
         return super(GuideWriteSerializer, self).update(instance, validated_data)
-
-    def _relation_update(self, field, obj, add):
-        if add:
-            field.add(obj)
-        else:
-            field.remove(obj)

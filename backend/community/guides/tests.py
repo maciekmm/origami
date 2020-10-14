@@ -191,15 +191,11 @@ class UpdateGuideTest(APITransactionTestCase):
         response = self.client.patch(retrieve_url, {
             'name': 'newname',
             'private': False,
-            'liked': True,
-            'solved': True,
         }, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['name'], 'newname')
         self.assertEqual(response.data['private'], False)
-        self.assertEqual(response.data['liked'], True)
-        self.assertEqual(response.data['solved'], True)
 
     @override_settings(CELERY_ALWAYS_EAGER=True)
     @patch('guides.tasks.process_guide.delay')
@@ -211,22 +207,6 @@ class UpdateGuideTest(APITransactionTestCase):
         }, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         task.assert_called_once()
-
-    def test_updates_liked_and_solved_when_not_owner(self):
-        self.client.force_authenticate(user=self.test_user_2)
-        retrieve_url = reverse('guide-detail', args=[self.public_guide.pk])
-        response = self.client.patch(retrieve_url, {
-            'liked': True,
-            'solved': True,
-        }, format='json')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['liked'], True)
-        self.assertEqual(response.data['solved'], True)
-
-        guide = Guide.objects.get(pk=response.data['id'])
-        self.assertEqual(list(guide.liked_by.all()), [self.test_user_2])
-        self.assertEqual(list(guide.solved_by.all()), [self.test_user_2])
 
     def test_does_not_update_private_fields_when_not_owner(self):
         self.client.force_authenticate(user=self.test_user_2)
@@ -246,18 +226,18 @@ class UpdateGuideTest(APITransactionTestCase):
 class RetrieveLikedGuidesTest(APITestCase):
     def setUp(self):
         self.test_user = UserFactory()
-        self.liked_guide = GuideFactory(private=False)
-        self.liked_guide.liked_by.add(self.test_user)
+        self.solved_guide = GuideFactory(private=False)
+        self.solved_guide.solved_by.add(self.test_user)
 
-    def test_returns_a_list_of_liked_guides_for_user(self):
+    def test_returns_a_list_of_solved_guides_for_user(self):
         self.client.force_authenticate(user=self.test_user)
-        retrieve_url = reverse('guide-liked')
+        retrieve_url = reverse('guide-solved')
         response = self.client.get(retrieve_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
 
     def test_not_allowed_when_unauthenticated(self):
-        retrieve_url = reverse('guide-liked')
+        retrieve_url = reverse('guide-solved')
         response = self.client.get(retrieve_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -279,3 +259,83 @@ class RetrieveSolvedGuidesTest(APITestCase):
         retrieve_url = reverse('guide-solved')
         response = self.client.get(retrieve_url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class SetLikedTest(APITestCase):
+    def setUp(self):
+        self.test_user = UserFactory()
+        self.guide = GuideFactory(private=False)
+        self.liked_guide = GuideFactory(private=False)
+        self.liked_guide.liked_by.add(self.test_user)
+        self.private_guide = GuideFactory(private=True)
+
+    def test_returns_401_for_unauthenticated_user(self):
+        retrieve_url = reverse('guide-like', args=[self.guide.pk])
+        response = self.client.post(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        response = self.client.delete(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_fails_when_guide_is_private(self):
+        self.client.force_authenticate(user=self.test_user)
+        retrieve_url = reverse('guide-like', args=[self.private_guide.pk])
+        response = self.client.post(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.client.delete(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_sets_as_liked(self):
+        self.client.force_authenticate(user=self.test_user)
+        retrieve_url = reverse('guide-like', args=[self.guide.pk])
+        response = self.client.post(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        guide = Guide.objects.get(pk=self.guide.pk)
+        self.assertEqual(list(guide.liked_by.all()), [self.test_user])
+
+    def test_removes_liked(self):
+        self.client.force_authenticate(user=self.test_user)
+        retrieve_url = reverse('guide-like', args=[self.liked_guide.pk])
+        response = self.client.delete(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        guide = Guide.objects.get(pk=self.guide.pk)
+        self.assertEqual(list(guide.liked_by.all()), [])
+
+
+class SetSolvedTest(APITestCase):
+    def setUp(self):
+        self.test_user = UserFactory()
+        self.guide = GuideFactory(private=False)
+        self.solved_guide = GuideFactory(private=False)
+        self.solved_guide.solved_by.add(self.test_user)
+        self.private_guide = GuideFactory(private=True)
+
+    def test_returns_401_for_unauthenticated_user(self):
+        retrieve_url = reverse('guide-solve', args=[self.guide.pk])
+        response = self.client.post(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        response = self.client.delete(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_fails_when_guide_is_private(self):
+        self.client.force_authenticate(user=self.test_user)
+        retrieve_url = reverse('guide-solve', args=[self.private_guide.pk])
+        response = self.client.post(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        response = self.client.delete(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_sets_as_solved(self):
+        self.client.force_authenticate(user=self.test_user)
+        retrieve_url = reverse('guide-solve', args=[self.guide.pk])
+        response = self.client.post(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        guide = Guide.objects.get(pk=self.guide.pk)
+        self.assertEqual(list(guide.solved_by.all()), [self.test_user])
+
+    def test_removes_solved(self):
+        self.client.force_authenticate(user=self.test_user)
+        retrieve_url = reverse('guide-solve', args=[self.solved_guide.pk])
+        response = self.client.delete(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        guide = Guide.objects.get(pk=self.guide.pk)
+        self.assertEqual(list(guide.solved_by.all()), [])

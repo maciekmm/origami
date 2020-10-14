@@ -1,7 +1,4 @@
 from rest_framework import permissions
-from rest_framework.permissions import IsAuthenticated
-
-from guides.serializers import GuideWriteSerializer
 
 
 class IsOwnerOrPublic(permissions.BasePermission):
@@ -9,17 +6,27 @@ class IsOwnerOrPublic(permissions.BasePermission):
         return obj.owner == request.user or not obj.private
 
 
-class UpdateAllowed(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        if view.action in ('update', 'partial_update'):
-            if obj.owner == request.user:
-                return True
-            return set(request.data).issubset(set(GuideWriteSerializer.ALLOWED_PUBLIC_FIELDS))
-        return True
+class IsAuthenticatedOrActionAllowed(permissions.BasePermission):
+    _UNATUHENTICATED_ALLOWED_ACTIONS = (
+        'list',
+        'retrieve'
+    )
 
-
-class IsLoggedInForPersonalizedData(IsAuthenticated):
     def has_permission(self, request, view):
-        if view.action in ('liked', 'solved'):
-            return super(IsLoggedInForPersonalizedData, self).has_permission(request, view)
-        return True
+        return bool(request.user and request.user.is_authenticated) or\
+               view.action in self._UNATUHENTICATED_ALLOWED_ACTIONS
+
+
+class IsOwnerOrActionAllowed(permissions.BasePermission):
+    _ALLOWED_ACTIONS = (
+        'list',
+        'create',
+        'retrieve',
+        'liked',
+        'solved',
+        'like',
+        'solve'
+    )
+
+    def has_object_permission(self, request, view, obj):
+        return obj.owner == request.user or view.action in self._ALLOWED_ACTIONS
