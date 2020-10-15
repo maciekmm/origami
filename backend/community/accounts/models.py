@@ -9,4 +9,3 @@ class User(AbstractUser):
         unique=True,
     )
     is_active = models.BooleanField(default=True)
-    
