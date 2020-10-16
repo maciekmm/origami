@@ -1,7 +1,7 @@
 import { useCommunityStore } from "@store/community"
 import { useReducer, useState } from "react"
 
-const BACKEND_URL = "http://localhost:8080"
+const BACKEND_URL = "http://localhost:8000/api"
 
 export const useCommunityService = () => {
 	const [tokens, dispatch] = useCommunityStore()
@@ -9,17 +9,19 @@ export const useCommunityService = () => {
 	const { auth } = tokens
 
 	const withAuth = function (requestOpts) {
-		return {
-			...requestOpts,
-			headers: {
+		if (!!auth) {
+			return (opts.headers = {
 				...(requestOpts.headers || {}),
 				Authorization: "Bearer " + auth,
-			},
+			})
 		}
+		return requestOpts
 	}
 
-	const login = async (username, password) =>
-		await fetch(BACKEND_URL + "/token/", {
+	const asJson = (response) => response.then((body) => body.json())
+
+	const login = (username, password) =>
+		fetch(BACKEND_URL + "/token/", {
 			method: "POST",
 			body: JSON.stringify({
 				username: username,
@@ -27,8 +29,8 @@ export const useCommunityService = () => {
 			}),
 		})
 
-	const register = async (username, email, password) =>
-		await fetch(BACKEND_URL + "/users/", {
+	const register = (username, email, password) =>
+		fetch(BACKEND_URL + "/users/", {
 			method: "POST",
 			body: JSON.stringify({
 				username: username,
@@ -37,8 +39,19 @@ export const useCommunityService = () => {
 			}),
 		})
 
+	const fetchGuides = () =>
+		asJson(
+			fetch(
+				BACKEND_URL + "/guides/",
+				withAuth({
+					method: "GET",
+				})
+			)
+		)
+
 	return {
 		login: login,
 		register: register,
+		fetchGuides: fetchGuides,
 	}
 }
