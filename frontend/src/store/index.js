@@ -8,6 +8,10 @@ import {
 	initialState as creatorInitialState,
 	reducer as creatorReducer,
 } from "@store/creator/reducer"
+import {
+	initialState as communityInitialState,
+	reducer as communityReducer,
+} from "@store/community/reducer"
 
 export const StoreContext = React.createContext()
 
@@ -16,7 +20,7 @@ export const StoreProvider = ({ children }) => (
 		value={{
 			player: useReducer(playerReducer, playerInitialState),
 			creator: useReducer(creatorReducer, creatorInitialState),
-			auth: useReducer(),
+			community: useReducer(communityReducer, communityInitialState),
 		}}
 	>
 		{children}

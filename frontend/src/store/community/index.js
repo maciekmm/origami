@@ -1,4 +1,4 @@
 import React from "react"
+import { useStore } from "@store/index"
 
-export const CommunityStoreContext = React.createContext()
-export const useCommunityStore = () => React.useContext(CommunityStoreContext)
+export const useCommunityStore = () => useStore("community")
