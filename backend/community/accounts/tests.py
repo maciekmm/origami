@@ -1,3 +1,4 @@
+import jwt
 from django.core import mail
 from django.urls import reverse
 from rest_framework import status
@@ -195,10 +196,11 @@ class LoginTest(APITestCase):
     def setUp(self):
         self.username = 'testuser'
         self.password = 'password123'
-        self.user = UserFactory(password=self.password, username=self.username)
+        self.email = 'test@example.com'
+        self.user = UserFactory(email=self.email, password=self.password, username=self.username)
         self.login_url = reverse('token-obtain-pair')
 
-    def test_returns_tokens_for_existing_user(self):
+    def test_returns_tokens_with_claims_for_existing_user(self):
         response = self.client.post(self.login_url, {
             'username': self.username,
             'password': self.password,
@@ -207,6 +209,12 @@ class LoginTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIsNotNone(response.data.get('access'))
         self.assertIsNotNone(response.data.get('refresh'))
+
+        access = response.data['access']
+        decoded = jwt.decode(access, verify=False)
+        self.assertEqual(decoded['username'], self.username)
+        self.assertEqual(decoded['email'], self.email)
+
 
     def test_denies_access_for_not_existing_user(self):
         response = self.client.post(self.login_url, {
