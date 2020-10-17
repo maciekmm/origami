@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from accounts.models import User
 
@@ -21,6 +22,15 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+
+class CustomClaimsTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        token['username'] = user.username
+        token['email'] = user.email
+        return token
 
 
 class ChangePasswordSerializer(serializers.Serializer):

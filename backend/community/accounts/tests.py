@@ -189,3 +189,37 @@ class ResetPasswordTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(len(mail.outbox) == 1)
         self.assertIn(self.test_user.email, mail.outbox[0].to)
+
+
+class LoginTest(APITestCase):
+    def setUp(self):
+        self.username = 'testuser'
+        self.password = 'password123'
+        self.user = UserFactory(password=self.password, username=self.username)
+        self.login_url = reverse('token-obtain-pair')
+
+    def test_returns_tokens_for_existing_user(self):
+        response = self.client.post(self.login_url, {
+            'username': self.username,
+            'password': self.password,
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIsNotNone(response.data.get('access'))
+        self.assertIsNotNone(response.data.get('refresh'))
+
+    def test_denies_access_for_not_existing_user(self):
+        response = self.client.post(self.login_url, {
+            'username': 'naruto_boruto_123',
+            'password': self.password,
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_denies_access_with_wrong_password(self):
+        response = self.client.post(self.login_url, {
+            'username': self.username,
+            'password': 'wrong_pass_obviously',
+        }, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
