@@ -1,0 +1,63 @@
+{
+  "file_spec": 1.1,
+  "file_creator": "Crease Pattern Editor",
+  "file_classes": [
+    "singleModel"
+  ],
+  "frame_classes": [
+    "creasePattern",
+    "origuide:steady_state"
+  ],
+  "vertices_coords": [
+    [0,0],
+    [0,4],
+    [4,4],
+    [4,0],
+    [0,2],
+    [4,2]
+  ],
+  "edges_vertices": [
+    [0,4],
+    [1,2],
+    [2,5],
+    [3,0],
+    [4,1],
+    [5,3],
+    [4,5]
+  ],
+  "edges_assignment": [
+    "B",
+    "B",
+    "B",
+    "B",
+    "B",
+    "B",
+    "M"
+  ],
+  "edges_foldAngle": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    -180
+  ],
+  "cpedit:page": {"xMin":0,"yMin":0,"xMax":4,"yMax":4},
+  "vertices_edges": [
+    [3,0],
+    [4,1],
+    [2,1],
+    [5,3],
+    [0,6,4],
+    [5,2,6]
+  ],
+  "faces_vertices": [
+    [0,3,5,4],
+    [1,4,5,2]
+  ],
+  "faces_edges": [
+    [0,3,5,6],
+    [1,4,6,2]
+  ]
+}
