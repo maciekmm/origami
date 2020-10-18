@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useEffect } from "react"
 import ViewerHeader from "@dom-components/viewer-header"
 import PlaybackControls from "@dom-components/playback-controls"
 import Player from "@dom-components/player"
 import Timeline from "@dom-components/timeline"
+import { useParams } from "react-router-dom"
 
 import {
 	getNextSteadyFrameId,
@@ -18,9 +19,21 @@ import {
 	SELECT_PREVIOUS_FRAME,
 	STOP,
 } from "../../store/player/actions"
+import { useCommunityService } from "../../services/community"
 
 export default function GuideViewer() {
 	const [{ model, frame, playing }, dispatch] = usePlayerStore()
+	const { guideId } = useParams()
+	const { fetchGuide } = useCommunityService()
+
+	useEffect(() => {
+		fetchGuide(guideId)
+			.then((guide) => {
+				return fetch(guide["animation_file"])
+			})
+			.then((resp) => resp.json())
+			.then((loadedGuide) => dispatch({ type: LOAD_MODEL, model: loadedGuide }))
+	}, [guideId, fetchGuide])
 
 	const loadModel = (model) => dispatch({ type: LOAD_MODEL, model: model })
 	const play = () => dispatch({ type: PLAY })

@@ -1,5 +1,4 @@
 import { useCommunityStore } from "@store/community"
-import { useReducer, useState } from "react"
 
 const BACKEND_URL = "http://localhost:8000/api"
 
@@ -49,9 +48,14 @@ export const useCommunityService = () => {
 			)
 		)
 
+	const fetchGuide = (guideId) => {
+		return asJson(fetch(BACKEND_URL + "/guides/" + guideId, withAuth({})))
+	}
+
 	return {
 		login: login,
 		register: register,
 		fetchGuides: fetchGuides,
+		fetchGuide: fetchGuide,
 	}
 }

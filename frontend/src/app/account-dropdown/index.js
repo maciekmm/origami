@@ -3,8 +3,10 @@ import MenuItem from "@material-ui/core/MenuItem"
 import Menu from "@material-ui/core/Menu"
 import { AccountCircle } from "@material-ui/icons"
 import IconButton from "@material-ui/core/IconButton"
+import { useCommunityStore } from "@store/community"
 
 export const AccountDropdown = (props) => {
+	const [{ username }, dispatch] = useCommunityStore()
 	const [anchorEl, setAnchorEl] = React.useState(null)
 
 	const isMenuOpen = Boolean(anchorEl)
@@ -45,6 +47,7 @@ export const AccountDropdown = (props) => {
 				color="inherit"
 				style={{ marginLeft: "auto" }}
 			>
+				{username !== null && username}
 				<AccountCircle />
 			</IconButton>
 			{renderMenu}
