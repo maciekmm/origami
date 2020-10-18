@@ -23,12 +23,18 @@ function AppWithStore() {
 				<AppBar position="static">
 					<Toolbar variant="dense">
 						<Typography variant="h6">Origuide</Typography>
-						<ButtonLink to="/" exact title="View" />
-						<ButtonLink to="/create" title="Create" />
+						<div>
+							<ButtonLink to="/" title="Browse" />
+							<ButtonLink to="/view" exact title="View" />
+							<ButtonLink to="/create" title="Create" />
+						</div>
 						<AccountDropdown></AccountDropdown>
 					</Toolbar>
 				</AppBar>
 				<Route exact path="/">
+					<GuideBrowser />
+				</Route>
+				<Route path="/view/:guideId">
 					<GuidePlayer />
 				</Route>
 				<Route path="/create">
@@ -36,9 +42,6 @@ function AppWithStore() {
 				</Route>
 				<Route path="/login"></Route>
 				<Route path="/register"></Route>
-				<Route path="/browser">
-					<GuideBrowser />
-				</Route>
 			</Router>
 		</StoreProvider>
 	)
