@@ -11,8 +11,18 @@ def extract_root_frame(root):
 
 
 class Frame:
+
+    @staticmethod
+    def _extend_vertices_coords(json_repr):
+        # I am assuming there is only 2d and 3d CP case
+        if json_repr.get('vertices_coords') is not None:
+            json_repr['vertices_coords'] = \
+                list(map(lambda v: v if len(v) == 3 else [v[0], v[1], 0], json_repr['vertices_coords']))
+
     def __init__(self, json_representation):
+        Frame._extend_vertices_coords(json_representation)
         self.raw = json_representation
+
         self.is_steady = is_steady_state(self.raw)
 
     @property
@@ -38,11 +48,9 @@ class Frame:
         return None
 
 
-class Fold(Frame):
+class Fold:
     def __init__(self, json_representation):
-        self._extend_vertices_coords(json_representation)
-        super(Fold, self).__init__(json_representation)
-
+        self.raw = json_representation
         self.frames = [Frame(frame) for frame in self.raw.get('file_frames', [])]
 
         maybe_root_frame = extract_root_frame(self.raw)
@@ -53,10 +61,6 @@ class Fold(Frame):
             filter(lambda frame: frame.is_steady, self.frames)
         )
 
-    def _extend_vertices_coords(self, json_representation):
-        # I am assuming there is only 2d and 3d CP case
-        json_representation['vertices_coords'] =\
-            list(map(lambda v: v if len(v) == 3 else [v[0], v[1], 0], json_representation['vertices_coords']))
 
 def read_fold(filename):
     with open(filename) as fold_file:
