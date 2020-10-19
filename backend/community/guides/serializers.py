@@ -10,6 +10,7 @@ from guides.tasks import process_guide
 class GuideReadSerializer(serializers.ModelSerializer):
     solved = serializers.SerializerMethodField()
     liked = serializers.SerializerMethodField()
+    owner_username = serializers.CharField(source='owner.username', required=False)
 
     class Meta:
         model = Guide
@@ -19,6 +20,7 @@ class GuideReadSerializer(serializers.ModelSerializer):
             'animation_file',
             'steps',
             'status',
+            'owner_username',
         ]
         fields = [
             'id',
@@ -32,6 +34,7 @@ class GuideReadSerializer(serializers.ModelSerializer):
             'private',
             'solved',
             'liked',
+            'owner_username',
         ]
 
     def get_solved(self, obj):
