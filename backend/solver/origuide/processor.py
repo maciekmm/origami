@@ -84,12 +84,55 @@ def normalize_bounding_box(vertices: List[Vertex], box_diag_len):
     return list(map(scale_v, vertices))
 
 
+def bounding_box(vertices: List[Vertex]):
+    min_x, min_y, min_z = math.inf, math.inf, math.inf
+    max_x, max_y, max_z = -math.inf, -math.inf, -math.inf
+
+    for v in vertices:
+        if v.x < min_x:
+            min_x = v.x
+        if v.x > max_x:
+            max_x = v.x
+
+        if v.y < min_y:
+            min_y = v.y
+        if v.y > max_y:
+            max_y = v.y
+
+        if v.z < min_z:
+            min_z = v.z
+        if v.z > max_z:
+            max_z = v.z
+
+    return min_x, min_y, min_z, max_x, max_y, max_z
+
+
+def translate_to_origin(vertices: List[Vertex]):
+    if len(vertices) == 0:
+        return vertices
+
+    min_x, min_y, min_z, max_x, max_y, max_z = bounding_box(vertices)
+    mid_x = (min_x + max_x) / 2
+    mid_y = (min_y + max_y) / 2
+    mid_z = (min_z + max_z) / 2
+
+    trans_vec = vector_from_to(Vector3(mid_x, mid_y, mid_z), Vector3(0, 0, 0))
+
+    def translate_v(v):
+        v.pos += trans_vec
+        return v
+
+    return list(map(translate_v, vertices))
+
+
 def solve_fold(fold_path):
     fold = read_fold(fold_path)
     first_frame = fold.frames[0]
 
     vertices = create_vertices(first_frame.vertices)
-    vertices = normalize_bounding_box(vertices, CONFIG['BOUNDING_BOX_SIDE_LEN'])
+    vertices = translate_to_origin(vertices)
+    vertices = normalize_bounding_box(vertices, CONFIG['BOUNDING_BOX_DIAG_LEN'])
+    fold.update_root_frame_vertices(list(map(lambda v: v.pos.vec, vertices)))
 
     edges = create_edges(vertices,
                          first_frame.edges,
