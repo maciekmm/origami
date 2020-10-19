@@ -1,4 +1,6 @@
-from origuide.fold import read_fold, FoldProducer, LogFoldEncoder
+from typing import List
+
+from origuide.fold import FoldProducer, LogFoldEncoder, Fold, json
 from origuide.geometry.geometry_models import *
 from origuide.geometry.triangulation import triangulate
 from origuide.solver import Solver
@@ -57,11 +59,37 @@ def create_faces(vertices, edges, faces_vertices):
     return faces
 
 
+def read_fold(filename):
+    with open(filename) as fold_file:
+        return Fold(json.load(fold_file))
+
+
+def normalize_bounding_box(vertices: List[Vertex], box_diag_len):
+    """
+    Normalizes vertices coordinates to lay within a bounding box
+    """
+    if len(vertices) == 0:
+        return vertices
+
+    scale_ref_len = box_diag_len / 2
+    max_dist_v = max(vertices, key=lambda v: v.pos.length)
+    scale_factor = max_dist_v.pos.length / scale_ref_len
+    if scale_factor <= 1:
+        return vertices
+
+    def scale_v(v):
+        v.pos /= scale_factor
+        return v
+
+    return list(map(scale_v, vertices))
+
+
 def solve_fold(fold_path):
     fold = read_fold(fold_path)
     first_frame = fold.frames[0]
 
     vertices = create_vertices(first_frame.vertices)
+    vertices = normalize_bounding_box(vertices, CONFIG['BOUNDING_BOX_SIDE_LEN'])
 
     edges = create_edges(vertices,
                          first_frame.edges,

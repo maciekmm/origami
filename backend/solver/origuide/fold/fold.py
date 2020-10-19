@@ -1,6 +1,3 @@
-import json
-
-
 def is_steady_state(frame):
     return "origuide:steady_state" in frame['frame_classes']
 
@@ -61,7 +58,3 @@ class Fold:
             filter(lambda frame: frame.is_steady, self.frames)
         )
 
-
-def read_fold(filename):
-    with open(filename) as fold_file:
-        return Fold(json.load(fold_file))
