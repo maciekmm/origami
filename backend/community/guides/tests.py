@@ -93,8 +93,8 @@ class DeleteGuideTest(APITestCase):
 
 class ListGuidesTest(APITestCase):
     def setUp(self):
-        self.test_user = UserFactory()
-        self.test_user_2 = UserFactory()
+        self.test_user = UserFactory(username='user1')
+        self.test_user_2 = UserFactory(username='user2')
         self.public_guide_1 = GuideFactory(owner=self.test_user, private=False, name='Public Crane')
         self.public_guide_2 = GuideFactory(owner=self.test_user_2, private=False, name='Public Paper')
         self.private_guide_1 = GuideFactory(owner=self.test_user, private=True, name='Private')
@@ -105,8 +105,16 @@ class ListGuidesTest(APITestCase):
         response = self.client.get(retrieve_url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
-        self.assertTrue(response.data[0]['private'] is False)
-        self.assertTrue(response.data[1]['private'] is False)
+        self.assertFalse(response.data[0]['private'])
+        self.assertFalse(response.data[1]['private'])
+
+    def test_returned_guides_should_contain_owner_username(self):
+        retrieve_url = reverse('guide-list')
+        response = self.client.get(retrieve_url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+        self.assertEqual(response.data[0]['owner_username'], self.test_user_2.username)
+        self.assertEqual(response.data[1]['owner_username'], self.test_user.username)
 
     def test_list_guides_should_return_public_and_authed_user_private_guides(self):
         self.client.force_authenticate(user=self.test_user)
