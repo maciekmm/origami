@@ -48,8 +48,10 @@
 	"dependencies": {
 		"@material-ui/core": "^4.9.10",
 		"@material-ui/icons": "^4.9.1",
+		"@material-ui/lab": "^4.0.0-alpha.56",
 		"earcut": "^2.2.2",
 		"fold": "^0.11.1",
+		"notistack": "^1.0.1",
 		"react-router-dom": "^5.2.0",
 		"react-three-fiber": "^4.0.28",
 		"three": "^0.115.0",

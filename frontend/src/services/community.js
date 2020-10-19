@@ -1,61 +1,101 @@
 import { useCommunityStore } from "@store/community"
+import { useMemo, useRef } from "react"
+import { useSnackbar } from "notistack"
 
 const BACKEND_URL = "http://localhost:8000/api"
 
+const paramsToQueryString = (params) => {
+	let query = "?"
+	for (let key in params) {
+		query += key + "=" + params[key]
+	}
+	return query
+}
+
 export const useCommunityService = () => {
-	const [tokens, dispatch] = useCommunityStore()
+	const [{ tokens, userId }, dispatch] = useCommunityStore()
+	const { enqueueSnackbar, closeSnackbar } = useSnackbar()
 
-	const { auth } = tokens
-
-	const withAuth = function (requestOpts) {
-		if (!!auth) {
-			return (opts.headers = {
-				...(requestOpts.headers || {}),
-				Authorization: "Bearer " + auth,
-			})
-		}
-		return requestOpts
-	}
-
-	const asJson = (response) => response.then((body) => body.json())
-
-	const login = (username, password) =>
-		fetch(BACKEND_URL + "/token/", {
-			method: "POST",
-			body: JSON.stringify({
-				username: username,
-				password: password,
-			}),
-		})
-
-	const register = (username, email, password) =>
-		fetch(BACKEND_URL + "/users/", {
-			method: "POST",
-			body: JSON.stringify({
-				username: username,
-				email: email,
-				password: password,
-			}),
-		})
-
-	const fetchGuides = () =>
-		asJson(
-			fetch(
-				BACKEND_URL + "/guides/",
-				withAuth({
-					method: "GET",
+	const validateResponse = useMemo(() => {
+		return (response) =>
+			response
+				.then((response) => {
+					const contentType = response.headers.get("content-type")
+					if (!contentType || !contentType.includes("/json")) {
+						throw new TypeError(
+							"Invalid contentType. Expected json, got " + contentType
+						)
+					}
+					return response
 				})
-			)
-		)
+				.catch((exception) => {
+					console.error(exception)
+					enqueueSnackbar("Error fetching data")
+				})
+	}, [])
 
-	const fetchGuide = (guideId) => {
-		return asJson(fetch(BACKEND_URL + "/guides/" + guideId, withAuth({})))
-	}
+	const statelessActions = useMemo(() => {
+		return {
+			login: (username, password) =>
+				validateResponse(
+					fetch(BACKEND_URL + "/token/", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							username: username,
+							password: password,
+						}),
+					})
+				),
+
+			register: (username, email, password) =>
+				validateResponse(
+					fetch(BACKEND_URL + "/users/", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json;charset=utf-8",
+						},
+						body: JSON.stringify({
+							username: username,
+							email: email,
+							password: password,
+						}),
+					})
+				),
+		}
+	}, [])
+
+	const statefulActions = useMemo(() => {
+		const withAuth = function (requestOpts) {
+			if (!!tokens.access) {
+				return (requestOpts.headers = {
+					...(requestOpts.headers || {}),
+					Authorization: "Bearer " + tokens.access,
+				})
+			}
+			return requestOpts
+		}
+
+		return {
+			fetchGuides: (filters) =>
+				validateResponse(
+					fetch(
+						BACKEND_URL + "/guides/" + paramsToQueryString(filters),
+						withAuth({})
+					)
+				),
+
+			fetchGuide: (guideId) =>
+				validateResponse(
+					fetch(BACKEND_URL + "/guides/" + guideId + "/", withAuth({}))
+				),
+		}
+	}, [userId])
 
 	return {
-		login: login,
-		register: register,
-		fetchGuides: fetchGuides,
-		fetchGuide: fetchGuide,
+		...statelessActions,
+		...statefulActions,
 	}
 }

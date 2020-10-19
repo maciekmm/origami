@@ -10,11 +10,11 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-export const ContentContainer = ({ children, title }) => {
+export const ContentContainer = ({ children, title, maxWidth }) => {
 	const classes = useStyles()
 
 	return (
-		<Container maxWidth="md" className={classes.root}>
+		<Container maxWidth={maxWidth ? maxWidth : "md"} className={classes.root}>
 			{title && <Typography variant="h5">{title}</Typography>}
 			{children}
 		</Container>

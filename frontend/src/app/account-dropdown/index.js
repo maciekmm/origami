@@ -4,10 +4,14 @@ import Menu from "@material-ui/core/Menu"
 import { AccountCircle } from "@material-ui/icons"
 import IconButton from "@material-ui/core/IconButton"
 import { useCommunityStore } from "@store/community"
+import { useHistory } from "react-router-dom"
+import { Typography } from "@material-ui/core"
+import { LOGOUT } from "@store/community/actions"
 
 export const AccountDropdown = (props) => {
 	const [{ username }, dispatch] = useCommunityStore()
 	const [anchorEl, setAnchorEl] = React.useState(null)
+	const history = useHistory()
 
 	const isMenuOpen = Boolean(anchorEl)
 
@@ -21,6 +25,16 @@ export const AccountDropdown = (props) => {
 		setAnchorEl(null)
 	}
 
+	const navigateTo = (path) => {
+		handleMenuClose()
+		history.push(path)
+	}
+
+	const logout = () => {
+		dispatch({ type: LOGOUT })
+		navigateTo("/")
+	}
+
 	const renderMenu = (
 		<Menu
 			anchorEl={anchorEl}
@@ -31,8 +45,20 @@ export const AccountDropdown = (props) => {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			<MenuItem onClick={handleMenuClose}>Sign in</MenuItem>
-			<MenuItem onClick={handleMenuClose}>Sign up</MenuItem>
+			{!username ? (
+				[
+					<MenuItem key="login" onClick={() => navigateTo("login")}>
+						Sign in
+					</MenuItem>,
+					<MenuItem key="register" onClick={() => navigateTo("register")}>
+						Sign up
+					</MenuItem>,
+				]
+			) : (
+				<MenuItem key="logout" onClick={() => logout()}>
+					Logout
+				</MenuItem>
+			)}
 		</Menu>
 	)
 
@@ -47,7 +73,9 @@ export const AccountDropdown = (props) => {
 				color="inherit"
 				style={{ marginLeft: "auto" }}
 			>
-				{username !== null && username}
+				<Typography variant="button">
+					{username !== null && username}
+				</Typography>
 				<AccountCircle />
 			</IconButton>
 			{renderMenu}

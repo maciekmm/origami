@@ -12,38 +12,44 @@ import { StoreProvider } from "@store"
 import Button from "@material-ui/core/Button"
 import { AccountDropdown } from "./app/account-dropdown"
 import { GuideBrowser } from "./app/guide-browser"
+import { SnackbarProvider } from "notistack"
+import { LoginPage } from "./app/login-page"
 
 const Router =
 	process.env.NODE_ENV !== "production" ? HashRouter : BrowserRouter
 
 function AppWithStore() {
 	return (
-		<StoreProvider>
-			<Router>
-				<AppBar position="static">
-					<Toolbar variant="dense">
-						<Typography variant="h6">Origuide</Typography>
-						<div>
-							<ButtonLink to="/" title="Browse" />
-							<ButtonLink to="/view" exact title="View" />
-							<ButtonLink to="/create" title="Create" />
-						</div>
-						<AccountDropdown></AccountDropdown>
-					</Toolbar>
-				</AppBar>
-				<Route exact path="/">
-					<GuideBrowser />
-				</Route>
-				<Route path="/view/:guideId">
-					<GuidePlayer />
-				</Route>
-				<Route path="/create">
-					<GuideCreator />
-				</Route>
-				<Route path="/login"></Route>
-				<Route path="/register"></Route>
-			</Router>
-		</StoreProvider>
+		<SnackbarProvider maxSnack={3}>
+			<StoreProvider>
+				<Router>
+					<AppBar position="static">
+						<Toolbar variant="dense">
+							<Typography variant="h6">Origuide</Typography>
+							<div>
+								<ButtonLink to="/" title="Browse" />
+								<ButtonLink to="/view" exact title="View" />
+								<ButtonLink to="/create" title="Create" />
+							</div>
+							<AccountDropdown></AccountDropdown>
+						</Toolbar>
+					</AppBar>
+					<Route exact path="/">
+						<GuideBrowser />
+					</Route>
+					<Route path={["/view/:guideId", "/view"]}>
+						<GuidePlayer />
+					</Route>
+					<Route path="/create">
+						<GuideCreator />
+					</Route>
+					<Route path="/login">
+						<LoginPage />
+					</Route>
+					<Route path="/register"></Route>
+				</Router>
+			</StoreProvider>
+		</SnackbarProvider>
 	)
 }
 
