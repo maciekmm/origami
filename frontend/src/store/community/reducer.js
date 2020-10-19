@@ -1,44 +1,49 @@
 import { LOGIN, LOGOUT } from "@store/community/actions"
-import { getEmail, getUsername } from "@store/community/selectors"
+import { getProperty } from "@store/community/selectors"
 
 export const initialState = {
 	tokens: {
-		auth: window.localStorage.getItem("auth-token"),
+		access: window.localStorage.getItem("access-token"),
 		refresh: window.localStorage.getItem("refresh-token"),
 	},
-	username: null,
-	email: null,
 }
+
+initialState.username = getProperty(initialState.tokens.access, "username")
+initialState.email = getProperty(initialState.tokens.access, "email")
+initialState.userId = getProperty(initialState.tokens.access, "userId")
 
 export function reducer(state, action) {
 	switch (action.type) {
 		case LOGIN:
-			window.localStorage.setItem("auth-token", action.authToken)
+			window.localStorage.setItem("access-token", action.accessToken)
 			window.localStorage.setItem("refresh-token", action.refreshToken)
 
-			const username = getUsername(action.authToken)
-			const email = getEmail(action.refreshToken)
+			const username = getProperty(action.accessToken, "username")
+			const email = getProperty(action.refreshToken, "email")
+			const userId = getProperty(action.refreshToken, "userId")
 
 			return {
 				...state,
 				tokens: {
-					auth: action.authToken,
+					access: action.accessToken,
 					refresh: action.refreshToken,
 				},
-				username: username,
 				email: email,
+				username: username,
+				userId: userId,
 			}
 		case LOGOUT:
-			window.localStorage.removeItem("auth-token")
+			window.localStorage.removeItem("access-token")
 			window.localStorage.removeItem("refresh-token")
 			return {
 				...state,
 				tokens: {
-					auth: null,
+					access: null,
 					refresh: null,
 				},
 				email: null,
 				username: null,
+				userId: null,
 			}
 	}
 	return state

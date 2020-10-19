@@ -12,10 +12,10 @@ export const GuideBrowser = (props) => {
 	const [guides, setGuides] = useState([])
 
 	useEffect(() => {
-		fetchGuides().then((guides) => {
-			setGuides(guides)
-		})
-	}, [tokens])
+		fetchGuides()
+			.then((response) => response.json())
+			.then((guides) => setGuides(guides))
+	}, [tokens, fetchGuides])
 
 	const history = useHistory()
 
@@ -24,8 +24,8 @@ export const GuideBrowser = (props) => {
 	}
 
 	return (
-		<ContentContainer>
-			<GridList cellHeight={160} cols={3} spacing={15}>
+		<ContentContainer title="Guides">
+			<GridList cellHeight={140} cols={4} spacing={10}>
 				{guides.map((guide) => (
 					<GuideTile key={guide.id} guide={guide} onOpen={openGuide} />
 				))}

@@ -1,9 +1,6 @@
 import { decodeJWT } from "../../jwt"
 
-export const getUsername = function (token) {
-	return decodeJWT(token)["username"]
-}
-
-export const getEmail = function (token) {
-	return decodeJWT(token)["email"]
+export const getProperty = function (token, property) {
+	if (!token) return null
+	return decodeJWT(token)[property]
 }

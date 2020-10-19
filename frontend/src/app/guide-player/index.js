@@ -27,10 +27,12 @@ export default function GuideViewer() {
 	const { fetchGuide } = useCommunityService()
 
 	useEffect(() => {
+		if (guideId === undefined || guideId === null) {
+			return
+		}
 		fetchGuide(guideId)
-			.then((guide) => {
-				return fetch(guide["animation_file"])
-			})
+			.then((guide) => guide.json())
+			.then((guide) => fetch(guide["animation_file"]))
 			.then((resp) => resp.json())
 			.then((loadedGuide) => dispatch({ type: LOAD_MODEL, model: loadedGuide }))
 	}, [guideId, fetchGuide])
