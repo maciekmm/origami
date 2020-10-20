@@ -1,7 +1,8 @@
 import unittest
 
+from origuide.geometry.generic_models import Vector3
 from origuide.geometry.geometry_models import Vertex
-from origuide.processor import normalize_bounding_box, Vector3, translate_to_origin
+from origuide.geometry.preprocessing import normalize_bounding_box, translate_to_origin
 
 
 class TestNormalizeBoundingBox(unittest.TestCase):
