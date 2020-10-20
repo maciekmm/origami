@@ -3,7 +3,7 @@ import io
 from celery import shared_task
 from celery.exceptions import SoftTimeLimitExceeded
 from django.core.files.storage import default_storage
-from origuide.loader import solve_fold
+from origuide.processor import solve_fold
 from os import path
 
 from guides.models import Guide
