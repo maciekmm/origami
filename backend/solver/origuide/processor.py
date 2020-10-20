@@ -74,6 +74,9 @@ def normalize_bounding_box(vertices: List[Vertex], box_diag_len):
     scale_ref_len = box_diag_len / 2
     max_dist_v = max(vertices, key=lambda v: v.pos.length)
     scale_factor = max_dist_v.pos.length / scale_ref_len
+    if scale_factor == 0:
+        return vertices
+
     def scale_v(v):
         v.pos /= scale_factor
         return v

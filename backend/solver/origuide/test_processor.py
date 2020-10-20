@@ -32,6 +32,11 @@ class TestNormalizeBoundingBox(unittest.TestCase):
         self.assertEqual(normalized[0].pos, Vector3(1.0 / scale_fac, 1.0 / scale_fac, 1.0 / scale_fac))
         self.assertEqual(normalized[1].pos, Vector3(-20.0 / scale_fac, -20.0 / scale_fac, -20.0 / scale_fac))
 
+    def test_zero_division_does_not_throw(self):
+        verts = [Vertex(0, 0, 0, 0)]
+        normalized = normalize_bounding_box(verts, 10)
+        self.assertEqual(normalized[0].pos, verts[0].pos)
+
 
 class TestTranslateToOrigin(unittest.TestCase):
     def test_does_nothing_for_already_translated(self):
