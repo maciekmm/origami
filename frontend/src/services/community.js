@@ -1,6 +1,7 @@
 import { useCommunityStore } from "@store/community"
-import { useMemo, useRef } from "react"
-import { useSnackbar } from "notistack"
+import { useMemo, useReducer } from "react"
+import { useAuthedHttp, useHttp } from "./http"
+import { LOGIN } from "@store/community/actions"
 
 const BACKEND_URL = "http://localhost:8000/api"
 
@@ -14,87 +15,97 @@ const paramsToQueryString = (params) => {
 	return query
 }
 
+export const useTokenRefresher = (storeTokens) => {
+	const { fetch } = useHttp()
+
+	return (refreshToken) =>
+		fetch(BACKEND_URL + "/token/refresh/", {
+			method: "POST",
+			body: JSON.stringify({
+				refresh: refreshToken,
+			}),
+		})
+			.then((response) => {
+				if (!response.ok) {
+					console.warn(response)
+					throw "Invalid response received"
+				}
+				return response.json()
+			})
+			.then((tokens) => {
+				storeTokens({
+					accessToken: tokens["access"],
+					refreshToken: refreshToken,
+				})
+				return Promise.resolve(tokens.access)
+			})
+}
+
 export const useCommunityService = () => {
 	const [{ tokens, userId }, dispatch] = useCommunityStore()
-	const { enqueueSnackbar, closeSnackbar } = useSnackbar()
-
-	const validateResponse = useMemo(() => {
-		return (response) =>
-			response
-				.then((response) => {
-					const contentType = response.headers.get("content-type")
-					if (!contentType || !contentType.includes("/json")) {
-						throw new TypeError(
-							"Invalid contentType. Expected json, got " + contentType
-						)
-					}
-					return response
-				})
-				.catch((exception) => {
-					console.error(exception)
-					enqueueSnackbar("Error fetching data")
-				})
-	}, [])
+	const tokenRefresher = useTokenRefresher((tokens) =>
+		dispatch({ type: LOGIN, ...tokens })
+	)
+	const { fetch } = useAuthedHttp(tokens, tokenRefresher)
 
 	const statelessActions = useMemo(() => {
 		return {
 			login: (username, password) =>
-				validateResponse(
-					fetch(BACKEND_URL + "/token/", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							username: username,
-							password: password,
-						}),
-					})
-				),
+				fetch(BACKEND_URL + "/token/", {
+					method: "POST",
+					body: JSON.stringify({
+						username: username,
+						password: password,
+					}),
+				}),
 
 			register: (username, email, password) =>
-				validateResponse(
-					fetch(BACKEND_URL + "/users/", {
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							username: username,
-							email: email,
-							password: password,
-						}),
-					})
-				),
+				fetch(BACKEND_URL + "/users/", {
+					method: "POST",
+					body: JSON.stringify({
+						username: username,
+						email: email,
+						password: password,
+					}),
+				}),
 		}
 	}, [])
 
-	const statefulActions = useMemo(() => {
-		const withAuth = function (requestOpts) {
-			if (!!tokens.access) {
-				return (requestOpts.headers = {
-					...(requestOpts.headers || {}),
-					Authorization: "Bearer " + tokens.access,
-				})
-			}
-			return requestOpts
-		}
+	const [invalidatorDependency, _invalidateFetchAction] = useReducer(
+		(state) => state + 1,
+		0
+	)
 
+	const withInvalidateFetchActions = (response) =>
+		response.then((response) => {
+			if (response.ok === true) {
+				_invalidateFetchAction()
+			}
+			return response
+		})
+
+	const statefulActions = useMemo(() => {
 		return {
 			fetchGuides: (filters) =>
-				validateResponse(
-					fetch(
-						BACKEND_URL + "/guides/" + paramsToQueryString(filters),
-						withAuth({})
-					)
+				fetch(BACKEND_URL + "/guides/" + paramsToQueryString(filters)),
+
+			fetchGuide: (guideId) => fetch(BACKEND_URL + "/guides/" + guideId + "/"),
+
+			likeGuide: (guideId) =>
+				withInvalidateFetchActions(
+					fetch(BACKEND_URL + "/guides/" + guideId + "/like/", {
+						method: "POST",
+					})
 				),
 
-			fetchGuide: (guideId) =>
-				validateResponse(
-					fetch(BACKEND_URL + "/guides/" + guideId + "/", withAuth({}))
+			unlikeGuide: (guideId) =>
+				withInvalidateFetchActions(
+					fetch(BACKEND_URL + "/guides/" + guideId + "/like/", {
+						method: "DELETE",
+					})
 				),
 		}
-	}, [userId])
+	}, [userId, invalidatorDependency])
 
 	return {
 		...statelessActions,

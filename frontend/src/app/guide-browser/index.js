@@ -4,14 +4,15 @@ import { useCommunityStore } from "@store/community"
 import { useHistory } from "react-router-dom"
 import { GuideList } from "@dom-components/guide-list"
 import Button from "@material-ui/core/Button"
-import Grid from "@material-ui/core/Grid"
+import { useSnackbar } from "notistack"
 
 export const GuideBrowser = (props) => {
-	const { fetchGuides } = useCommunityService()
+	const { fetchGuides, likeGuide, unlikeGuide } = useCommunityService()
 	const [{ userId }] = useCommunityStore()
 
 	const [userGuides, setUserGuides] = useState([])
 	const [allGuides, setAllGuides] = useState([])
+	const { enqueueSnackbar } = useSnackbar()
 
 	useEffect(() => {
 		if (userId === null) {
@@ -35,10 +36,28 @@ export const GuideBrowser = (props) => {
 
 	const openGuide = (guide) => history.push("/view/" + guide.id)
 
+	const toggleLikeGuide = (guide) => {
+		if (userId === null) {
+			history.push("/login")
+			enqueueSnackbar("Sign In to make that action", { variant: "info" })
+			return
+		}
+
+		let action = guide.liked ? unlikeGuide(guide.id) : likeGuide(guide.id)
+	}
+
 	const uploadGuide = () => history.push("/upload")
 
 	return (
 		<>
+			{allGuides.length > 0 && (
+				<GuideList
+					title="All guides"
+					openGuide={openGuide}
+					guides={allGuides}
+					toggleLikeGuide={toggleLikeGuide}
+				></GuideList>
+			)}
 			{userGuides.length > 0 && (
 				<GuideList
 					title="My guides"
@@ -54,13 +73,7 @@ export const GuideBrowser = (props) => {
 							Upload
 						</Button>
 					}
-				></GuideList>
-			)}
-			{allGuides.length > 0 && (
-				<GuideList
-					title="All guides"
-					openGuide={openGuide}
-					guides={allGuides}
+					toggleLikeGuide={toggleLikeGuide}
 				></GuideList>
 			)}
 		</>
