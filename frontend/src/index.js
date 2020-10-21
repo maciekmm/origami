@@ -29,7 +29,7 @@ function AppWithStore() {
 							<Typography variant="h6">Origuide</Typography>
 							<div>
 								<ButtonLink to="/" title="Browse" />
-								<ButtonLink to="/view" exact title="View" />
+								<ButtonLink to="/view" title="View" />
 								<ButtonLink to="/create" title="Create" />
 							</div>
 							<AccountDropdown></AccountDropdown>

@@ -3,3 +3,11 @@ export function decodeJWT(token) {
 	const base64 = base64Url.replace("-", "+").replace("_", "/")
 	return JSON.parse(window.atob(base64))
 }
+
+const CONSIDER_EXPIRED_OFFSET = 30
+
+export function isExpired(token) {
+	const decoded = decodeJWT(token)
+	const currentUnix = new Date().getTime() / 1000
+	return decoded["exp"] + CONSIDER_EXPIRED_OFFSET <= currentUnix
+}
