@@ -1,7 +1,8 @@
-from origuide.fold import read_fold, FoldProducer, LogFoldEncoder
+from typing import List
+
+from origuide.fold import Fold, json
 from origuide.geometry.geometry_models import *
 from origuide.geometry.triangulation import triangulate
-from origuide.solver import Solver
 
 
 def create_vertices(coords):
@@ -57,31 +58,62 @@ def create_faces(vertices, edges, faces_vertices):
     return faces
 
 
-def solve_fold(fold_path):
-    fold = read_fold(fold_path)
-    first_frame = fold.frames[0]
+def normalize_bounding_box(vertices: List[Vertex], box_diag_len):
+    """
+    Normalizes vertices coordinates to lay within a bounding box
+    """
+    if len(vertices) == 0:
+        return vertices
 
-    vertices = create_vertices(first_frame.vertices)
+    scale_ref_len = box_diag_len / 2
+    max_dist_v = max(vertices, key=lambda v: v.pos.length)
+    scale_factor = max_dist_v.pos.length / scale_ref_len
+    if scale_factor == 0:
+        return vertices
 
-    edges = create_edges(vertices,
-                         first_frame.edges,
-                         first_frame.assignments)
+    def scale_v(v):
+        v.pos /= scale_factor
+        return v
 
-    faces = create_faces(vertices, edges, first_frame.faces)
+    return list(map(scale_v, vertices))
 
-    fold_producer = FoldProducer(fold, LogFoldEncoder(frame_drop_rate=4,
-                                                      frame_drop_multiplier=1.25,
-                                                      frame_drop_change_iter=40)
-                                 )
 
-    for steady_state in fold.steady_states:
-        for edge in edges:
-            if edge.id == -1:
-                continue
-            edge.assignment = steady_state.assignments[edge.id]
+def bounding_box(vertices: List[Vertex]):
+    min_x, min_y, min_z = math.inf, math.inf, math.inf
+    max_x, max_y, max_z = -math.inf, -math.inf, -math.inf
 
-        solver = Solver(vertices, edges, faces, steady_state.edges_fold_angles)
-        solver.solve(fold_producer)
-        fold_producer.next_transition()
+    for v in vertices:
+        if v.x < min_x:
+            min_x = v.x
+        if v.x > max_x:
+            max_x = v.x
 
-    return fold_producer.produce()
+        if v.y < min_y:
+            min_y = v.y
+        if v.y > max_y:
+            max_y = v.y
+
+        if v.z < min_z:
+            min_z = v.z
+        if v.z > max_z:
+            max_z = v.z
+
+    return min_x, min_y, min_z, max_x, max_y, max_z
+
+
+def translate_to_origin(vertices: List[Vertex]):
+    if len(vertices) == 0:
+        return vertices
+
+    min_x, min_y, min_z, max_x, max_y, max_z = bounding_box(vertices)
+    mid_x = (min_x + max_x) / 2
+    mid_y = (min_y + max_y) / 2
+    mid_z = (min_z + max_z) / 2
+
+    trans_vec = vector_from_to(Vector3(mid_x, mid_y, mid_z), Vector3(0, 0, 0))
+
+    def translate_v(v):
+        v.pos += trans_vec
+        return v
+
+    return list(map(translate_v, vertices))

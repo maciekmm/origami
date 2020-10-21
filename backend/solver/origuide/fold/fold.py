@@ -1,6 +1,3 @@
-import json
-
-
 def is_steady_state(frame):
     return "origuide:steady_state" in frame['frame_classes']
 
@@ -11,7 +8,6 @@ def extract_root_frame(root):
 
 
 class Frame:
-
     @staticmethod
     def _extend_vertices_coords(json_repr):
         # I am assuming there is only 2d and 3d CP case
@@ -24,6 +20,9 @@ class Frame:
         self.raw = json_representation
 
         self.is_steady = is_steady_state(self.raw)
+
+    def update_vertices(self, vertices_coords):
+        self.raw['vertices_coords'] = vertices_coords
 
     @property
     def vertices(self):
@@ -61,7 +60,8 @@ class Fold:
             filter(lambda frame: frame.is_steady, self.frames)
         )
 
+    def update_root_frame_vertices(self, vertices):
+        if len(self.frames) == 0:
+            return
 
-def read_fold(filename):
-    with open(filename) as fold_file:
-        return Fold(json.load(fold_file))
+        self.frames[0].update_vertices(vertices)

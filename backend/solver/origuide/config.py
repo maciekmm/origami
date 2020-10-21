@@ -13,6 +13,7 @@ CONFIG = {
     'DEBUG_PLOT_FROM': 0,
     'PROFILE': False,
 
+    'BOUNDING_BOX_DIAG_LEN': 2,
 
     'AXIAL_STIFFNESS_EA': 20.0,
     'FACET_STIFFNESS': 0.7,

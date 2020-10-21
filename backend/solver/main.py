@@ -1,6 +1,6 @@
 import sys
 
-from origuide.loader import solve_fold
+from origuide.processor import solve_fold
 
 
 def main():
