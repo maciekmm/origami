@@ -14,6 +14,7 @@ import { AccountDropdown } from "./app/account-dropdown"
 import { GuideBrowser } from "./app/guide-browser"
 import { SnackbarProvider } from "notistack"
 import { LoginPage } from "./app/login-page"
+import { RegisterPage } from "./app/register-page"
 
 const Router =
 	process.env.NODE_ENV !== "production" ? HashRouter : BrowserRouter
@@ -46,7 +47,9 @@ function AppWithStore() {
 					<Route path="/login">
 						<LoginPage />
 					</Route>
-					<Route path="/register"></Route>
+					<Route path="/register">
+						<RegisterPage />
+					</Route>
 				</Router>
 			</StoreProvider>
 		</SnackbarProvider>

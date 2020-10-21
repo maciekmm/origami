@@ -10,7 +10,7 @@ export const GuideTile = ({ guide, onClick, onOpen, ...other }) => {
 			<img src="https://i.pinimg.com/originals/62/12/50/621250c0dec2949856d926a69c1414e5.png" />
 			<GridListTileBar
 				title={guide.name}
-				subtitle={<span>By: {guide.owner}</span>}
+				subtitle={<span>By: {guide["owner_username"]}</span>}
 				actionIcon={
 					<IconButton onClick={() => onOpen(guide)}>
 						<OpenInBrowser style={{ color: "white" }} />

@@ -8,6 +8,7 @@ import { useCommunityStore } from "@store/community"
 import { LOGIN } from "@store/community/actions"
 import Alert from "@material-ui/lab/Alert"
 import { useHistory } from "react-router-dom"
+import { useSnackbar } from "notistack"
 
 export const LoginPage = () => {
 	const { login } = useCommunityService()
@@ -16,6 +17,7 @@ export const LoginPage = () => {
 	const passwordInput = useRef()
 	const [detail, setDetails] = useState("")
 	const history = useHistory()
+	const { enqueueSnackbar } = useSnackbar()
 
 	const performLogin = (event) => {
 		event.preventDefault()
@@ -26,6 +28,7 @@ export const LoginPage = () => {
 					.json()
 					.then((body) => {
 						if (response.status === 200) {
+							enqueueSnackbar("Sign in successful", { variant: "success" })
 							dispatch({
 								type: LOGIN,
 								accessToken: body["access"],

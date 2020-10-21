@@ -10,7 +10,7 @@ export const initialState = {
 
 initialState.username = getProperty(initialState.tokens.access, "username")
 initialState.email = getProperty(initialState.tokens.access, "email")
-initialState.userId = getProperty(initialState.tokens.access, "userId")
+initialState.userId = getProperty(initialState.tokens.access, "user_id")
 
 export function reducer(state, action) {
 	switch (action.type) {
@@ -20,7 +20,7 @@ export function reducer(state, action) {
 
 			const username = getProperty(action.accessToken, "username")
 			const email = getProperty(action.refreshToken, "email")
-			const userId = getProperty(action.refreshToken, "userId")
+			const userId = getProperty(action.refreshToken, "user_id")
 
 			return {
 				...state,
