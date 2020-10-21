@@ -15,7 +15,11 @@ export const ContentContainer = ({ children, title, maxWidth }) => {
 
 	return (
 		<Container maxWidth={maxWidth ? maxWidth : "md"} className={classes.root}>
-			{title && <Typography variant="h5">{title}</Typography>}
+			{title && (
+				<Typography variant="h5" color="primary">
+					{title}
+				</Typography>
+			)}
 			{children}
 		</Container>
 	)

@@ -7,11 +7,13 @@ import { useCommunityStore } from "@store/community"
 import { useHistory } from "react-router-dom"
 import { Typography } from "@material-ui/core"
 import { LOGOUT } from "@store/community/actions"
+import { useSnackbar } from "notistack"
 
 export const AccountDropdown = (props) => {
 	const [{ username }, dispatch] = useCommunityStore()
 	const [anchorEl, setAnchorEl] = React.useState(null)
 	const history = useHistory()
+	const { enqueueSnackbar } = useSnackbar()
 
 	const isMenuOpen = Boolean(anchorEl)
 
@@ -33,6 +35,7 @@ export const AccountDropdown = (props) => {
 	const logout = () => {
 		dispatch({ type: LOGOUT })
 		navigateTo("/")
+		enqueueSnackbar("Logout successful", { variant: "success" })
 	}
 
 	const renderMenu = (

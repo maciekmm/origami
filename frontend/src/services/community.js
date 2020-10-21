@@ -7,7 +7,9 @@ const BACKEND_URL = "http://localhost:8000/api"
 const paramsToQueryString = (params) => {
 	let query = "?"
 	for (let key in params) {
-		query += key + "=" + params[key]
+		if (params[key] !== null) {
+			query += key + "=" + params[key]
+		}
 	}
 	return query
 }
@@ -55,7 +57,7 @@ export const useCommunityService = () => {
 					fetch(BACKEND_URL + "/users/", {
 						method: "POST",
 						headers: {
-							"Content-Type": "application/json;charset=utf-8",
+							"Content-Type": "application/json",
 						},
 						body: JSON.stringify({
 							username: username,
