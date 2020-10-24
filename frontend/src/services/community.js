@@ -41,7 +41,7 @@ export const useTokenRefresher = (storeTokens, logout) => {
 					accessToken: tokens["access"],
 					refreshToken: refreshToken,
 				})
-				return Promise.resolve(tokens.access)
+				return Promise.resolve(tokens)
 			})
 }
 
