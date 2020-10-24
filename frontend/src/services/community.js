@@ -1,7 +1,7 @@
 import { useCommunityStore } from "@store/community"
 import { useMemo, useReducer } from "react"
 import { useAuthedHttp, useHttp } from "./http"
-import { LOGIN } from "@store/community/actions"
+import { LOGIN, LOGOUT } from "@store/community/actions"
 
 const BACKEND_URL = "http://localhost:8000/api"
 
@@ -15,7 +15,7 @@ const paramsToQueryString = (params) => {
 	return query
 }
 
-export const useTokenRefresher = (storeTokens) => {
+export const useTokenRefresher = (storeTokens, logout) => {
 	const { fetch } = useHttp()
 
 	return (refreshToken) =>
@@ -26,9 +26,13 @@ export const useTokenRefresher = (storeTokens) => {
 			}),
 		})
 			.then((response) => {
+				if (response.status === 401) {
+					logout()
+					return Promise.reject(new Error("Session expired"))
+				}
 				if (!response.ok) {
 					console.warn(response)
-					throw "Invalid response received"
+					return Promise.reject(new Error("Unknown error"))
 				}
 				return response.json()
 			})
@@ -43,8 +47,9 @@ export const useTokenRefresher = (storeTokens) => {
 
 export const useCommunityService = () => {
 	const [{ tokens, userId }, dispatch] = useCommunityStore()
-	const tokenRefresher = useTokenRefresher((tokens) =>
-		dispatch({ type: LOGIN, ...tokens })
+	const tokenRefresher = useTokenRefresher(
+		(tokens) => dispatch({ type: LOGIN, ...tokens }),
+		() => dispatch({ type: LOGOUT })
 	)
 	const { fetch } = useAuthedHttp(tokens, tokenRefresher)
 
@@ -76,9 +81,9 @@ export const useCommunityService = () => {
 		0
 	)
 
-	const withInvalidateFetchActions = (response) =>
-		response.then((response) => {
-			if (response.ok === true) {
+	const withInvalidateFetchActions = (request) =>
+		request.then((response) => {
+			if (response.ok) {
 				_invalidateFetchAction()
 			}
 			return response
@@ -90,6 +95,18 @@ export const useCommunityService = () => {
 				fetch(BACKEND_URL + "/guides/" + paramsToQueryString(filters)),
 
 			fetchGuide: (guideId) => fetch(BACKEND_URL + "/guides/" + guideId + "/"),
+
+			createGuide: (file, isPrivate, name) =>
+				withInvalidateFetchActions(
+					fetch(BACKEND_URL + "/guides/", {
+						method: "POST",
+						body: JSON.stringify({
+							name: name,
+							private: isPrivate,
+							guide_file: file,
+						}),
+					})
+				),
 
 			likeGuide: (guideId) =>
 				withInvalidateFetchActions(

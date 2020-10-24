@@ -2,11 +2,9 @@ import FormControl from "@material-ui/core/FormControl"
 import TextField from "@material-ui/core/TextField"
 import { ConfigurationGroup } from "@dom-components/configuration-group"
 import React from "react"
-import InputLabel from "@material-ui/core/InputLabel"
-import Select from "@material-ui/core/Select"
-import MenuItem from "@material-ui/core/MenuItem"
-import InputAdornment from "@material-ui/core/InputAdornment"
 import Button from "@material-ui/core/Button"
+import FormControlLabel from "@material-ui/core/FormControlLabel"
+import Checkbox from "@material-ui/core/Checkbox"
 
 export default function FileConfiguration({
 	author,
@@ -15,7 +13,10 @@ export default function FileConfiguration({
 	onAuthorChange,
 	onTitleChange,
 	onDescriptionChange,
+	onPrivateChange,
+	showPrivate,
 	onSave,
+	saveTitle,
 }) {
 	return (
 		<ConfigurationGroup title="File">
@@ -52,8 +53,24 @@ export default function FileConfiguration({
 					}}
 				/>
 			</FormControl>
+			{showPrivate && (
+				<FormControl fullWidth margin="dense">
+					<FormControlLabel
+						control={
+							<Checkbox
+								size="small"
+								id="configuration-file-private"
+								onChange={(event) => onPrivateChange(event.target.checked)}
+								name="guide-private"
+							/>
+						}
+						label="Private"
+						color="primary"
+					/>
+				</FormControl>
+			)}
 			<Button color="primary" onClick={onSave}>
-				Save
+				{saveTitle}
 			</Button>
 		</ConfigurationGroup>
 	)

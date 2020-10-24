@@ -5,10 +5,15 @@ import { useHistory } from "react-router-dom"
 import { GuideList } from "@dom-components/guide-list"
 import Button from "@material-ui/core/Button"
 import { useSnackbar } from "notistack"
+import { LOAD_MODEL } from "@store/viewer/actions"
+import ModelLoader from "@dom-components/model-loader"
+import { ContentContainer } from "@dom-components/content-container"
+import { useCreatorStore } from "@store/creator"
 
 export const GuideBrowser = (props) => {
 	const { fetchGuides, likeGuide, unlikeGuide } = useCommunityService()
 	const [{ userId }] = useCommunityStore()
+	const [{}, dispatchCreator] = useCreatorStore()
 
 	const [userGuides, setUserGuides] = useState([])
 	const [allGuides, setAllGuides] = useState([])
@@ -46,7 +51,10 @@ export const GuideBrowser = (props) => {
 		let action = guide.liked ? unlikeGuide(guide.id) : likeGuide(guide.id)
 	}
 
-	const uploadGuide = () => history.push("/upload")
+	const loadGuide = (guide) => {
+		dispatchCreator({ type: LOAD_MODEL, model: guide })
+		history.push("/create")
+	}
 
 	return (
 		<>
@@ -64,14 +72,19 @@ export const GuideBrowser = (props) => {
 					openGuide={openGuide}
 					guides={userGuides}
 					HeaderButton={
-						<Button
-							variant="contained"
-							color="primary"
-							onClick={uploadGuide}
-							disableElevation
-						>
-							Upload
-						</Button>
+						<ModelLoader
+							component={
+								<Button
+									component="div"
+									variant="contained"
+									color="primary"
+									disableElevation
+								>
+									Upload
+								</Button>
+							}
+							loadModel={loadGuide}
+						/>
 					}
 					toggleLikeGuide={toggleLikeGuide}
 				></GuideList>

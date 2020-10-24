@@ -4,10 +4,10 @@ export function decodeJWT(token) {
 	return JSON.parse(window.atob(base64))
 }
 
-const CONSIDER_EXPIRED_OFFSET = 30
+const CONSIDER_EXPIRED_OFFSET = 10
 
 export function isExpired(token) {
 	const decoded = decodeJWT(token)
 	const currentUnix = new Date().getTime() / 1000
-	return decoded["exp"] + CONSIDER_EXPIRED_OFFSET <= currentUnix
+	return decoded["exp"] <= currentUnix + CONSIDER_EXPIRED_OFFSET
 }

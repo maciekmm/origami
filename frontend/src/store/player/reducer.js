@@ -7,10 +7,9 @@ import {
 } from "./actions"
 
 import {
-	reducer as viewerReducer,
 	initialState as viewerInitialState,
+	reducer as viewerReducer,
 } from "../viewer/reducer"
-import { LOAD_MODEL } from "../viewer/actions"
 
 export const initialState = {
 	...viewerInitialState,

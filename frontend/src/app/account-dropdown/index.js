@@ -68,13 +68,11 @@ export const AccountDropdown = (props) => {
 	return (
 		<>
 			<IconButton
-				edge="end"
 				aria-label="account of current user"
 				aria-controls={menuId}
 				aria-haspopup="true"
 				onClick={handleProfileMenuOpen}
 				color="inherit"
-				style={{ marginLeft: "auto" }}
 			>
 				<Typography variant="button">
 					{username !== null && username}

@@ -9,6 +9,7 @@ import { useCreatorStore } from "@store/creator"
 import { LOAD_MODEL, SELECT_FRAME } from "../../store/viewer/actions"
 import { ADD_STEP, REMOVE_STEP, SELECT_EDGE } from "../../store/creator/actions"
 import styles from "./style.css"
+import { useCommunityService } from "../../services/community"
 
 export default function GuideCreator() {
 	const [{ model, frame, selectedEdge }, dispatch] = useCreatorStore()
