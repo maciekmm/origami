@@ -25,6 +25,8 @@ export function downloadModel(model) {
 }
 
 export function modelToBase64(model) {
+	// TODO: btoa does not support UTF-8
+	// https://attacomsian.com/blog/javascript-base64-encode-decode
 	const interpolated = interpolateModel(model)
 	return btoa(JSON.stringify(interpolated))
 }
