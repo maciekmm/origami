@@ -1,10 +1,10 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useState } from "react"
 import EdgeConfiguration from "@dom-components/configuration-edge"
 import FileConfiguration from "@dom-components/configuration-file"
 import StepConfiguration from "@dom-components/configuration-step"
 import styles from "./styles.css"
 import { useCreatorStore } from "@store/creator"
-import { downloadModel } from "../../../download"
+import { downloadModel, modelToBase64 } from "../../../download"
 import { getComputedProperty } from "@fold/properties"
 import {
 	SET_EDGE_ASSIGNMENT,
@@ -15,6 +15,10 @@ import {
 	SET_STEP_DESCRIPTION,
 	SET_STEP_TITLE,
 } from "../../../store/creator/actions"
+import { useCommunityService } from "../../../services/community"
+import { useIsAuthenticated } from "@store/community"
+import { useSnackbar } from "notistack"
+import { useHistory } from "react-router-dom"
 
 export default function ConfigurationSidebar() {
 	const [{ model, frame, selectedEdge }, dispatch] = useCreatorStore()
@@ -61,6 +65,31 @@ export default function ConfigurationSidebar() {
 	const setStepTitle = (title) =>
 		dispatch({ type: SET_STEP_TITLE, title: title })
 
+	const [isPrivate, setPrivate] = useState(false)
+
+	const { createGuide } = useCommunityService()
+	const isAuthed = useIsAuthenticated()
+	const { enqueueSnackbar } = useSnackbar()
+	const history = useHistory()
+
+	const uploadGuide = (model) => {
+		const base64Representation = modelToBase64(model)
+		const name = name != "" ? name : null
+		createGuide(
+			"data:text/json;base64," + base64Representation,
+			isPrivate,
+			name
+		)
+			.then((response) => response.json())
+			.then((guide) => {
+				enqueueSnackbar("Guide created", { variant: "success" })
+				history.push("/")
+			})
+	}
+
+	const saveModel = () =>
+		!isAuthed ? downloadModel(model) : uploadGuide(model)
+
 	return (
 		<div className={styles.sidebar}>
 			{assignment && (
@@ -78,13 +107,17 @@ export default function ConfigurationSidebar() {
 				onDescriptionChange={setStepDescription}
 			/>
 			<FileConfiguration
-				onSave={() => downloadModel(model)}
+				onSave={saveModel}
+				saveTitle="Save"
 				author={model.file_author}
 				onAuthorChange={setFileAuthor}
 				title={model.file_title}
 				onTitleChange={setFileTitle}
 				description={model.file_description}
 				onDescriptionChange={setFileDescription}
+				private={isPrivate}
+				showPrivate={isAuthed}
+				onPrivateChange={setPrivate}
 			/>
 		</div>
 	)

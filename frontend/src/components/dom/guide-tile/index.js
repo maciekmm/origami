@@ -1,7 +1,12 @@
 import React from "react"
 import GridListTile from "@material-ui/core/GridListTile"
 import IconButton from "@material-ui/core/IconButton"
-import { Favorite, FavoriteBorder, OpenInBrowser } from "@material-ui/icons"
+import {
+	Favorite,
+	FavoriteBorder,
+	OpenInBrowser,
+	PlayArrow,
+} from "@material-ui/icons"
 import GridListTileBar from "@material-ui/core/GridListTileBar"
 import makeStyles from "@material-ui/core/styles/makeStyles"
 
@@ -51,7 +56,7 @@ export const GuideTile = ({ guide, onClick, onOpen, onLike, ...other }) => {
 				// subtitle={<span>By: {guide["owner_username"]}</span>}
 				actionIcon={
 					<IconButton onClick={() => onOpen(guide)}>
-						<OpenInBrowser className={classes.icon} />
+						<PlayArrow className={classes.icon} />
 					</IconButton>
 				}
 			/>

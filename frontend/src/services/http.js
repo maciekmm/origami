@@ -13,11 +13,16 @@ export const useHttp = () => {
 						"Invalid contentType. Expected json, got " + contentType
 					)
 				}
+
+				if (!response.ok && !contentType) {
+					throw new Error("Unexpected response: " + response.statusText)
+				}
+
 				return response
 			})
 			.catch((exception) => {
 				console.error(exception)
-				enqueueSnackbar("Error fetching data")
+				enqueueSnackbar("Unknown error occurred")
 			})
 
 	const withJsonBodyIfUpdateAction = (requestOpts) => {
@@ -25,6 +30,7 @@ export const useHttp = () => {
 			requestOpts && requestOpts.method
 				? requestOpts.method.toLowerCase()
 				: "get"
+
 		if (["post", "put", "patch"].indexOf(method) != -1) {
 			if (requestOpts === undefined) {
 				requestOpts = {}

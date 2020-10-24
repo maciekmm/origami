@@ -23,3 +23,8 @@ export function downloadModel(model) {
 	const exportableTitle = convertToFileName(title)
 	downloadTextFile(JSON.stringify(exported), `${exportableTitle}.fold`)
 }
+
+export function modelToBase64(model) {
+	const interpolated = interpolateModel(model)
+	return btoa(JSON.stringify(interpolated))
+}

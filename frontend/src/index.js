@@ -9,12 +9,12 @@ import Toolbar from "@material-ui/core/Toolbar"
 import Typography from "@material-ui/core/Typography"
 import ButtonLink from "@dom-components/button-link"
 import { StoreProvider } from "@store"
-import Button from "@material-ui/core/Button"
 import { AccountDropdown } from "./app/account-dropdown"
 import { GuideBrowser } from "./app/guide-browser"
 import { SnackbarProvider } from "notistack"
 import { LoginPage } from "./app/login-page"
 import { RegisterPage } from "./app/register-page"
+import Grid from "@material-ui/core/Grid"
 
 const Router =
 	process.env.NODE_ENV !== "production" ? HashRouter : BrowserRouter
@@ -26,13 +26,20 @@ function AppWithStore() {
 				<Router>
 					<AppBar position="static">
 						<Toolbar variant="dense">
-							<Typography variant="h6">Origuide</Typography>
-							<div>
-								<ButtonLink to="/" title="Browse" />
-								<ButtonLink to="/view" title="View" />
-								<ButtonLink to="/create" title="Create" />
-							</div>
-							<AccountDropdown></AccountDropdown>
+							<Grid
+								container
+								direction="row"
+								justify="space-between"
+								alignItems="center"
+							>
+								<Typography variant="h6">Origuide</Typography>
+								<Grid>
+									<ButtonLink to="/" title="Browse" />
+									<ButtonLink to="/view" title="View" />
+									<ButtonLink to="/create" title="Create" />
+								</Grid>
+								<AccountDropdown></AccountDropdown>
+							</Grid>
 						</Toolbar>
 					</AppBar>
 					<Route exact path="/">
