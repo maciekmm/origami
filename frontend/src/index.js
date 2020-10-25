@@ -16,6 +16,8 @@ import { LoginPage } from "./app/login"
 import { RegisterPage } from "./app/register"
 import Grid from "@material-ui/core/Grid"
 import { SettingsPage } from "./app/settings"
+import { EmailPasswordReset } from "./app/email-password-reset"
+import { ResetPassword } from "./app/reset-password"
 
 const Router =
 	process.env.NODE_ENV !== "production" ? HashRouter : BrowserRouter
@@ -60,6 +62,12 @@ function AppWithStore() {
 					</Route>
 					<Route path="/settings">
 						<SettingsPage />
+					</Route>
+					<Route exact path="/reset-password">
+						<EmailPasswordReset />
+					</Route>
+					<Route path="/reset-password/:token">
+						<ResetPassword />
 					</Route>
 				</Router>
 			</StoreProvider>

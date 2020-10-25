@@ -10,6 +10,7 @@ import Alert from "@material-ui/lab/Alert"
 import { useHistory } from "react-router-dom"
 import { useSnackbar } from "notistack"
 import Link from "@material-ui/core/Link"
+import { Link as RouterLink } from "react-router-dom"
 import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles((theme) => ({
@@ -75,7 +76,7 @@ export const LoginPage = () => {
 					/>
 				</FormControl>
 				<FormControl fullWidth margin="dense" classes={{ root: classes.root }}>
-					<Link to="/password-reset" variant="caption">
+					<Link to="/reset-password" component={RouterLink} variant="caption">
 						Forgot your password?
 					</Link>
 					<Button

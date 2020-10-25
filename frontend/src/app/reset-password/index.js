@@ -4,38 +4,34 @@ import Button from "@material-ui/core/Button"
 import { ContentContainer } from "@dom-components/content-container"
 import FormControl from "@material-ui/core/FormControl"
 import { useCommunityService } from "../../services/community"
-import { useCommunityStore } from "@store/community"
-import { LOGIN } from "@store/community/actions"
 import Alert from "@material-ui/lab/Alert"
-import { useHistory } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { useSnackbar } from "notistack"
 
-export const SettingsPage = () => {
-	const { changePassword } = useCommunityService()
+export const ResetPassword = () => {
 	const { enqueueSnackbar } = useSnackbar()
+	const { token } = useParams()
+
+	const { resetPassword } = useCommunityService()
 
 	const [detail, setDetails] = useState("")
 	const [fieldErrors, setFieldErrors] = useState({})
-	const currentPasswordInput = useRef()
 	const newPasswordInput = useRef()
 	const confirmPasswordInput = useRef()
 
 	const clearFields = () => {
-		currentPasswordInput.current.value = ""
 		newPasswordInput.current.value = ""
 		confirmPasswordInput.current.value = ""
 		setFieldErrors({})
 	}
 
-	const saveSettings = (event) => {
+	const changePassword = (event) => {
 		event.preventDefault()
 		const newPassword = newPasswordInput.current.value
 		const newPasswordConfirm = confirmPasswordInput.current.value
 		clearFields()
 		if (newPassword !== newPasswordConfirm) {
-			setFieldErrors({
-				confirm_password: "Passwords do not match",
-			})
+			setDetails("Passwords do not match")
 			return
 		}
 
@@ -46,52 +42,41 @@ export const SettingsPage = () => {
 			return
 		}
 
-		changePassword(currentPasswordInput.current.value, newPassword).then(
-			(response) => {
-				response
-					.json()
-					.then((body) => {
-						if (response.ok) {
-							enqueueSnackbar("Password change successful", {
-								variant: "success",
-							})
+		resetPassword(newPassword, token).then((response) => {
+			response
+				.json()
+				.then((body) => {
+					if (response.ok) {
+						enqueueSnackbar("Password changed successfully", {
+							variant: "success",
+						})
+						history.push("/login")
+					} else {
+						if ("detail" in body) {
+							setDetails(body["detail"])
 						} else {
-							if ("detail" in body) {
-								setDetails(body["detail"])
-							} else {
-								setFieldErrors(body)
-							}
+							setFieldErrors(body)
 						}
-					})
-					.catch((ex) => {
-						setDetails("Unknown error occured")
-					})
-			}
-		)
+					}
+				})
+				.catch((ex) => {
+					setDetails("Unknown error occured")
+				})
+		})
 	}
 
 	return (
-		<ContentContainer title={"Change Password"} maxWidth="sm">
+		<ContentContainer title={"Change password"} maxWidth="sm">
 			{detail && <Alert severity="error">{detail}</Alert>}
-			<form noValidate onSubmit={saveSettings} action="#">
-				<FormControl fullWidth margin="dense">
-					<TextField
-						id="current-password"
-						type="password"
-						label="Current Password"
-						inputRef={currentPasswordInput}
-						error={"old_password" in fieldErrors}
-						helperText={fieldErrors["old_password"] || ""}
-					/>
-				</FormControl>
+			<form noValidate onSubmit={changePassword} action="#">
 				<FormControl fullWidth margin="dense">
 					<TextField
 						id="new-password"
 						type="password"
 						label="New password"
 						inputRef={newPasswordInput}
-						error={"new_password" in fieldErrors}
-						helperText={fieldErrors["new_password"] || ""}
+						error={"password" in fieldErrors}
+						helperText={fieldErrors["password"] || ""}
 					/>
 				</FormControl>
 				<FormControl fullWidth margin="dense">
@@ -107,12 +92,11 @@ export const SettingsPage = () => {
 				<FormControl fullWidth margin="dense">
 					<Button
 						type="submit"
-						onClick={saveSettings}
 						variant="outlined"
 						color="primary"
 						style={{ marginLeft: "auto" }}
 					>
-						Save
+						Change Password
 					</Button>
 				</FormControl>
 			</form>
