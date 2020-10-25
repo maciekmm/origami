@@ -2,7 +2,7 @@ import React from "react"
 import TimelineStep from "../timeline-step"
 import { getSteadyFrameIds } from "@fold/steadyness"
 import styles from "./styles.css"
-import Viewer from "../viewer"
+import { Viewer } from "../viewer"
 
 export default function Timeline({
 	model,

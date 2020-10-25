@@ -74,7 +74,7 @@ export const useCommunityService = () => {
 					}),
 				}),
 		}
-	}, [])
+	}, [fetch])
 
 	const [invalidatorDependency, _invalidateFetchAction] = useReducer(
 		(state) => state + 1,
@@ -96,7 +96,7 @@ export const useCommunityService = () => {
 
 			fetchGuide: (guideId) => fetch(BACKEND_URL + "/guides/" + guideId + "/"),
 
-			createGuide: (file, isPrivate, name) =>
+			createGuide: (file, isPrivate, name, thumbnail) =>
 				withInvalidateFetchActions(
 					fetch(BACKEND_URL + "/guides/", {
 						method: "POST",
@@ -104,6 +104,7 @@ export const useCommunityService = () => {
 							name: name,
 							private: isPrivate,
 							guide_file: file,
+							thumbnail_file: thumbnail,
 						}),
 					})
 				),
@@ -122,7 +123,7 @@ export const useCommunityService = () => {
 					})
 				),
 		}
-	}, [userId, invalidatorDependency])
+	}, [userId, invalidatorDependency, fetch])
 
 	return {
 		...statelessActions,

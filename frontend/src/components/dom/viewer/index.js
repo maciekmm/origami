@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo, useRef } from "react"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js"
 import {
 	Canvas,
@@ -12,11 +12,12 @@ import { getComputedProperty } from "@fold/properties"
 
 extend({ OrbitControls })
 
-function SceneConfiguration() {
-	const {
-		camera,
-		gl: { domElement },
-	} = useThree()
+function SceneConfiguration({ innerRef }) {
+	const { camera, gl } = useThree()
+
+	if (innerRef !== undefined && innerRef !== null) {
+		innerRef.current = gl.domElement
+	}
 
 	const [lightRef, light] = useResource()
 
@@ -26,14 +27,17 @@ function SceneConfiguration() {
 
 	return (
 		<>
-			<orbitControls args={[camera, domElement]} />
+			<orbitControls args={[camera, gl.domElement]} />
 			<ambientLight intensity={0.3} />
 			<pointLight ref={lightRef} intensity={0.8} />
 		</>
 	)
 }
 
-export default function Viewer({ model, frame, onEdgeSelect, selectedEdge }) {
+export const Viewer = React.forwardRef(function Viewer(
+	{ model, frame, onEdgeSelect, selectedEdge },
+	forwardRef
+) {
 	const facesVertices = useMemo(
 		() => getComputedProperty(model.file_frames, 0, "faces_vertices"),
 		[model.file_frames]
@@ -55,8 +59,8 @@ export default function Viewer({ model, frame, onEdgeSelect, selectedEdge }) {
 	)
 
 	return (
-		<Canvas>
-			<SceneConfiguration />
+		<Canvas gl={{ preserveDrawingBuffer: true, autoClear: false }}>
+			<SceneConfiguration innerRef={forwardRef} />
 			<Figure
 				verticesCoords={verticesCoords}
 				facesVertices={facesVertices}
@@ -67,4 +71,4 @@ export default function Viewer({ model, frame, onEdgeSelect, selectedEdge }) {
 			/>
 		</Canvas>
 	)
-}
+})

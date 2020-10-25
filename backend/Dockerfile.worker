@@ -1,7 +1,4 @@
-FROM pypy:3.7
-
-RUN apt-get update
-RUN apt-get install -y libblas-dev liblapack-dev gfortran
+FROM maciekmm/pypy-scientific:0.1
 
 RUN mkdir /build
 WORKDIR /build

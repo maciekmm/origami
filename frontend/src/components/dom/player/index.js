@@ -1,5 +1,5 @@
 import React from "react"
-import Viewer from "@dom-components/viewer"
+import { Viewer } from "@dom-components/viewer"
 import { isSteady } from "@fold/steadyness"
 import { useAfter } from "../../../hooks"
 import styles from "./styles.css"

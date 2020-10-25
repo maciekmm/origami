@@ -20,7 +20,7 @@ import { useIsAuthenticated } from "@store/community"
 import { useSnackbar } from "notistack"
 import { useHistory } from "react-router-dom"
 
-export default function ConfigurationSidebar() {
+export default function ConfigurationSidebar({ thumbnailFactory }) {
 	const [{ model, frame, selectedEdge }, dispatch] = useCreatorStore()
 
 	const currentStep = model && model.file_frames[frame]
@@ -75,15 +75,22 @@ export default function ConfigurationSidebar() {
 	const uploadGuide = (model) => {
 		const base64Representation = modelToBase64(model)
 		const name = name != "" ? name : null
+		const thumbnail = thumbnailFactory()
+
 		createGuide(
 			"data:text/json;base64," + base64Representation,
 			isPrivate,
-			name
+			name,
+			thumbnail
 		)
 			.then((response) => response.json())
 			.then((guide) => {
-				enqueueSnackbar("Guide created", { variant: "success" })
-				history.push("/")
+				if ("id" in guide) {
+					enqueueSnackbar("Guide created", { variant: "success" })
+					history.push("/")
+				} else {
+					enqueueSnackbar("Error creating guide ", { variant: "error" })
+				}
 			})
 	}
 

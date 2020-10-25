@@ -30,12 +30,14 @@ export const GuideList = ({
 
 	const changePage = (event, page) => setPage(page)
 
-	const searchFilter = (guide) => {
-		if (searchCriteria.length === 0) return true
-		return guide.name.toLowerCase().indexOf(searchCriteria.toLowerCase()) !== -1
-	}
-
 	useEffect(() => {
+		const searchFilter = (guide) => {
+			if (searchCriteria.length === 0) return true
+			return (
+				guide.name.toLowerCase().indexOf(searchCriteria.toLowerCase()) !== -1
+			)
+		}
+
 		setFilteredGuides(guides.filter(searchFilter))
 	}, [searchCriteria, guides])
 

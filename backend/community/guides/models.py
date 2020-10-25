@@ -19,5 +19,6 @@ class Guide(models.Model):
     steps = models.IntegerField(default=0)
     guide_file = models.FileField(upload_to='guides/')
     animation_file = models.FileField(upload_to='animations/')
+    thumbnail_file = models.ImageField(upload_to='thumbnails/', null=True, default=None)
     status = models.CharField(max_length=32, choices=ProcessingStatus.choices, default=ProcessingStatus.QUEUED)
     private = models.BooleanField(default=True)
