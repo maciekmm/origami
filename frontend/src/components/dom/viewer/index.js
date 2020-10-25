@@ -13,13 +13,16 @@ import { getComputedProperty } from "@fold/properties"
 extend({ OrbitControls })
 
 function SceneConfiguration({ innerRef }) {
-	const { camera, gl } = useThree()
+	const {
+		camera,
+		gl: { domElement },
+	} = useThree()
 
 	if (innerRef !== undefined && innerRef !== null) {
-		innerRef.current = gl.domElement
+		innerRef.current = domElement
 	}
 
-	const [lightRef, light] = useResource()
+	const [lightRef] = useResource()
 
 	useFrame(() => {
 		lightRef.current.position.copy(camera.position)
@@ -27,7 +30,7 @@ function SceneConfiguration({ innerRef }) {
 
 	return (
 		<>
-			<orbitControls args={[camera, gl.domElement]} />
+			<orbitControls args={[camera, domElement]} />
 			<ambientLight intensity={0.3} />
 			<pointLight ref={lightRef} intensity={0.8} />
 		</>

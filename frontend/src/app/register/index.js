@@ -11,14 +11,15 @@ import { useHistory } from "react-router-dom"
 import { useSnackbar } from "notistack"
 
 export const RegisterPage = () => {
+	const { enqueueSnackbar } = useSnackbar()
+	const history = useHistory()
 	const { register } = useCommunityService()
+
+	const [detail, setDetails] = useState("")
+	const [fieldErrors, setFieldErrors] = useState({})
 	const usernameInput = useRef()
 	const passwordInput = useRef()
 	const emailInput = useRef()
-	const [detail, setDetails] = useState("")
-	const [fieldErrors, setFieldErrors] = useState({})
-	const history = useHistory()
-	const { enqueueSnackbar } = useSnackbar()
 
 	const performSignup = (event) => {
 		event.preventDefault()

@@ -19,8 +19,8 @@ export default function GuideCreator() {
 	const canvasRef = useRef()
 
 	const snapshotCanvas = () => {
-		const ctx = canvasRef.current
-		return ctx.toDataURL()
+		const canvas = canvasRef.current
+		return canvas.toDataURL()
 	}
 
 	return (

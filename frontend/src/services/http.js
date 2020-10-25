@@ -1,4 +1,6 @@
 import { useSnackbar } from "notistack"
+import { isExpired } from "../jwt"
+import { useCallback } from "react"
 
 const withJsonBodyIfUpdateAction = (requestOpts) => {
 	const method =
@@ -19,14 +21,11 @@ const withJsonBodyIfUpdateAction = (requestOpts) => {
 	return requestOpts
 }
 
-import { isExpired } from "../jwt"
-import { useMemo } from "react"
-
 export const useHttp = () => {
 	const { enqueueSnackbar } = useSnackbar()
 
-	const withValidateResponse = useMemo(
-		() => (response) =>
+	const withValidateResponse = useCallback(
+		(response) =>
 			response
 				.then((response) => {
 					const contentType = response.headers.get("content-type")
@@ -49,8 +48,8 @@ export const useHttp = () => {
 		[enqueueSnackbar]
 	)
 
-	const _fetch = useMemo(
-		() => (url, requestOpts) =>
+	const _fetch = useCallback(
+		(url, requestOpts) =>
 			withValidateResponse(fetch(url, withJsonBodyIfUpdateAction(requestOpts))),
 		[withJsonBodyIfUpdateAction]
 	)
@@ -79,23 +78,20 @@ const withAuthedOpts = (maybeToken, requestOpts) => {
 export const useAuthedHttp = (tokens, tokenRefresher) => {
 	const { fetch } = useHttp()
 
-	const fetchAccessToken = useMemo(
-		() => () => {
-			if (!!tokens.access) {
-				const expired = isExpired(tokens.access)
-				if (expired) {
-					return tokenRefresher(tokens.refresh).then((tokens) => tokens.access)
-				} else {
-					return Promise.resolve(tokens.access)
-				}
+	const fetchAccessToken = useCallback(() => {
+		if (!!tokens.access) {
+			const expired = isExpired(tokens.access)
+			if (expired) {
+				return tokenRefresher(tokens.refresh).then((tokens) => tokens.access)
+			} else {
+				return Promise.resolve(tokens.access)
 			}
-			return Promise.resolve(null)
-		},
-		[tokens, tokenRefresher]
-	)
+		}
+		return Promise.resolve(null)
+	}, [tokens, tokenRefresher])
 
-	const authedFetch = useMemo(
-		() => (url, opts) =>
+	const authedFetch = useCallback(
+		(url, opts) =>
 			fetchAccessToken().then((maybeToken) => {
 				const authedOpts = withAuthedOpts(maybeToken, opts)
 				return fetch(url, authedOpts)

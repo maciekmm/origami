@@ -37,7 +37,6 @@ CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')  # redis://localhost:
 ALLOWED_HOSTS = ['*']  # Reverse proxy is used to filter out hosts
 MEDIA_ROOT = os.getenv('MEDIA_ROOT')
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -81,7 +80,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS=True # For testing purposes, the backend will be put behind a reverse proxy
+CORS_ALLOW_ALL_ORIGINS = True  # For testing and debugging purposes. On production the backend will be put behind a reverse proxy
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

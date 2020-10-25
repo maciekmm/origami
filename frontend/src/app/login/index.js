@@ -19,14 +19,16 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export const LoginPage = () => {
+	const classes = useStyles()
+
+	const { enqueueSnackbar } = useSnackbar()
+	const history = useHistory()
 	const { login } = useCommunityService()
 	const [{}, dispatch] = useCommunityStore()
+
 	const usernameInput = useRef()
 	const passwordInput = useRef()
 	const [detail, setDetails] = useState("")
-	const history = useHistory()
-	const { enqueueSnackbar } = useSnackbar()
-	const classes = useStyles()
 
 	const performLogin = (event) => {
 		event.preventDefault()

@@ -12,17 +12,19 @@ import { useSnackbar } from "notistack"
 
 export const SettingsPage = () => {
 	const { changePassword } = useCommunityService()
+	const { enqueueSnackbar } = useSnackbar()
+
+	const [detail, setDetails] = useState("")
+	const [fieldErrors, setFieldErrors] = useState({})
 	const currentPasswordInput = useRef()
 	const newPasswordInput = useRef()
 	const confirmPasswordInput = useRef()
-	const [detail, setDetails] = useState("")
-	const [fieldErrors, setFieldErrors] = useState({})
-	const { enqueueSnackbar } = useSnackbar()
 
 	const clearFields = () => {
 		currentPasswordInput.current.value = ""
 		newPasswordInput.current.value = ""
 		confirmPasswordInput.current.value = ""
+		setFieldErrors({})
 	}
 
 	const performLogin = (event) => {
@@ -78,8 +80,8 @@ export const SettingsPage = () => {
 						type="password"
 						label="Current Password"
 						inputRef={currentPasswordInput}
-						error={"current_password" in fieldErrors}
-						helperText={fieldErrors["current_password"] || ""}
+						error={"old_password" in fieldErrors}
+						helperText={fieldErrors["old_password"] || ""}
 					/>
 				</FormControl>
 				<FormControl fullWidth margin="dense">

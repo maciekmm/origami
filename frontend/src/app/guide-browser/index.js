@@ -44,7 +44,7 @@ export const GuideBrowser = (props) => {
 	const toggleLikeGuide = (guide) => {
 		if (userId === null) {
 			history.push("/login")
-			enqueueSnackbar("Sign In to make that action", { variant: "info" })
+			enqueueSnackbar("Sign In to like a guide", { variant: "info" })
 			return
 		}
 
