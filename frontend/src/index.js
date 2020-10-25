@@ -12,10 +12,10 @@ import { StoreProvider } from "@store"
 import { AccountDropdown } from "./app/account-dropdown"
 import { GuideBrowser } from "./app/guide-browser"
 import { SnackbarProvider } from "notistack"
-import { LoginPage } from "./app/login-page"
-import { RegisterPage } from "./app/register-page"
+import { LoginPage } from "./app/login"
+import { RegisterPage } from "./app/register"
 import Grid from "@material-ui/core/Grid"
-import { SettingsPage } from "./app/settings-page"
+import { SettingsPage } from "./app/settings"
 
 const Router =
 	process.env.NODE_ENV !== "production" ? HashRouter : BrowserRouter

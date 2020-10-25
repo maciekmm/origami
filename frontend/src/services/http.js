@@ -5,7 +5,7 @@ const withJsonBodyIfUpdateAction = (requestOpts) => {
 		requestOpts && requestOpts.method ? requestOpts.method.toLowerCase() : "get"
 
 	if (["post", "put", "patch"].indexOf(method) != -1) {
-		if (requestOpts === undefined) {
+		if (!requestOpts) {
 			requestOpts = {}
 		}
 		return {
@@ -61,7 +61,7 @@ export const useHttp = () => {
 }
 
 const withAuthedOpts = (maybeToken, requestOpts) => {
-	if (requestOpts === undefined) {
+	if (!requestOpts) {
 		requestOpts = {}
 	}
 	if (!!maybeToken) {
@@ -100,7 +100,7 @@ export const useAuthedHttp = (tokens, tokenRefresher) => {
 				const authedOpts = withAuthedOpts(maybeToken, opts)
 				return fetch(url, authedOpts)
 			}),
-		[withAuthedOpts, fetch]
+		[withAuthedOpts, fetch, fetchAccessToken]
 	)
 
 	return {

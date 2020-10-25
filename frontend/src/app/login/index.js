@@ -9,6 +9,14 @@ import { LOGIN } from "@store/community/actions"
 import Alert from "@material-ui/lab/Alert"
 import { useHistory } from "react-router-dom"
 import { useSnackbar } from "notistack"
+import Link from "@material-ui/core/Link"
+import { makeStyles } from "@material-ui/core/styles"
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+		flexDirection: "row",
+	},
+}))
 
 export const LoginPage = () => {
 	const { login } = useCommunityService()
@@ -18,6 +26,7 @@ export const LoginPage = () => {
 	const [detail, setDetails] = useState("")
 	const history = useHistory()
 	const { enqueueSnackbar } = useSnackbar()
+	const classes = useStyles()
 
 	const performLogin = (event) => {
 		event.preventDefault()
@@ -63,7 +72,10 @@ export const LoginPage = () => {
 						inputRef={passwordInput}
 					/>
 				</FormControl>
-				<FormControl fullWidth margin="dense">
+				<FormControl fullWidth margin="dense" classes={{ root: classes.root }}>
+					<Link to="/password-reset" variant="caption">
+						Forgot your password?
+					</Link>
 					<Button
 						type="submit"
 						onClick={performLogin}
