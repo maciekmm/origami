@@ -1,4 +1,5 @@
 from django.db import transaction
+from drf_base64.fields import Base64ImageField
 from rest_framework import serializers
 
 from guides.fields.foldfilefield import FoldFileField
@@ -29,6 +30,7 @@ class GuideReadSerializer(serializers.ModelSerializer):
             'published_at',
             'steps',
             'guide_file',
+            'thumbnail_file',
             'animation_file',
             'status',
             'private',
@@ -49,6 +51,7 @@ class GuideReadSerializer(serializers.ModelSerializer):
 class GuideWriteSerializer(GuideReadSerializer):
     guide_file = FoldFileField()
     name = serializers.CharField(required=False)
+    thumbnail_file = Base64ImageField(required=False)
 
     @transaction.atomic
     def create(self, validated_data):

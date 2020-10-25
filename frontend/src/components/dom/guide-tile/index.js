@@ -36,7 +36,7 @@ export const GuideTile = ({ guide, onClick, onOpen, onLike, ...other }) => {
 
 	return (
 		<GridListTile key={guide.id} cols={1} {...other}>
-			<img src="https://i.pinimg.com/originals/62/12/50/621250c0dec2949856d926a69c1414e5.png" />
+			<img src={guide.thumbnail_file} />
 			<GridListTileBar
 				className={classes.titleBar}
 				titlePosition="top"

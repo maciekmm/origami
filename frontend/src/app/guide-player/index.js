@@ -35,7 +35,7 @@ export default function GuideViewer() {
 			.then((guide) => fetch(guide["animation_file"]))
 			.then((resp) => resp.json())
 			.then((loadedGuide) => dispatch({ type: LOAD_MODEL, model: loadedGuide }))
-	}, [guideId, fetchGuide])
+	}, [guideId, fetchGuide, dispatch])
 
 	const loadModel = (model) => dispatch({ type: LOAD_MODEL, model: model })
 	const play = () => dispatch({ type: PLAY })
