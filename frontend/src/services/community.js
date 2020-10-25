@@ -15,7 +15,7 @@ const paramsToQueryString = (params) => {
 	return query
 }
 
-export const useTokenRefresher = (storeTokens, logout) => {
+const useTokenRefresher = (storeTokens, logout) => {
 	const { fetch } = useHttp()
 
 	return (refreshToken) =>
