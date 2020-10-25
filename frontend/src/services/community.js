@@ -73,6 +73,23 @@ export const useCommunityService = () => {
 						password: password,
 					}),
 				}),
+
+			emailPasswordReset: (email) =>
+				fetch(BACKEND_URL + "/password_reset/", {
+					method: "POST",
+					body: JSON.stringify({
+						email: email,
+					}),
+				}),
+
+			resetPassword: (password, token) =>
+				fetch(BACKEND_URL + "/password_reset/confirm/", {
+					method: "POST",
+					body: JSON.stringify({
+						token: token,
+						password: password,
+					}),
+				}),
 		}
 	}, [])
 
@@ -96,12 +113,11 @@ export const useCommunityService = () => {
 
 			fetchGuide: (guideId) => fetch(BACKEND_URL + "/guides/" + guideId + "/"),
 
-			createGuide: (file, isPrivate, name, thumbnail) =>
+			createGuide: (file, isPrivate, thumbnail) =>
 				withInvalidateFetchActions(
 					fetch(BACKEND_URL + "/guides/", {
 						method: "POST",
 						body: JSON.stringify({
-							name: name,
 							private: isPrivate,
 							guide_file: file,
 							thumbnail_file: thumbnail,

@@ -10,58 +10,46 @@ import Alert from "@material-ui/lab/Alert"
 import { useHistory } from "react-router-dom"
 import { useSnackbar } from "notistack"
 
-export const RegisterPage = () => {
-	const { enqueueSnackbar } = useSnackbar()
-	const history = useHistory()
-	const { register } = useCommunityService()
+export const EmailPasswordReset = () => {
+	const { emailPasswordReset } = useCommunityService()
 
-	const [detail, setDetails] = useState("")
+	const [detail, setDetails] = useState({ message: "", severity: "" })
 	const [fieldErrors, setFieldErrors] = useState({})
-	const usernameInput = useRef()
-	const passwordInput = useRef()
 	const emailInput = useRef()
 
-	const performSignup = (event) => {
+	const resetPassword = (event) => {
 		event.preventDefault()
-		register(
-			usernameInput.current.value,
-			emailInput.current.value,
-			passwordInput.current.value
-		).then((response) => {
-			passwordInput.current.value = ""
+		setDetails({})
+		setFieldErrors({})
+		emailPasswordReset(emailInput.current.value).then((response) => {
 			response
 				.json()
 				.then((body) => {
 					if (response.ok) {
-						enqueueSnackbar("Sign up successful", { variant: "success" })
-						history.push("/login")
+						setDetails({
+							message: "Follow instructions sent to Your email address.",
+							severity: "success",
+						})
 					} else {
 						if ("detail" in body) {
-							setDetails(body["detail"])
+							setDetails({ message: body["detail"], severity: "error" })
 						} else {
 							setFieldErrors(body)
 						}
 					}
 				})
 				.catch((ex) => {
-					setDetails("Unknown error occured")
+					setDetails({ message: "Unknown error occured", severity: "error" })
 				})
 		})
 	}
 
 	return (
-		<ContentContainer title={"Sign up"} maxWidth="sm">
-			{detail && <Alert severity="error">{detail}</Alert>}
-			<form noValidate onSubmit={performSignup} action="#">
-				<FormControl fullWidth margin="dense">
-					<TextField
-						id="username"
-						label="Username"
-						inputRef={usernameInput}
-						error={"username" in fieldErrors}
-						helperText={fieldErrors["username"] || ""}
-					/>
-				</FormControl>
+		<ContentContainer title={"Reset password"} maxWidth="sm">
+			{detail.message && (
+				<Alert severity={detail.severity}>{detail.message}</Alert>
+			)}
+			<form noValidate onSubmit={resetPassword} action="#">
 				<FormControl fullWidth margin="dense">
 					<TextField
 						id="email"
@@ -72,23 +60,13 @@ export const RegisterPage = () => {
 					/>
 				</FormControl>
 				<FormControl fullWidth margin="dense">
-					<TextField
-						id="password"
-						type="password"
-						label="Password"
-						inputRef={passwordInput}
-						error={"password" in fieldErrors}
-						helperText={fieldErrors["password"] || ""}
-					/>
-				</FormControl>
-				<FormControl fullWidth margin="dense">
 					<Button
 						type="submit"
 						variant="outlined"
 						color="primary"
 						style={{ marginLeft: "auto" }}
 					>
-						Signup
+						Reset password
 					</Button>
 				</FormControl>
 			</form>

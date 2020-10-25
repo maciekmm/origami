@@ -74,7 +74,6 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 
 	const uploadGuide = (model) => {
 		const base64Representation = modelToBase64(model)
-		const name = model.file_title
 		if (!model.file_title) {
 			enqueueSnackbar("Title cannot be empty", { variant: "error" })
 			return
@@ -84,7 +83,6 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 		createGuide(
 			"data:text/json;base64," + base64Representation,
 			isPrivate,
-			name,
 			thumbnail
 		)
 			.then((response) => response.json())

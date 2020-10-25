@@ -30,13 +30,17 @@ export const useHttp = () => {
 				.then((response) => {
 					const contentType = response.headers.get("content-type")
 					if (contentType && !contentType.includes("/json")) {
-						throw new TypeError(
-							"Invalid contentType. Expected json, got " + contentType
+						return Promise.reject(
+							new TypeError(
+								"Invalid contentType. Expected json, got " + contentType
+							)
 						)
 					}
 
 					if (!response.ok && !contentType) {
-						throw new Error("Unexpected response: " + response.statusText)
+						return Promise.reject(
+							new Error("Unexpected response: " + response.statusText)
+						)
 					}
 
 					return response

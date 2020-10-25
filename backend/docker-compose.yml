@@ -23,10 +23,12 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     volumes:
       - postgres:/var/lib/postgresql/data
+    restart: always
   redis:
     image: redis:6
     volumes:
       - redis:/data
+    restart: always
   worker:
     build:
       context: .
@@ -39,6 +41,7 @@ services:
     depends_on:
       - postgres
       - migrations
+    restart: always
   community:
     build:
       context: .
@@ -49,10 +52,11 @@ services:
     volumes:
       - guides:/files
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     depends_on:
       - postgres
       - migrations
+    restart: always
   migrations:
     build:
       context: .

@@ -27,8 +27,12 @@ EMAIL_HOST = os.getenv('EMAIL_HOST')
 if os.getenv('EMAIL_PORT') != "":
     EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
 
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+if os.getenv('EMAIL_HOST_USER') != "":
+    EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+
+if os.getenv('EMAIL_HOST_PASSWORD') != "":
+    EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS') == 'true'
 
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  # redis://localhost:6379'
@@ -36,6 +40,8 @@ CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')  # redis://localhost:
 
 ALLOWED_HOSTS = ['*']  # Reverse proxy is used to filter out hosts
 MEDIA_ROOT = os.getenv('MEDIA_ROOT')
+
+FRONTEND_DOMAIN = os.getenv('FRONTEND_DOMAIN')
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -123,19 +129,20 @@ MEDIA_URL = 'uploads/'
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
+# FIXME: this is not verified when creating account or changing password
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    # },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    # },
 ]
 
 # Internationalization

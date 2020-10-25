@@ -1,9 +1,9 @@
 from django.core.mail import EmailMultiAlternatives
 from django.dispatch import receiver
 from django.template.loader import render_to_string
-from django.urls import reverse
-
 from django_rest_passwordreset.signals import reset_password_token_created
+
+from community import settings
 
 
 # https://pypi.org/project/django-rest-passwordreset/
@@ -24,7 +24,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
         'current_user': reset_password_token.user,
         'username': reset_password_token.user.username,
         'email': reset_password_token.user.email,
-        'reset_password_url': "{}?token={}".format('TODO-URL', reset_password_token.key)
+        'reset_password_url': "{}reset-password/{}".format(settings.FRONTEND_DOMAIN, reset_password_token.key)
     }
 
     # render email text

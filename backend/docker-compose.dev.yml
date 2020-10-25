@@ -3,6 +3,9 @@ services:
     command: python /community/manage.py runserver 0.0.0.0:8000 
     environment:
       PYTHONUNBUFFERED: "yeah"
+      EMAIL_HOST: "mailserver"
+      EMAIL_PORT: "1025"
+      EMAIL_USE_TLS: "false"
     volumes:
       - guides:/files
       - ./community:/community
@@ -11,3 +14,6 @@ services:
     volumes:
       - guides:/files
       - ./community:/community
+  mailserver:
+    image: python:3.8
+    command: python -m smtpd -n -c DebuggingServer 0.0.0.0:1025
