@@ -48,20 +48,23 @@ export const AccountDropdown = (props) => {
 			open={isMenuOpen}
 			onClose={handleMenuClose}
 		>
-			{!username ? (
-				[
-					<MenuItem key="login" onClick={() => navigateTo("login")}>
-						Sign in
-					</MenuItem>,
-					<MenuItem key="register" onClick={() => navigateTo("register")}>
-						Sign up
-					</MenuItem>,
-				]
-			) : (
-				<MenuItem key="logout" onClick={() => logout()}>
-					Logout
-				</MenuItem>
-			)}
+			{!username
+				? [
+						<MenuItem key="login" onClick={() => navigateTo("login")}>
+							Sign in
+						</MenuItem>,
+						<MenuItem key="register" onClick={() => navigateTo("register")}>
+							Sign up
+						</MenuItem>,
+				  ]
+				: [
+						<MenuItem key="settings" onClick={() => navigateTo("/settings")}>
+							Settings
+						</MenuItem>,
+						<MenuItem key="logout" onClick={() => logout()}>
+							Logout
+						</MenuItem>,
+				  ]}
 		</Menu>
 	)
 

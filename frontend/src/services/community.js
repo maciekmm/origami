@@ -122,6 +122,15 @@ export const useCommunityService = () => {
 						method: "DELETE",
 					})
 				),
+
+			changePassword: (oldPassword, newPassword) =>
+				fetch(BACKEND_URL + "/users/" + userId + "/change_password/", {
+					method: "PUT",
+					body: JSON.stringify({
+						old_password: oldPassword,
+						new_password: newPassword,
+					}),
+				}),
 		}
 	}, [userId, invalidatorDependency])
 

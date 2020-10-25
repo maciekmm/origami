@@ -15,6 +15,7 @@ import { SnackbarProvider } from "notistack"
 import { LoginPage } from "./app/login-page"
 import { RegisterPage } from "./app/register-page"
 import Grid from "@material-ui/core/Grid"
+import { SettingsPage } from "./app/settings-page"
 
 const Router =
 	process.env.NODE_ENV !== "production" ? HashRouter : BrowserRouter
@@ -56,6 +57,9 @@ function AppWithStore() {
 					</Route>
 					<Route path="/register">
 						<RegisterPage />
+					</Route>
+					<Route path="/settings">
+						<SettingsPage />
 					</Route>
 				</Router>
 			</StoreProvider>
