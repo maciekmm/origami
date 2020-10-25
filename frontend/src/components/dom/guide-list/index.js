@@ -5,10 +5,17 @@ import GridList from "@material-ui/core/GridList"
 import { GuideTile } from "@dom-components/guide-tile"
 import React, { useEffect, useState } from "react"
 import Pagination from "@material-ui/lab/Pagination"
+import { makeStyles } from "@material-ui/core/styles"
 
 const ROWS_PER_PAGE = 2
 const COLUMNS = 3
 const GUIDES_PER_PAGE = ROWS_PER_PAGE * COLUMNS
+
+const useStyles = makeStyles((theme) => ({
+	root: {
+		marginTop: "1em",
+	},
+}))
 
 export const GuideList = ({
 	title,
@@ -17,11 +24,12 @@ export const GuideList = ({
 	toggleLikeGuide,
 	HeaderButton,
 }) => {
+	const classes = useStyles()
 	const [filteredGuides, setFilteredGuides] = useState(guides)
 	const [paginatedGuides, setPaginatedGuides] = useState([])
 	const [searchCriteria, setSearchCriteria] = useState("")
 	const [page, setPage] = useState(1)
-	const pages = Math.ceil((guides.length * 1.0) / GUIDES_PER_PAGE)
+	const pages = Math.ceil((filteredGuides.length * 1.0) / GUIDES_PER_PAGE)
 
 	const onSearch = (event) => {
 		const value = event.target.value
@@ -71,7 +79,7 @@ export const GuideList = ({
 				cellHeight={200}
 				cols={COLUMNS}
 				spacing={10}
-				style={{ marginTop: "1em" }}
+				classes={{ root: classes.root }}
 			>
 				{paginatedGuides.map((guide) => (
 					<GuideTile
@@ -86,7 +94,7 @@ export const GuideList = ({
 				container
 				alignItems="center"
 				justify="center"
-				style={{ marginTop: "1em" }}
+				classes={{ root: classes.root }}
 			>
 				<Pagination count={pages} onChange={changePage} value={page} />
 			</Grid>

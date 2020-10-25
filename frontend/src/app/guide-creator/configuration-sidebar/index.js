@@ -74,7 +74,11 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 
 	const uploadGuide = (model) => {
 		const base64Representation = modelToBase64(model)
-		const name = name != "" ? name : null
+		const name = model.file_title
+		if (!model.file_title) {
+			enqueueSnackbar("Title cannot be empty", { variant: "error" })
+			return
+		}
 		const thumbnail = thumbnailFactory()
 
 		createGuide(
@@ -116,11 +120,11 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 			<FileConfiguration
 				onSave={saveModel}
 				saveTitle="Save"
-				author={model.file_author}
+				author={model.file_author || ""}
 				onAuthorChange={setFileAuthor}
-				title={model.file_title}
+				title={model.file_title || ""}
 				onTitleChange={setFileTitle}
-				description={model.file_description}
+				description={model.file_description || ""}
 				onDescriptionChange={setFileDescription}
 				private={isPrivate}
 				showPrivate={isAuthed}
