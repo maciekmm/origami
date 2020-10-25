@@ -74,7 +74,7 @@ export const useCommunityService = () => {
 					}),
 				}),
 		}
-	}, [fetch])
+	}, [])
 
 	const [invalidatorDependency, _invalidateFetchAction] = useReducer(
 		(state) => state + 1,
@@ -123,7 +123,7 @@ export const useCommunityService = () => {
 					})
 				),
 		}
-	}, [userId, invalidatorDependency, fetch])
+	}, [userId, invalidatorDependency])
 
 	return {
 		...statelessActions,
