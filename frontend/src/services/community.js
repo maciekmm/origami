@@ -91,7 +91,7 @@ export const useCommunityService = () => {
 					}),
 				}),
 		}
-	}, [])
+	}, [fetch])
 
 	const [invalidatorDependency, _invalidateFetchAction] = useReducer(
 		(state) => state + 1,
@@ -148,7 +148,7 @@ export const useCommunityService = () => {
 					}),
 				}),
 		}
-	}, [userId, invalidatorDependency])
+	}, [userId, invalidatorDependency]) // eslint-disable-line react-hooks/exhaustive-deps
 
 	return {
 		...statelessActions,

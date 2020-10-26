@@ -49,13 +49,13 @@ export const useHttp = () => {
 					console.error(exception)
 					enqueueSnackbar("Unknown error occurred")
 				}),
-		[enqueueSnackbar]
-	)
+		[] // eslint-disable-line react-hooks/exhaustive-deps
+	) // enqueueSnackbar will change every time useSnackbar is called, therefore we can't depend on it
 
 	const _fetch = useCallback(
 		(url, requestOpts) =>
 			withValidateResponse(fetch(url, withJsonBodyIfUpdateAction(requestOpts))),
-		[withJsonBodyIfUpdateAction, withValidateResponse]
+		[withValidateResponse]
 	)
 
 	return {
@@ -100,7 +100,7 @@ export const useAuthedHttp = (tokens, tokenRefresher) => {
 				const authedOpts = withAuthedOpts(maybeToken, opts)
 				return fetch(url, authedOpts)
 			}),
-		[withAuthedOpts, fetch, fetchAccessToken]
+		[fetch, fetchAccessToken]
 	)
 
 	return {
