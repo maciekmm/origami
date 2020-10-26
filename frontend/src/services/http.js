@@ -55,7 +55,7 @@ export const useHttp = () => {
 	const _fetch = useCallback(
 		(url, requestOpts) =>
 			withValidateResponse(fetch(url, withJsonBodyIfUpdateAction(requestOpts))),
-		[withJsonBodyIfUpdateAction]
+		[withJsonBodyIfUpdateAction, withValidateResponse]
 	)
 
 	return {
