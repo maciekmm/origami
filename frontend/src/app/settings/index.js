@@ -31,8 +31,8 @@ export const SettingsPage = () => {
 		event.preventDefault()
 		const newPassword = newPasswordInput.current.value
 		const newPasswordConfirm = confirmPasswordInput.current.value
-		clearFields()
 		if (newPassword !== newPasswordConfirm) {
+			clearFields()
 			setFieldErrors({
 				confirm_password: "Passwords do not match",
 			})
@@ -40,6 +40,7 @@ export const SettingsPage = () => {
 		}
 
 		if (!newPassword) {
+			clearFields()
 			setFieldErrors({
 				new_password: "New password cannot be empty",
 			})
@@ -51,6 +52,7 @@ export const SettingsPage = () => {
 				response
 					.json()
 					.then((body) => {
+						clearFields()
 						if (response.ok) {
 							enqueueSnackbar("Password change successful", {
 								variant: "success",
