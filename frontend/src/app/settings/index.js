@@ -29,10 +29,11 @@ export const SettingsPage = () => {
 
 	const saveSettings = (event) => {
 		event.preventDefault()
+		const currentPassword = currentPasswordInput.current.value
 		const newPassword = newPasswordInput.current.value
 		const newPasswordConfirm = confirmPasswordInput.current.value
+		clearFields()
 		if (newPassword !== newPasswordConfirm) {
-			clearFields()
 			setFieldErrors({
 				confirm_password: "Passwords do not match",
 			})
@@ -40,36 +41,31 @@ export const SettingsPage = () => {
 		}
 
 		if (!newPassword) {
-			clearFields()
 			setFieldErrors({
 				new_password: "New password cannot be empty",
 			})
 			return
 		}
 
-		changePassword(currentPasswordInput.current.value, newPassword).then(
-			(response) => {
-				response
-					.json()
-					.then((body) => {
-						clearFields()
-						if (response.ok) {
-							enqueueSnackbar("Password change successful", {
-								variant: "success",
-							})
+		changePassword(currentPassword, newPassword)
+			.then((response) =>
+				response.json().then((body) => {
+					if (response.ok) {
+						enqueueSnackbar("Password change successful", {
+							variant: "success",
+						})
+					} else {
+						if ("detail" in body) {
+							setDetails(body["detail"])
 						} else {
-							if ("detail" in body) {
-								setDetails(body["detail"])
-							} else {
-								setFieldErrors(body)
-							}
+							setFieldErrors(body)
 						}
-					})
-					.catch((ex) => {
-						setDetails("Unknown error occured")
-					})
-			}
-		)
+					}
+				})
+			)
+			.catch((_) => {
+				setDetails("Unknown error occured")
+			})
 	}
 
 	return (

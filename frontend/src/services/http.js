@@ -48,6 +48,7 @@ export const useHttp = () => {
 				.catch((exception) => {
 					console.error(exception)
 					enqueueSnackbar("Unknown error occurred")
+					return Promise.reject(exception)
 				}),
 		[] // eslint-disable-line react-hooks/exhaustive-deps
 	) // enqueueSnackbar will change every time useSnackbar is called, therefore we can't depend on it

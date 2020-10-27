@@ -42,10 +42,9 @@ export const ResetPassword = () => {
 			return
 		}
 
-		resetPassword(newPassword, token).then((response) => {
-			response
-				.json()
-				.then((body) => {
+		resetPassword(newPassword, token)
+			.then((response) =>
+				response.json().then((body) => {
 					if (response.ok) {
 						enqueueSnackbar("Password changed successfully", {
 							variant: "success",
@@ -59,10 +58,10 @@ export const ResetPassword = () => {
 						}
 					}
 				})
-				.catch((ex) => {
-					setDetails("Unknown error occured")
-				})
-		})
+			)
+			.catch((_) => {
+				setDetails("Unknown error occured")
+			})
 	}
 
 	return (

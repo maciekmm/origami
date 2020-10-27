@@ -27,11 +27,10 @@ export const RegisterPage = () => {
 			usernameInput.current.value,
 			emailInput.current.value,
 			passwordInput.current.value
-		).then((response) => {
-			passwordInput.current.value = ""
-			response
-				.json()
-				.then((body) => {
+		)
+			.then((response) => {
+				passwordInput.current.value = ""
+				return response.json().then((body) => {
 					if (response.ok) {
 						enqueueSnackbar("Sign up successful", { variant: "success" })
 						history.push("/login")
@@ -43,10 +42,10 @@ export const RegisterPage = () => {
 						}
 					}
 				})
-				.catch((ex) => {
-					setDetails("Unknown error occured")
-				})
-		})
+			})
+			.catch((_) => {
+				setDetails("Unknown error occured")
+			})
 	}
 
 	return (
