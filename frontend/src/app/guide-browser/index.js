@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useCommunityService } from "../../services/community"
-import { useCommunityStore } from "@store/community"
+import { useCommunityStore, useIsAuthenticated } from "@store/community"
 import { useHistory } from "react-router-dom"
 import { GuideList } from "@dom-components/guide-list"
 import Button from "@material-ui/core/Button"
@@ -13,6 +13,7 @@ import { useCreatorStore } from "@store/creator"
 export const GuideBrowser = (props) => {
 	const { fetchGuides, likeGuide, unlikeGuide } = useCommunityService()
 	const [{ userId }] = useCommunityStore()
+	const isAuthenticated = useIsAuthenticated()
 	const [{}, dispatchCreator] = useCreatorStore()
 
 	const [userGuides, setUserGuides] = useState([])
@@ -66,7 +67,7 @@ export const GuideBrowser = (props) => {
 					toggleLikeGuide={toggleLikeGuide}
 				></GuideList>
 			)}
-			{userGuides.length > 0 && (
+			{isAuthenticated && (
 				<GuideList
 					title="My guides"
 					openGuide={openGuide}
