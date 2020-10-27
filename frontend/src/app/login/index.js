@@ -33,31 +33,28 @@ export const LoginPage = () => {
 
 	const performLogin = (event) => {
 		event.preventDefault()
-		login(usernameInput.current.value, passwordInput.current.value).then(
-			(response) => {
+		login(usernameInput.current.value, passwordInput.current.value)
+			.then((response) => {
 				passwordInput.current.value = ""
-				response
-					.json()
-					.then((body) => {
-						if (response.status === 200) {
-							enqueueSnackbar("Sign in successful", { variant: "success" })
-							dispatch({
-								type: LOGIN,
-								accessToken: body["access"],
-								refreshToken: body["refresh"],
-							})
-							history.push("/")
+				return response.json().then((body) => {
+					if (response.status === 200) {
+						enqueueSnackbar("Sign in successful", { variant: "success" })
+						dispatch({
+							type: LOGIN,
+							accessToken: body["access"],
+							refreshToken: body["refresh"],
+						})
+						history.push("/")
+					} else {
+						if ("detail" in body) {
+							setDetails(body["detail"])
 						} else {
-							if ("detail" in body) {
-								setDetails(body["detail"])
-							} else {
-								setDetails("Unknown error occured")
-							}
+							setDetails("Unknown error occured")
 						}
-					})
-					.catch((ex) => setDetails("Unknown error occured"))
-			}
-		)
+					}
+				})
+			})
+			.catch((ex) => setDetails("Unknown error occured"))
 	}
 
 	return (
