@@ -3,6 +3,7 @@ import preprocessFOLDModel, {
 	moveRootFrameToFileFrames,
 	DEFAULT_FRAME_RATE,
 	markFramesToInheritDeeply,
+	normalizeCoordinates,
 } from "./preprocess"
 
 import { FRAME_RATE_PROPERTY } from "./properties"
@@ -110,19 +111,6 @@ describe("setDefaultFrameRate", () => {
 	})
 })
 
-describe("preprocessFOLDModel", () => {
-	it("should work in-place for performance reasons", () => {
-		// given
-		const model = {
-			file_frames: [{}],
-		}
-		// when
-		const output = preprocessFOLDModel(model)
-		// then
-		expect(output).toBe(model)
-	})
-})
-
 describe("markFramesToInheritDeeply", () => {
 	it("should mark all frames as deeply inherent", () => {
 		const model = modelFactory()
@@ -133,5 +121,138 @@ describe("markFramesToInheritDeeply", () => {
 		preprocessedModel.file_frames.forEach((frame) => {
 			expect(frame).toHaveProperty("frame_og:inheritDeep")
 		})
+	})
+})
+
+describe("normalizeCoordinates", () => {
+	it("does nothing if perfectly bound", () => {
+		const model = {
+			file_frames: [
+				{
+					frame_title: "",
+					vertices_coords: [
+						[-1, -1, -1],
+						[1, 1, 1],
+					],
+				},
+			],
+		}
+
+		normalizeCoordinates(model)
+		expect(model.file_frames[0].vertices_coords).toStrictEqual([
+			[-1, -1, -1],
+			[1, 1, 1],
+		])
+	})
+
+	it("scales model up if too small", () => {
+		const model = {
+			file_frames: [
+				{
+					frame_title: "",
+					vertices_coords: [
+						[-0.5, -0.5, -0.5],
+						[0.5, 0.5, 0.5],
+					],
+				},
+			],
+		}
+
+		normalizeCoordinates(model)
+		expect(model.file_frames[0].vertices_coords).toStrictEqual([
+			[-1, -1, -1],
+			[1, 1, 1],
+		])
+	})
+
+	it("scales model down if too big", () => {
+		const model = {
+			file_frames: [
+				{
+					frame_title: "",
+					vertices_coords: [
+						[-2, -2, -2],
+						[2, 2, 2],
+					],
+				},
+			],
+		}
+
+		normalizeCoordinates(model)
+		expect(model.file_frames[0].vertices_coords).toStrictEqual([
+			[-1, -1, -1],
+			[1, 1, 1],
+		])
+	})
+
+	it("translates model to center if off-center", () => {
+		const model = {
+			file_frames: [
+				{
+					frame_title: "",
+					vertices_coords: [
+						[0, 0, 0],
+						[2, 2, 2],
+					],
+				},
+			],
+		}
+
+		normalizeCoordinates(model)
+		expect(model.file_frames[0].vertices_coords).toStrictEqual([
+			[-1, -1, -1],
+			[1, 1, 1],
+		])
+	})
+
+	it("translates model to center if off-center and scales if not-scaled", () => {
+		const model = {
+			file_frames: [
+				{
+					frame_title: "",
+					vertices_coords: [
+						[0, 0, 0],
+						[1, 1, 1],
+					],
+				},
+			],
+		}
+
+		normalizeCoordinates(model)
+		expect(model.file_frames[0].vertices_coords).toStrictEqual([
+			[-1, -1, -1],
+			[1, 1, 1],
+		])
+	})
+
+	it("scales the model according to the first frame and keeps same scale factor throughout all frames", () => {
+		const model = {
+			file_frames: [
+				{
+					frame_title: "",
+					vertices_coords: [
+						[0, 0, 0],
+						[1, 1, 1],
+					],
+				},
+				{
+					frame_title: "",
+					vertices_coords: [
+						[0, 0, 0],
+						[2, 2, 2],
+					],
+				},
+			],
+		}
+
+		normalizeCoordinates(model)
+		expect(model.file_frames[0].vertices_coords).toStrictEqual([
+			[-1, -1, -1],
+			[1, 1, 1],
+		])
+		expect(model.file_frames[1].vertices_coords).toStrictEqual([
+			[-1, -1, -1],
+			[3, 3, 3],
+		])
 	})
 })

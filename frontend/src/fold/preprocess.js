@@ -3,7 +3,7 @@ import { FRAME_RATE_PROPERTY } from "./properties"
 
 export const DEFAULT_FRAME_RATE = 24
 export const DEFAULT_CREATOR = "Origuide - https://origami.wtf"
-export const DEFAULT_BOUNDING_BOX_DIAGONAL = 2
+export const DEFAULT_BOUNDING_BOX_DIAGONAL = 2 * Math.sqrt(3)
 
 export default function preprocessFOLDModel(foldModel) {
 	moveRootFrameToFileFrames(foldModel)
@@ -59,15 +59,14 @@ export function normalizeCoordinates(foldModel) {
 	const firstFrame = foldModel.file_frames[0]
 	const firstFrameVertices = firstFrame["vertices_coords"]
 
-	const furthestDistanceFromOrigin = getFurthestDistanceFromOrigin(
+	const firstFrameBoundingBox = computeBoundingBox(firstFrameVertices)
+	const firstFrameCenteredVertices = centerVertices(
+		firstFrameBoundingBox,
 		firstFrameVertices
 	)
-	const normalizedFirstFrameVertices = normalizeBoundingBox(
-		firstFrameVertices,
-		DEFAULT_BOUNDING_BOX_DIAGONAL,
-		furthestDistanceFromOrigin
+	const furthestDistanceFromOrigin = getFurthestDistanceFromOrigin(
+		firstFrameCenteredVertices
 	)
-	const firstFrameBoundingBox = computeBoundingBox(normalizedFirstFrameVertices)
 
 	const normalizeFrame = (frame) => {
 		const vertices = frame["vertices_coords"]
@@ -75,15 +74,15 @@ export function normalizeCoordinates(foldModel) {
 			return frame
 		}
 
+		const centeredCoords = centerVertices(firstFrameBoundingBox, vertices)
 		const normalized = normalizeBoundingBox(
-			vertices,
+			centeredCoords,
 			DEFAULT_BOUNDING_BOX_DIAGONAL,
 			furthestDistanceFromOrigin
 		)
-		const centeredCoords = centerVertices(firstFrameBoundingBox, normalized)
 		return {
 			...frame,
-			vertices_coords: centeredCoords,
+			vertices_coords: normalized,
 		}
 	}
 	foldModel.file_frames = foldModel.file_frames.map(normalizeFrame)
