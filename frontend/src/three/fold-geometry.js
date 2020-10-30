@@ -17,7 +17,7 @@ export default class FoldGeometry {
 		this.geometry.dispose()
 	}
 
-	addVertex(x, y, z) {
+	addVertex(x, y, z = 0) {
 		const vertexIdx = this.vertices.push(new THREE.Vector3(x, y, z)) - 1
 		this.geometry.verticesNeedUpdate = true
 		return vertexIdx
@@ -44,7 +44,7 @@ export default class FoldGeometry {
 		this.geometry.computeVertexNormals()
 	}
 
-	setVertexPosition(id, x, y, z) {
+	setVertexPosition(id, x, y, z = 0) {
 		const vertex = this.vertices[id]
 		if (!vertex) {
 			throw "error setting position, no vertex with " + id + " found"

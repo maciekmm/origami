@@ -34,7 +34,7 @@ export default function EdgeSet({
 		vertices.forEach(([x, y, z], i) => {
 			vertexPositions[i * 3] = x
 			vertexPositions[i * 3 + 1] = y
-			vertexPositions[i * 3 + 2] = z
+			vertexPositions[i * 3 + 2] = z || 0
 		})
 
 		geometry.attributes.position.needsUpdate = true
