@@ -17,8 +17,11 @@ def solve_fold(fold_path):
     first_frame = fold.frames[0]
 
     vertices = create_vertices(first_frame.vertices)
-    vertices = translate_to_origin(vertices)
-    vertices = normalize_bounding_box(vertices, CONFIG['BOUNDING_BOX_DIAG_LEN'])
+
+    if CONFIG['NORMALIZE']:
+        vertices = translate_to_origin(vertices)
+        vertices = normalize_bounding_box(vertices, CONFIG['BOUNDING_BOX_DIAG_LEN'])
+        
     fold.update_root_frame_vertices(list(map(lambda v: v.pos.vec, vertices)))
 
     edges = create_edges(vertices,
