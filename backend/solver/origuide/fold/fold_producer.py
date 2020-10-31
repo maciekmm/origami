@@ -21,14 +21,18 @@ class FoldProducer:
         if len(self.base.steady_states) < self.step:
             raise RuntimeError("No steady state to base transition on")
 
-        self.transitions.append(
-            {
+        transition = {
                 **self.base.steady_states[self.step - 1].raw,
                 "frame_inherit": True,
                 "frame_parent": len(self.transitions) - 1,
-                "vertices_coords": self.transitions[-1]["vertices_coords"]
+                "vertices_coords": self.transitions[-1]["vertices_coords"],
             }
-        )
+
+        if self.step < len(self.base.steady_states):
+            transition["edges_assignment"] = self.base.steady_states[self.step].raw["edges_assignment"]
+
+        self.transitions.append(transition)
+
         self.last_steady_frame = len(self.transitions) - 1
         self.encoder.next_step()
 
