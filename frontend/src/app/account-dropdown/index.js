@@ -50,10 +50,10 @@ export const AccountDropdown = (props) => {
 		>
 			{!username
 				? [
-						<MenuItem key="login" onClick={() => navigateTo("login")}>
+						<MenuItem key="login" onClick={() => navigateTo("/login")}>
 							Sign in
 						</MenuItem>,
-						<MenuItem key="register" onClick={() => navigateTo("register")}>
+						<MenuItem key="register" onClick={() => navigateTo("/register")}>
 							Sign up
 						</MenuItem>,
 				  ]

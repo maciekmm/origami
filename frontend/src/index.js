@@ -45,30 +45,14 @@ function AppWithStore() {
 							</Grid>
 						</Toolbar>
 					</AppBar>
-					<Route exact path="/">
-						<GuideBrowser />
-					</Route>
-					<Route path={["/view/:guideId", "/view"]}>
-						<GuidePlayer />
-					</Route>
-					<Route path="/create">
-						<GuideCreator />
-					</Route>
-					<Route path="/login">
-						<LoginPage />
-					</Route>
-					<Route path="/register">
-						<RegisterPage />
-					</Route>
-					<Route path="/settings">
-						<SettingsPage />
-					</Route>
-					<Route exact path="/reset-password">
-						<EmailPasswordReset />
-					</Route>
-					<Route path="/reset-password/:token">
-						<ResetPassword />
-					</Route>
+					<Route exact path="/" component={GuideBrowser} />
+					<Route path={["/view/:guideId", "/view"]} component={GuidePlayer} />
+					<Route path="/create" component={GuideCreator} />
+					<Route path="/login" component={LoginPage} />
+					<Route path="/register" component={RegisterPage} />
+					<Route path="/settings" component={SettingsPage} />
+					<Route exact path="/reset-password" component={EmailPasswordReset} />
+					<Route path="/reset-password/:token" component={ResetPassword} />
 				</Router>
 			</StoreProvider>
 		</SnackbarProvider>
