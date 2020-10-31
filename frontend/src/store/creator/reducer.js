@@ -2,8 +2,9 @@ import {
 	ADD_STEP,
 	REMOVE_STEP,
 	SELECT_EDGE,
-	SET_EDGE_ASSIGNMENT,
-	SET_EDGE_TARGET_ANGLE,
+	TOGGLE_EDGE_SELECTION,
+	SET_EDGES_ASSIGNMENT,
+	SET_EDGES_TARGET_ANGLE,
 	SET_FILE_AUTHOR,
 	SET_FILE_DESCRIPTION,
 	SET_FILE_TITLE,
@@ -26,7 +27,7 @@ export const initialState = {
 		markFramesToInheritDeeply(model)
 		return model
 	})(),
-	selectedEdge: null,
+	selectedEdges: [],
 }
 
 export function reducer(state, action) {
@@ -47,9 +48,9 @@ export function reducer(state, action) {
 		}
 	}
 
-	const setEdgeArrayProperty = (property, value) => {
-		if (state.selectedEdge !== 0 && !state.selectedEdge) {
-			console.warn(`Tried to change ${property} of null edge`)
+	const setEdgesArrayProperty = (edges, property, value) => {
+		if (edges.length === 0) {
+			console.warn(`Tried to change ${property} of no edges`)
 			return state
 		}
 		const prefixedProperty = "edges_" + property
@@ -59,7 +60,9 @@ export function reducer(state, action) {
 			...(currentStep[prefixedProperty] ||
 				Array(state.model.file_frames[0].edges_vertices.length).fill(null)),
 		]
-		values[state.selectedEdge] = value
+		for (let selectedEdge of edges) {
+			values[selectedEdge] = value
+		}
 
 		const modifiedStep = { ...currentStep }
 		modifiedStep[prefixedProperty] = values
@@ -101,7 +104,26 @@ export function reducer(state, action) {
 		case SELECT_EDGE:
 			return {
 				...state,
-				selectedEdge: action.edge,
+				selectedEdges: action && action.edge !== null ? [action.edge] : [],
+			}
+		case TOGGLE_EDGE_SELECTION:
+			if (!action || action.edge === null) {
+				return state
+			}
+			const indexInSelectedEdges = state.selectedEdges.indexOf(action.edge)
+			if (indexInSelectedEdges !== -1) {
+				return {
+					...state,
+					selectedEdges: [
+						...state.selectedEdges.slice(0, indexInSelectedEdges),
+						...state.selectedEdges.slice(indexInSelectedEdges + 1),
+					],
+				}
+			} else {
+				return {
+					...state,
+					selectedEdges: [...state.selectedEdges, action.edge],
+				}
 			}
 		case SET_FILE_TITLE:
 			return {
@@ -137,16 +159,24 @@ export function reducer(state, action) {
 				...state.model.file_frames[state.frame],
 				frame_title: action.title,
 			})
-		case SET_EDGE_TARGET_ANGLE:
-			return setEdgeArrayProperty("targetAngle", action.targetAngle)
-		case SET_EDGE_ASSIGNMENT:
-			return setEdgeArrayProperty("assignment", action.assignment)
+		case SET_EDGES_TARGET_ANGLE:
+			return setEdgesArrayProperty(
+				action.edges,
+				"targetAngle",
+				action.targetAngle
+			)
+		case SET_EDGES_ASSIGNMENT:
+			return setEdgesArrayProperty(
+				action.edges,
+				"assignment",
+				action.assignment
+			)
 		case LOAD_MODEL:
 			const viewerState = viewerReducer(state, action)
 			markFramesToInheritDeeply(viewerState.model)
 			return {
 				...viewerState,
-				selectedEdge: null,
+				selectedEdges: [],
 			}
 		default:
 			return viewerReducer(state, action)

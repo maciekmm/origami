@@ -7,8 +7,8 @@ import { useCreatorStore } from "@store/creator"
 import { downloadModel, modelToBase64 } from "../../../download"
 import { getComputedProperty } from "@fold/properties"
 import {
-	SET_EDGE_ASSIGNMENT,
-	SET_EDGE_TARGET_ANGLE,
+	SET_EDGES_ASSIGNMENT,
+	SET_EDGES_TARGET_ANGLE,
 	SET_FILE_AUTHOR,
 	SET_FILE_DESCRIPTION,
 	SET_FILE_TITLE,
@@ -21,39 +21,55 @@ import { useSnackbar } from "notistack"
 import { useHistory } from "react-router-dom"
 
 export default function ConfigurationSidebar({ thumbnailFactory }) {
-	const [{ model, frame, selectedEdge }, dispatch] = useCreatorStore()
+	const [{ model, frame, selectedEdges }, dispatch] = useCreatorStore()
 
 	const currentStep = model && model.file_frames[frame]
 
-	const getEdgeArrayProperty = (property) => {
-		if (selectedEdge === null) return null
-		const value = getComputedProperty(
+	const getSelectedEdgesProperty = (property) => {
+		if (selectedEdges.length === 0) return null
+		const values = getComputedProperty(
 			model.file_frames,
 			frame,
 			"edges_" + property
 		)
-		if (value === undefined) {
-			return value
+		if (values === undefined) {
+			return values
 		}
-		return value[selectedEdge]
+
+		let firstValue = values[selectedEdges[0]]
+		for (let selectedEge of selectedEdges) {
+			if (values[selectedEge] !== firstValue) {
+				firstValue = null
+			}
+		}
+
+		return firstValue
 	}
 
 	/* eslint-disable react-hooks/exhaustive-deps */
-	const assignment = useMemo(() => getEdgeArrayProperty("assignment"), [
-		selectedEdge,
+	const assignment = useMemo(() => getSelectedEdgesProperty("assignment"), [
+		selectedEdges,
 		model.file_frames,
 	])
 
 	/* eslint-disable react-hooks/exhaustive-deps */
-	const targetAngle = useMemo(() => getEdgeArrayProperty("targetAngle"), [
-		selectedEdge,
+	const targetAngle = useMemo(() => getSelectedEdgesProperty("targetAngle"), [
+		selectedEdges,
 		model.file_frames,
 	])
 
 	const setAssignment = (assignment) =>
-		dispatch({ type: SET_EDGE_ASSIGNMENT, assignment: assignment })
+		dispatch({
+			type: SET_EDGES_ASSIGNMENT,
+			edges: selectedEdges,
+			assignment: assignment,
+		})
 	const setTargetAngle = (targetAngle) =>
-		dispatch({ type: SET_EDGE_TARGET_ANGLE, targetAngle: targetAngle })
+		dispatch({
+			type: SET_EDGES_TARGET_ANGLE,
+			edges: selectedEdges,
+			targetAngle: targetAngle,
+		})
 	const setFileTitle = (title) =>
 		dispatch({ type: SET_FILE_TITLE, title: title })
 	const setFileDescription = (description) =>
@@ -101,9 +117,9 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 
 	return (
 		<div className={styles.sidebar}>
-			{assignment && (
+			{selectedEdges.length > 0 && (
 				<EdgeConfiguration
-					assignment={assignment}
+					assignment={assignment || ""}
 					onAssignmentChange={setAssignment}
 					targetAngle={targetAngle || ""}
 					onTargetAngleChange={setTargetAngle}
