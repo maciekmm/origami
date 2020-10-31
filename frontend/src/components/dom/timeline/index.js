@@ -14,14 +14,17 @@ export default function Timeline({
 }) {
 	const steadyIds = model ? getSteadyFrameIds(model.file_frames) : []
 
-	const steps = steadyIds.map((steadyFrameId) => {
+	const steps = steadyIds.map((steadyFrameId, sequence) => {
 		const state = model.file_frames[steadyFrameId]
-		const title = state.frame_title || `Step ${steadyFrameId}`
+		const title = state.frame_title || `Step ${sequence}`
+		const selected =
+			frame >= steadyFrameId &&
+			frame < (steadyIds[sequence + 1] || Number.MAX_SAFE_INTEGER)
 
 		return (
 			<TimelineStep
 				frame={steadyFrameId}
-				selected={steadyFrameId === frame}
+				selected={selected}
 				title={title}
 				onClick={() => selectFrame(steadyFrameId)}
 				key={steadyFrameId}
