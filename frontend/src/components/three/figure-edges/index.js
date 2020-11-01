@@ -36,7 +36,7 @@ export default function FigureEdges({
 			edgesPerAssignment[assignment].push([i, edgesVertices[i]])
 		})
 		return edgesPerAssignment
-	}, [edgesAssignment, edgesVertices, selectedEdges])
+	}, [edgesAssignment, edgesVertices])
 
 	const mousePosition = useRef(mouse)
 

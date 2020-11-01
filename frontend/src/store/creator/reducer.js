@@ -60,8 +60,8 @@ export function reducer(state, action) {
 			...(currentStep[prefixedProperty] ||
 				Array(state.model.file_frames[0].edges_vertices.length).fill(null)),
 		]
-		for (let selectedEdge of edges) {
-			values[selectedEdge] = value
+		for (let edge of edges) {
+			values[edge] = value
 		}
 
 		const modifiedStep = { ...currentStep }
@@ -107,7 +107,7 @@ export function reducer(state, action) {
 				selectedEdges: action && action.edge !== null ? [action.edge] : [],
 			}
 		case TOGGLE_EDGE_SELECTION:
-			if (!action || action.edge === null) {
+			if (action.edge === null || action.edge === undefined) {
 				return state
 			}
 			const indexInSelectedEdges = state.selectedEdges.indexOf(action.edge)
