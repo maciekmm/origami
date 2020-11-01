@@ -38,7 +38,7 @@ function SceneConfiguration({ innerRef }) {
 }
 
 export const Viewer = React.forwardRef(function Viewer(
-	{ model, frame, onEdgeSelect, selectedEdge },
+	{ model, frame, onEdgeSelect, selectedEdges },
 	forwardRef
 ) {
 	const facesVertices = useMemo(
@@ -70,7 +70,7 @@ export const Viewer = React.forwardRef(function Viewer(
 				edgesAssignment={edgesAssignment}
 				edgesVertices={edgesVertices}
 				onEdgeSelect={onEdgeSelect}
-				selectedEdge={selectedEdge}
+				selectedEdges={selectedEdges || []}
 			/>
 		</Canvas>
 	)

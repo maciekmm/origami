@@ -11,7 +11,7 @@ export default function Figure({
 	edgesVertices,
 	edgesAssignment,
 	onEdgeSelect,
-	selectedEdge,
+	selectedEdges,
 }) {
 	const [foldGeometry] = useState(() => new FoldGeometry())
 
@@ -40,7 +40,7 @@ export default function Figure({
 				edgesVertices={edgesVertices}
 				vertices={verticesCoords}
 				onEdgeSelect={onEdgeSelect}
-				selectedEdge={selectedEdge}
+				selectedEdges={selectedEdges}
 			></FigureEdges>
 			<meshPhongMaterial
 				side={THREE.FrontSide}

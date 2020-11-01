@@ -7,13 +7,21 @@ import ConfigurationSidebar from "./configuration-sidebar"
 import { TimelineStepAdd } from "@dom-components/timeline-step-add"
 import { useCreatorStore } from "@store/creator"
 import { LOAD_MODEL, SELECT_FRAME } from "../../store/viewer/actions"
-import { ADD_STEP, REMOVE_STEP, SELECT_EDGE } from "../../store/creator/actions"
+import {
+	ADD_STEP,
+	REMOVE_STEP,
+	SELECT_EDGE,
+	TOGGLE_EDGE_SELECTION,
+} from "../../store/creator/actions"
 import styles from "./style.css"
 
 export default function GuideCreator() {
-	const [{ model, frame, selectedEdge }, dispatch] = useCreatorStore()
+	const [{ model, frame, selectedEdges }, dispatch] = useCreatorStore()
 
-	const selectEdge = (edge) => dispatch({ type: SELECT_EDGE, edge: edge })
+	const selectEdge = (edge, isToggleMode) => {
+		const action = isToggleMode ? TOGGLE_EDGE_SELECTION : SELECT_EDGE
+		dispatch({ type: action, edge: edge })
+	}
 	const selectFrame = (frame) => dispatch({ type: SELECT_FRAME, frame: frame })
 	const removeStep = () => dispatch({ type: REMOVE_STEP })
 	const canvasRef = useRef()
@@ -38,7 +46,7 @@ export default function GuideCreator() {
 								model={model}
 								frame={frame}
 								onEdgeSelect={selectEdge}
-								selectedEdge={selectedEdge}
+								selectedEdges={selectedEdges}
 							/>
 						</Grid>
 						<Grid item xs>

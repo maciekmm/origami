@@ -12,15 +12,15 @@ const ASSIGNMENT_COLORS = {
 	C: 0x00ff00,
 }
 
-const RAYCASTER_LINE_THRESHOLD = 0.02
-const MAXIMUM_MOUSE_DISPLACEMENT_FOR_EDGE_TO_SELECT = 0.01
-const LINE_WIDTH = 10
+const RAYCASTER_LINE_THRESHOLD = 0.03
+const MAXIMUM_MOUSE_DISPLACEMENT_FOR_EDGE_TO_SELECT = 0.02
+const SELECTED_EDGE_WIDTH = 10
 
 export default function FigureEdges({
 	edgesVertices,
 	edgesAssignment,
 	vertices,
-	selectedEdge,
+	selectedEdges,
 	onEdgeSelect,
 }) {
 	const { camera, mouse } = useThree()
@@ -33,11 +33,10 @@ export default function FigureEdges({
 		}
 
 		edgesAssignment.forEach((assignment, i) => {
-			if (i === selectedEdge) return
-			edgesPerAssignment[assignment].push(edgesVertices[i])
+			edgesPerAssignment[assignment].push([i, edgesVertices[i]])
 		})
 		return edgesPerAssignment
-	}, [edgesAssignment, edgesVertices, selectedEdge])
+	}, [edgesAssignment, edgesVertices])
 
 	const mousePosition = useRef(mouse)
 
@@ -58,12 +57,13 @@ export default function FigureEdges({
 			return
 		}
 		e.stopPropagation()
+		const isToggleMode = e.ctrlKey
 
 		raycaster.setFromCamera(mouse, camera)
 
 		const intersects = raycaster.intersectObjects(edgeSets.children)
 		if (intersects.length === 0) {
-			onEdgeSelect(null)
+			onEdgeSelect(null, isToggleMode)
 			return
 		}
 
@@ -85,8 +85,10 @@ export default function FigureEdges({
 			return
 		}
 
-		onEdgeSelect(edgeId)
+		onEdgeSelect(edgeId, isToggleMode)
 	}
+
+	const isSelected = (edgeId) => selectedEdges.indexOf(edgeId) !== -1
 
 	return (
 		<group
@@ -96,25 +98,27 @@ export default function FigureEdges({
 		>
 			{Object.keys(edgesPerAssignment)
 				.filter((assignment) => edgesPerAssignment[assignment].length > 0)
-				.map((assignment) => (
+				.map((assignment) => [
 					<EdgeSet
 						key={assignment}
 						vertices={vertices}
-						edges={edgesPerAssignment[assignment]}
+						edges={edgesPerAssignment[assignment]
+							.filter(([id, _]) => !isSelected(id))
+							.map(([_, vertices]) => vertices)}
 						color={ASSIGNMENT_COLORS[assignment]}
 						assignment={assignment}
-					></EdgeSet>
-				))}
-			{(selectedEdge === 0 || !!selectedEdge) && (
-				<EdgeSet
-					key={selectedEdge}
-					vertices={vertices}
-					edges={[edgesVertices[selectedEdge]]}
-					color={ASSIGNMENT_COLORS[edgesAssignment[selectedEdge]]}
-					lineWidth={LINE_WIDTH}
-					assignment={edgesAssignment[selectedEdge]}
-				></EdgeSet>
-			)}
+					></EdgeSet>,
+					<EdgeSet
+						key={`selected-${assignment}`}
+						vertices={vertices}
+						edges={edgesPerAssignment[assignment]
+							.filter(([id, _]) => isSelected(id))
+							.map(([_, vertices]) => vertices)}
+						color={ASSIGNMENT_COLORS[assignment]}
+						assignment={assignment}
+						lineWidth={SELECTED_EDGE_WIDTH}
+					></EdgeSet>,
+				])}
 		</group>
 	)
 }
