@@ -35,7 +35,7 @@ def create_faces(vertices, edges, faces_vertices):
         for face_vertices in triangles:
             face = Face(i, *face_vertices)  # TODO: ? This makes id in Face not unique (which might not be a problem)
 
-            face_edges = zip(face_vertices, list(face_vertices[1:]) + [face_vertices[0]])
+            face_edges = zip(face_vertices, face_vertices[1:] + [face_vertices[0]])
             for p in face_edges:
                 v1 = p[0].id
                 v2 = p[1].id

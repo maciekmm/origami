@@ -8,6 +8,7 @@ from origuide.config import CONFIG
 from origuide.geometry.geometry_models import Vertex, Edge, Face
 from origuide.geometry.generic_models import Vector3
 
+
 def assignment_to_color(assignment):
     if assignment == 'M':
         return 'red'
@@ -17,6 +18,7 @@ def assignment_to_color(assignment):
         return 'yellow'
     else:
         return 'gray'
+
 
 def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces):
     forces = np.array(forces)
@@ -37,10 +39,6 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
         vel_xs.append(v.velocity[0])
         vel_ys.append(v.velocity[1])
         vel_zs.append(v.velocity[2])
-
-    display_forces = np.concatenate((forces, [forces[0, :]]))
-
-    us, vs, ws = zip(*display_forces)
 
     xns, yns, zns, uns, vns, wns = [], [], [], [], [], []
     for face in faces:
@@ -69,6 +67,8 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
 
     # Plot forces
     if CONFIG['DEBUG_PLOT_FORCES']:
+        display_forces = np.concatenate((forces, [forces[0, :]]))
+        us, vs, ws = zip(*display_forces)
         ax.quiver(xs, ys, zs, us, vs, ws)
 
     # Plot faces' normals
@@ -79,7 +79,7 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
     if CONFIG['DEBUG_PLOT_VELOCITIES']:
         ax.quiver(xs, ys, zs, vel_xs, vel_ys, vel_zs, color='r')
 
-    box_lim = 2
+    box_lim = 16
 
     ax.set_xlim([-box_lim, box_lim])
     ax.set_ylim([-box_lim, box_lim])

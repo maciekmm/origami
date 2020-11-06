@@ -1,10 +1,11 @@
+import math
+
 from origuide.config import CONFIG
 from origuide.geometry.geometry_models import Edge, EDGE_MOUNTAIN, EDGE_VALLEY,\
     EDGE_BOUNDARY, EDGE_FLAT, EDGE_UNKNOWN, Face, ForceName
 from origuide.geometry.generic_tools import vector_from_to, triangle_height, cot
-import numpy as np
 
-TWO_PI = 2 * np.pi
+TWO_PI = 2 * math.pi
 ANGLE_FLIP_THRESHOLD = 5.0
 
 
