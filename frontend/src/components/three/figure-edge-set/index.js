@@ -53,7 +53,7 @@ export default function EdgeSet({
 		<lineSegments renderOrder={1} userData={{ assignment: assignment }}>
 			<primitive attach="geometry" object={geometry} />
 			<lineBasicMaterial
-				linewidth={lineWidth || 2}
+				linewidth={lineWidth || 2.5}
 				color={color}
 				attach="material"
 			></lineBasicMaterial>

@@ -4,11 +4,11 @@ import EdgeSet from "../figure-edge-set"
 import { useThree, useResource } from "react-three-fiber"
 
 const ASSIGNMENT_COLORS = {
-	M: 0xff0000,
-	V: 0x0000ff,
+	M: 0xd63131,
+	V: 0x3131d6,
 	B: 0x000000,
-	U: 0x000000,
-	F: 0x000000,
+	U: 0xb4b4b4,
+	F: 0x737373,
 	C: 0x00ff00,
 }
 

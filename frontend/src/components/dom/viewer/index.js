@@ -31,8 +31,8 @@ function SceneConfiguration({ innerRef }) {
 	return (
 		<>
 			<orbitControls args={[camera, domElement]} />
-			<ambientLight intensity={0.3} />
-			<pointLight ref={lightRef} intensity={0.8} />
+			<ambientLight intensity={0.4} />
+			<pointLight ref={lightRef} intensity={0.5} />
 		</>
 	)
 }
