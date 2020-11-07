@@ -44,12 +44,13 @@ export default function Figure({
 			></FigureEdges>
 			<meshPhongMaterial
 				side={THREE.FrontSide}
-				color={0x22ff22}
+				color={0x31d631}
 				vertexColors={THREE.FaceColors}
 				attach="material"
 				polygonOffset={true}
 				flatShading={true}
 				polygonOffsetFactor={POLYGON_OFFSET_FACTOR}
+				shininess={0}
 			></meshPhongMaterial>
 			<primitive attach="geometry" object={foldGeometry.geometry} />
 			<mesh>
@@ -61,6 +62,7 @@ export default function Figure({
 					flatShading={true}
 					polygonOffset={true}
 					polygonOffsetFactor={POLYGON_OFFSET_FACTOR}
+					shininess={0}
 				></meshPhongMaterial>
 				<primitive attach="geometry" object={foldGeometry.geometry} />
 			</mesh>
