@@ -79,7 +79,7 @@ def plot3d(vertices: List[Vertex], edges: List[Edge], faces: List[Face], forces)
     if CONFIG['DEBUG_PLOT_VELOCITIES']:
         ax.quiver(xs, ys, zs, vel_xs, vel_ys, vel_zs, color='r')
 
-    box_lim = 16
+    box_lim = 2
 
     ax.set_xlim([-box_lim, box_lim])
     ax.set_ylim([-box_lim, box_lim])

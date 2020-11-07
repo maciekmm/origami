@@ -10,7 +10,7 @@ ANGLE_FLIP_THRESHOLD = 5.0
 
 
 def set_crease_force(edge: Edge):
-    if edge.assignment == EDGE_BOUNDARY or edge.assignment == EDGE_UNKNOWN:
+    if edge.assignment == EDGE_BOUNDARY:
         return
 
     if edge.face_left is None or edge.face_right is None:
@@ -18,8 +18,10 @@ def set_crease_force(edge: Edge):
 
     if edge.assignment == EDGE_MOUNTAIN or edge.assignment == EDGE_VALLEY:
         k_crease = edge.l0 * CONFIG['FOLD_STIFFNESS']
-    elif edge.assignment == EDGE_FLAT:
+    elif edge.assignment == EDGE_FLAT or edge.assignment == EDGE_UNKNOWN:
         k_crease = edge.l0 * CONFIG['FACET_STIFFNESS']
+    else:
+        raise RuntimeError("wrong face assignment: ", edge.assignment)
 
     theta = edge.faces_angle()
     theta_target = edge.target_angle
