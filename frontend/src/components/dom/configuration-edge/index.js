@@ -17,8 +17,8 @@ const EDGE_ASSIGNMENTS = {
 export default function EdgeConfiguration({
 	assignment,
 	onAssignmentChange,
-	targetAngle,
-	onTargetAngleChange,
+	foldAngle,
+	onFoldAngleChange,
 }) {
 	return (
 		<ConfigurationGroup title="Edge" defaultExpanded>
@@ -43,11 +43,11 @@ export default function EdgeConfiguration({
 			</FormControl>
 			<FormControl fullWidth margin="dense">
 				<TextField
-					id="configuration-edge-target-angle"
+					id="configuration-edge-fold-angle"
 					label="Target Angle"
 					type="number"
-					value={targetAngle}
-					onChange={(event) => onTargetAngleChange(event.target.value)}
+					value={foldAngle}
+					onChange={(event) => onFoldAngleChange(event.target.value)}
 					InputLabelProps={{
 						shrink: true,
 					}}

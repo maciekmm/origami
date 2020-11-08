@@ -8,7 +8,7 @@ import { downloadModel, modelToBase64 } from "../../../download"
 import { getComputedProperty } from "@fold/properties"
 import {
 	SET_EDGES_ASSIGNMENT,
-	SET_EDGES_TARGET_ANGLE,
+	SET_EDGES_FOLD_ANGLE,
 	SET_FILE_AUTHOR,
 	SET_FILE_DESCRIPTION,
 	SET_FILE_TITLE,
@@ -53,7 +53,7 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 	])
 
 	/* eslint-disable react-hooks/exhaustive-deps */
-	const targetAngle = useMemo(() => getSelectedEdgesProperty("targetAngle"), [
+	const foldAngle = useMemo(() => getSelectedEdgesProperty("foldAngle"), [
 		selectedEdges,
 		model.file_frames,
 	])
@@ -64,11 +64,11 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 			edges: selectedEdges,
 			assignment: assignment,
 		})
-	const setTargetAngle = (targetAngle) =>
+	const setFoldAngle = (foldAngle) =>
 		dispatch({
-			type: SET_EDGES_TARGET_ANGLE,
+			type: SET_EDGES_FOLD_ANGLE,
 			edges: selectedEdges,
-			targetAngle: targetAngle,
+			foldAngle: foldAngle,
 		})
 	const setFileTitle = (title) =>
 		dispatch({ type: SET_FILE_TITLE, title: title })
@@ -121,8 +121,8 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 				<EdgeConfiguration
 					assignment={assignment || ""}
 					onAssignmentChange={setAssignment}
-					targetAngle={targetAngle || ""}
-					onTargetAngleChange={setTargetAngle}
+					foldAngle={foldAngle || ""}
+					onFoldAngleChange={setFoldAngle}
 				/>
 			)}
 			<StepConfiguration

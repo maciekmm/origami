@@ -1,3 +1,6 @@
+import math
+
+
 def is_steady_state(frame):
     return "origuide:steady_state" in frame['frame_classes']
 
@@ -42,9 +45,12 @@ class Frame:
 
     @property
     def edges_fold_angles(self):
-        if 'edges_foldAngles' in self.raw:
-            return self.raw['edges_foldAngles']
+        if 'edges_foldAngle' in self.raw:
+            return self._preprocess_fold_angles(self.raw['edges_foldAngle'])
         return None
+
+    def _preprocess_fold_angles(self, fold_angles):
+        return list(map(lambda angle: math.radians(angle) if angle is not None else None, fold_angles))
 
 
 class Fold:

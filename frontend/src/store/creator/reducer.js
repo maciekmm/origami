@@ -4,7 +4,7 @@ import {
 	SELECT_EDGE,
 	TOGGLE_EDGE_SELECTION,
 	SET_EDGES_ASSIGNMENT,
-	SET_EDGES_TARGET_ANGLE,
+	SET_EDGES_FOLD_ANGLE,
 	SET_FILE_AUTHOR,
 	SET_FILE_DESCRIPTION,
 	SET_FILE_TITLE,
@@ -159,11 +159,11 @@ export function reducer(state, action) {
 				...state.model.file_frames[state.frame],
 				frame_title: action.title,
 			})
-		case SET_EDGES_TARGET_ANGLE:
+		case SET_EDGES_FOLD_ANGLE:
 			return setEdgesArrayProperty(
 				action.edges,
-				"targetAngle",
-				action.targetAngle
+				"foldAngle",
+				Number(action.foldAngle)
 			)
 		case SET_EDGES_ASSIGNMENT:
 			return setEdgesArrayProperty(
