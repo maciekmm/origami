@@ -49,12 +49,14 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 	/* eslint-disable react-hooks/exhaustive-deps */
 	const assignment = useMemo(() => getSelectedEdgesProperty("assignment"), [
 		selectedEdges,
+		frame,
 		model.file_frames,
 	])
 
 	/* eslint-disable react-hooks/exhaustive-deps */
 	const targetAngle = useMemo(() => getSelectedEdgesProperty("targetAngle"), [
 		selectedEdges,
+		frame,
 		model.file_frames,
 	])
 
