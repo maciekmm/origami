@@ -21,6 +21,9 @@ export const GuideList = ({
 	title,
 	guides,
 	openGuide,
+	editGuide,
+	deleteGuide,
+	showEdit,
 	toggleLikeGuide,
 	HeaderButton,
 }) => {
@@ -86,7 +89,10 @@ export const GuideList = ({
 						key={guide.id}
 						guide={guide}
 						onLike={toggleLikeGuide}
+						showOwnerActions={showEdit}
 						onOpen={openGuide}
+						onEdit={editGuide}
+						onDelete={deleteGuide}
 					/>
 				))}
 			</GridList>

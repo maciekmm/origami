@@ -47,7 +47,10 @@ function AppWithStore() {
 					</AppBar>
 					<Route exact path="/" component={GuideBrowser} />
 					<Route path={["/view/:guideId", "/view"]} component={GuidePlayer} />
-					<Route path="/create" component={GuideCreator} />
+					<Route
+						path={["/create/:guideId", "/create"]}
+						component={GuideCreator}
+					/>
 					<Route path="/login" component={LoginPage} />
 					<Route path="/register" component={RegisterPage} />
 					<Route path="/settings" component={SettingsPage} />

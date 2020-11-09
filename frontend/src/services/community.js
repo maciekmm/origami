@@ -125,6 +125,25 @@ export const useCommunityService = () => {
 					})
 				),
 
+			deleteGuide: (guideId) =>
+				withInvalidateFetchActions(
+					fetch(BACKEND_URL + "/guides/" + guideId + "/", {
+						method: "DELETE",
+					})
+				),
+
+			updateGuide: (guideId, file, isPrivate, thumbnail) =>
+				withInvalidateFetchActions(
+					fetch(BACKEND_URL + "/guides/" + guideId + "/", {
+						method: "PATCH",
+						body: JSON.stringify({
+							private: isPrivate,
+							guide_file: file,
+							thumbnail_file: thumbnail,
+						}),
+					})
+				),
+
 			likeGuide: (guideId) =>
 				withInvalidateFetchActions(
 					fetch(BACKEND_URL + "/guides/" + guideId + "/like/", {

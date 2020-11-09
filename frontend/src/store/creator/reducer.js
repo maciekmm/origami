@@ -2,7 +2,6 @@ import {
 	ADD_STEP,
 	REMOVE_STEP,
 	SELECT_EDGE,
-	TOGGLE_EDGE_SELECTION,
 	SET_EDGES_ASSIGNMENT,
 	SET_EDGES_TARGET_ANGLE,
 	SET_FILE_AUTHOR,
@@ -10,20 +9,24 @@ import {
 	SET_FILE_TITLE,
 	SET_STEP_DESCRIPTION,
 	SET_STEP_TITLE,
+	TOGGLE_EDGE_SELECTION,
 } from "./actions"
 
 import {
-	reducer as viewerReducer,
 	initialState as viewerInitialState,
+	reducer as viewerReducer,
 } from "../viewer/reducer"
 import { STEADY_STATE_CLASS } from "@fold/steadyness"
 import { LOAD_MODEL } from "../viewer/actions"
-import { markFramesToInheritDeeply } from "@fold/preprocess"
+import preprocessFOLDModel, {
+	markFramesToInheritDeeply,
+} from "@fold/preprocess"
+import penguinGuide from "../../../../assets/origuide-models/penguin.fold"
 
 export const initialState = {
 	...viewerInitialState,
 	model: (() => {
-		const model = viewerInitialState.model
+		const model = preprocessFOLDModel(penguinGuide)
 		markFramesToInheritDeeply(model)
 		return model
 	})(),
