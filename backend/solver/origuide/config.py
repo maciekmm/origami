@@ -5,12 +5,12 @@ import os
 
 CONFIG = {
     'DEBUG': False,
-    'DEBUG_PLOT': False,
+    'DEBUG_PLOT': True,
     'DEBUG_FORCES': False,
     'DEBUG_PLOT_FORCES': False,
     'DEBUG_PLOT_NORMALS': False,
     'DEBUG_PLOT_VELOCITIES': False,
-    'DEBUG_PLOT_EVERY': 50,
+    'DEBUG_PLOT_EVERY': 1500,
     'DEBUG_PLOT_FROM': 0,
     'PROFILE': False,
 
