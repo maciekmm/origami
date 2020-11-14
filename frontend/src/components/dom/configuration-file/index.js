@@ -2,7 +2,6 @@ import FormControl from "@material-ui/core/FormControl"
 import TextField from "@material-ui/core/TextField"
 import { ConfigurationGroup } from "@dom-components/configuration-group"
 import React from "react"
-import Button from "@material-ui/core/Button"
 import FormControlLabel from "@material-ui/core/FormControlLabel"
 import Checkbox from "@material-ui/core/Checkbox"
 
@@ -14,9 +13,9 @@ export default function FileConfiguration({
 	onTitleChange,
 	onDescriptionChange,
 	onPrivateChange,
+	isPrivate,
 	showPrivate,
-	onSave,
-	saveTitle,
+	children,
 }) {
 	return (
 		<ConfigurationGroup title="File">
@@ -62,6 +61,7 @@ export default function FileConfiguration({
 								id="configuration-file-private"
 								onChange={(event) => onPrivateChange(event.target.checked)}
 								name="guide-private"
+								checked={isPrivate}
 							/>
 						}
 						label="Private"
@@ -69,9 +69,7 @@ export default function FileConfiguration({
 					/>
 				</FormControl>
 			)}
-			<Button color="primary" onClick={onSave}>
-				{saveTitle}
-			</Button>
+			{children}
 		</ConfigurationGroup>
 	)
 }

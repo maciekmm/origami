@@ -4,8 +4,9 @@ import IconButton from "@material-ui/core/IconButton"
 import {
 	Favorite,
 	FavoriteBorder,
-	OpenInBrowser,
 	PlayArrow,
+	Edit,
+	Delete,
 } from "@material-ui/icons"
 import GridListTileBar from "@material-ui/core/GridListTileBar"
 import makeStyles from "@material-ui/core/styles/makeStyles"
@@ -17,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
 		justifyContent: "space-around",
 		overflow: "hidden",
 		backgroundColor: theme.palette.background.paper,
+	},
+	tile: {
+		cursor: "pointer",
 	},
 	titleBar: {
 		background:
@@ -31,18 +35,37 @@ const useStyles = makeStyles((theme) => ({
 	},
 }))
 
-export const GuideTile = ({ guide, onClick, onOpen, onLike, ...other }) => {
+export const GuideTile = ({
+	guide,
+	onOpen,
+	onEdit,
+	onDelete,
+	onLike,
+	showOwnerActions,
+	...other
+}) => {
 	const classes = useStyles()
 
 	return (
-		<GridListTile key={guide.id} cols={1} {...other}>
+		<GridListTile
+			classes={{ root: classes.tile }}
+			key={guide.id}
+			cols={1}
+			{...other}
+			onClick={() => onOpen(guide)}
+		>
 			<img src={guide.thumbnail_file} />
 			<GridListTileBar
 				className={classes.titleBar}
 				titlePosition="top"
 				// subtitle={<span>By: {guide["owner_username"]}</span>}
 				actionIcon={
-					<IconButton onClick={() => onLike(guide)}>
+					<IconButton
+						onClick={(event) => {
+							event.stopPropagation()
+							onLike(guide)
+						}}
+					>
 						{guide.liked ? (
 							<Favorite className={classes.likedIcon}></Favorite>
 						) : (
@@ -55,9 +78,26 @@ export const GuideTile = ({ guide, onClick, onOpen, onLike, ...other }) => {
 				title={guide.name}
 				// subtitle={<span>By: {guide["owner_username"]}</span>}
 				actionIcon={
-					<IconButton onClick={() => onOpen(guide)}>
-						<PlayArrow className={classes.icon} />
-					</IconButton>
+					showOwnerActions && (
+						<>
+							<IconButton
+								onClick={(event) => {
+									event.stopPropagation()
+									onEdit(guide.id)
+								}}
+							>
+								<Edit className={classes.icon} />
+							</IconButton>
+							<IconButton
+								onClick={(event) => {
+									event.stopPropagation()
+									onDelete(guide.id)
+								}}
+							>
+								<Delete className={classes.icon} />
+							</IconButton>
+						</>
+					)
 				}
 			/>
 		</GridListTile>

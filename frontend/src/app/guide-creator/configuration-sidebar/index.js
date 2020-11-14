@@ -1,10 +1,10 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import EdgeConfiguration from "@dom-components/configuration-edge"
 import FileConfiguration from "@dom-components/configuration-file"
 import StepConfiguration from "@dom-components/configuration-step"
 import styles from "./styles.css"
 import { useCreatorStore } from "@store/creator"
-import { downloadModel, modelToBase64 } from "../../../download"
+import { downloadModel } from "../../../download"
 import { getComputedProperty } from "@fold/properties"
 import {
 	SET_EDGES_ASSIGNMENT,
@@ -15,12 +15,16 @@ import {
 	SET_STEP_DESCRIPTION,
 	SET_STEP_TITLE,
 } from "../../../store/creator/actions"
-import { useCommunityService } from "../../../services/community"
 import { useIsAuthenticated } from "@store/community"
-import { useSnackbar } from "notistack"
-import { useHistory } from "react-router-dom"
+import Button from "@material-ui/core/Button"
+import { Link } from "@material-ui/core"
+import SaveIcon from "@material-ui/icons/Save"
 
-export default function ConfigurationSidebar({ thumbnailFactory }) {
+export default function ConfigurationSidebar({
+	uploadGuide,
+	isPrivate,
+	setPrivate,
+}) {
 	const [{ model, frame, selectedEdges }, dispatch] = useCreatorStore()
 
 	const currentStep = model && model.file_frames[frame]
@@ -83,39 +87,8 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 	const setStepTitle = (title) =>
 		dispatch({ type: SET_STEP_TITLE, title: title })
 
-	const [isPrivate, setPrivate] = useState(false)
-
-	const { createGuide } = useCommunityService()
 	const isAuthed = useIsAuthenticated()
-	const { enqueueSnackbar } = useSnackbar()
-	const history = useHistory()
-
-	const uploadGuide = (model) => {
-		const base64Representation = modelToBase64(model)
-		if (!model.file_title) {
-			enqueueSnackbar("Title cannot be empty", { variant: "error" })
-			return
-		}
-		const thumbnail = thumbnailFactory()
-
-		createGuide(
-			"data:text/json;base64," + base64Representation,
-			isPrivate,
-			thumbnail
-		)
-			.then((response) => response.json())
-			.then((guide) => {
-				if ("id" in guide) {
-					enqueueSnackbar("Guide created", { variant: "success" })
-					history.push("/")
-				} else {
-					enqueueSnackbar("Error creating guide ", { variant: "error" })
-				}
-			})
-	}
-
-	const saveModel = () =>
-		!isAuthed ? downloadModel(model) : uploadGuide(model)
+	const saveAction = isAuthed ? uploadGuide : () => downloadModel(model)
 
 	return (
 		<div className={styles.sidebar}>
@@ -134,18 +107,39 @@ export default function ConfigurationSidebar({ thumbnailFactory }) {
 				onDescriptionChange={setStepDescription}
 			/>
 			<FileConfiguration
-				onSave={saveModel}
-				saveTitle="Save"
 				author={model.file_author || ""}
 				onAuthorChange={setFileAuthor}
 				title={model.file_title || ""}
 				onTitleChange={setFileTitle}
 				description={model.file_description || ""}
 				onDescriptionChange={setFileDescription}
-				private={isPrivate}
+				isPrivate={isPrivate}
 				showPrivate={isAuthed}
 				onPrivateChange={setPrivate}
-			/>
+			>
+				<Button
+					variant="outlined"
+					color="primary"
+					onClick={saveAction}
+					startIcon={<SaveIcon />}
+				>
+					Save
+				</Button>
+				{isAuthed && (
+					<Link
+						href="#"
+						onClick={(event) => {
+							event.preventDefault()
+							downloadModel(model)
+						}}
+						align="right"
+						variant="caption"
+						color="textSecondary"
+					>
+						or download model
+					</Link>
+				)}
+			</FileConfiguration>
 		</div>
 	)
 }

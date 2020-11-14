@@ -11,7 +11,12 @@ import { ContentContainer } from "@dom-components/content-container"
 import { useCreatorStore } from "@store/creator"
 
 export const GuideBrowser = (props) => {
-	const { fetchGuides, likeGuide, unlikeGuide } = useCommunityService()
+	const {
+		fetchGuides,
+		likeGuide,
+		unlikeGuide,
+		deleteGuide,
+	} = useCommunityService()
 	const [{ userId }] = useCommunityStore()
 	const isAuthenticated = useIsAuthenticated()
 	const [{}, dispatchCreator] = useCreatorStore()
@@ -52,9 +57,13 @@ export const GuideBrowser = (props) => {
 		let action = guide.liked ? unlikeGuide(guide.id) : likeGuide(guide.id)
 	}
 
-	const loadGuide = (guide) => {
+	const startCreatingGuide = (guide) => {
 		dispatchCreator({ type: LOAD_MODEL, model: guide })
 		history.push("/create")
+	}
+
+	const editGuide = (guideId) => {
+		history.push(`/create/${guideId}`)
 	}
 
 	return (
@@ -72,6 +81,9 @@ export const GuideBrowser = (props) => {
 					title="My guides"
 					openGuide={openGuide}
 					guides={userGuides}
+					showEdit
+					editGuide={editGuide}
+					deleteGuide={deleteGuide}
 					HeaderButton={
 						<ModelLoader
 							component={
@@ -84,7 +96,7 @@ export const GuideBrowser = (props) => {
 									Upload
 								</Button>
 							}
-							loadModel={loadGuide}
+							loadModel={startCreatingGuide}
 						/>
 					}
 					toggleLikeGuide={toggleLikeGuide}

@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import ViewerHeader from "@dom-components/viewer-header"
 import { Viewer } from "@dom-components/viewer"
 import Timeline from "@dom-components/timeline"
@@ -14,9 +14,37 @@ import {
 	TOGGLE_EDGE_SELECTION,
 } from "../../store/creator/actions"
 import styles from "./style.css"
+import { useHistory, useParams } from "react-router-dom"
+import { useCommunityService } from "../../services/community"
+import { modelToBase64 } from "../../download"
+import { useSnackbar } from "notistack"
+import { useCommunityStore } from "@store/community"
 
 export default function GuideCreator() {
 	const [{ model, frame, selectedEdges }, dispatch] = useCreatorStore()
+	const [{ userId }] = useCommunityStore()
+
+	const { guideId } = useParams()
+	const isEditingGuide = guideId !== undefined && guideId !== null
+	const { fetchGuide } = useCommunityService()
+	const { createGuide, updateGuide } = useCommunityService()
+	const [isPrivate, setPrivate] = useState(false)
+	const [isOwner, setIsOwner] = useState(false)
+
+	useEffect(() => {
+		if (!isEditingGuide) {
+			return
+		}
+		fetchGuide(guideId)
+			.then((guide) => guide.json())
+			.then((guide) => {
+				setIsOwner(guide["owner"] === userId)
+				setPrivate(guide["private"])
+				return fetch(guide["guide_file"])
+			})
+			.then((resp) => resp.json())
+			.then((loadedGuide) => dispatch({ type: LOAD_MODEL, model: loadedGuide }))
+	}, [guideId, fetchGuide, dispatch])
 
 	const selectEdge = (edge, isToggleMode) => {
 		const action = isToggleMode ? TOGGLE_EDGE_SELECTION : SELECT_EDGE
@@ -29,6 +57,40 @@ export default function GuideCreator() {
 	const snapshotCanvas = () => {
 		const canvas = canvasRef.current
 		return canvas.toDataURL()
+	}
+
+	const { enqueueSnackbar } = useSnackbar()
+	const history = useHistory()
+
+	const upsertGuide = () => {
+		const base64Representation = modelToBase64(model)
+		if (!model.file_title) {
+			enqueueSnackbar("Title cannot be empty", { variant: "error" })
+			return
+		}
+		const thumbnail = snapshotCanvas()
+
+		const isUpdating = isEditingGuide && isOwner
+
+		const upload = isUpdating
+			? (...params) => updateGuide(guideId, ...params)
+			: createGuide
+
+		upload(
+			"data:text/json;base64," + base64Representation,
+			isPrivate,
+			thumbnail
+		)
+			.then((response) => response.json())
+			.then((guide) => {
+				if ("id" in guide) {
+					const successAction = isUpdating ? "updated" : "created"
+					enqueueSnackbar(`Guide ${successAction}`, { variant: "success" })
+					history.push("/")
+				} else {
+					enqueueSnackbar("Error creating guide ", { variant: "error" })
+				}
+			})
 	}
 
 	return (
@@ -50,7 +112,11 @@ export default function GuideCreator() {
 							/>
 						</Grid>
 						<Grid item xs>
-							<ConfigurationSidebar thumbnailFactory={snapshotCanvas} />
+							<ConfigurationSidebar
+								uploadGuide={upsertGuide}
+								isPrivate={isPrivate}
+								setPrivate={setPrivate}
+							/>
 						</Grid>
 					</Grid>
 					<Timeline
