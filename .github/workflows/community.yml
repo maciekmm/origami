@@ -69,16 +69,16 @@ jobs:
         echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USER }} --password-stdin
     - name: Build community image
       run: |
-        docker build -f Dockerfile.community -t origuide/community:${{ GITHUB_SHA }} .
+        docker build -f Dockerfile.community -t origuide/community:${{ github.sha }} .
     - name: Build worker image
       run: |
-        docker build -f Dockerfile.worker -t origuide/worker:${{ GITHUB_SHA }} .
+        docker build -f Dockerfile.worker -t origuide/worker:${{ github.sha }} .
     - name: Push community image
       run: |
-        docker push origuide/community:${{ GITHUB_SHA }}
+        docker push origuide/community:${{ github.sha }}
     - name: Push worker image
       run: |
-        docker push origuide/worker:${{ GITHUB_SHA }}
+        docker push origuide/worker:${{ github.sha }}
   deploy:
     needs: build
     name: Deploy
@@ -101,8 +101,8 @@ jobs:
           ssh-add $HOME/.ssh/id_ed25519
       - name: Deploy 
         run: |
-          sed -i "s/origuide\/worker:.*/origuide\/worker:${{ GITHUB_SHA }}/g" docker-compose.yml
-          sed -i "s/origuide\/community:.*/origuide\/community:${{ GITHUB_SHA }}/g" docker-compose.yml
+          sed -i "s/origuide\/worker:.*/origuide\/worker:${{ github.sha }}/g" docker-compose.yml
+          sed -i "s/origuide\/community:.*/origuide\/community:${{ github.sha }}/g" docker-compose.yml
           scp -i $HOME/.ssh/id_ed25519 docker-compose.yml $ssh_user@$ssh_host:/home/$ssh_user/origuide/docker-compose.yml
           ssh -i $HOME/.ssh/id_ed25519 $ssh_user@$ssh_host "cd origuide && docker-compose up -d"
 
