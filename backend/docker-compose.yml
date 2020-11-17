@@ -27,7 +27,7 @@ services:
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: origuide
+      POSTGRES_DB: ${DATABASE_NAME}
     volumes:
       - postgres:/var/lib/postgresql/data
     restart: always
