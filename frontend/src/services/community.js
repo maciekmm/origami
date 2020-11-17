@@ -3,7 +3,7 @@ import { useMemo, useReducer } from "react"
 import { useAuthedHttp, useHttp } from "./http"
 import { LOGIN, LOGOUT } from "@store/community/actions"
 
-const BACKEND_URL = "http://localhost:8000/api"
+const BACKEND_URL = "https://api.origami.wtf/api"
 
 const paramsToQueryString = (params) => {
 	let query = "?"

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 x-shared_environment: &shared-environment
   CELERY_BROKER_URL: redis://redis:6379
@@ -27,6 +27,7 @@ services:
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: origuide
     volumes:
       - postgres:/var/lib/postgresql/data
     restart: always
@@ -40,7 +41,7 @@ services:
       - redis:/data
     restart: always
   worker:
-    image: origuide/worker:invalid
+    image: origuide/worker:master
     env_file: .env
     networks:
       - origuide
@@ -53,7 +54,7 @@ services:
       - migrations
     restart: always
   community:
-    image: origuide/community:invalid
+    image: origuide/community:master
     env_file: .env
     networks:
       - origuide
@@ -73,10 +74,12 @@ services:
       - migrations
     restart: always
   migrations:
-    image: origuide/community:invalid
+    image: origuide/community:master
     env_file: .env
     environment:
       <<: *shared-environment
     command: python /community/manage.py migrate
+    networks:
+      - origuide
     depends_on:
       - postgres

@@ -70,15 +70,15 @@ jobs:
     - name: Build community image
       run: |
         docker build -f Dockerfile.community -t origuide/community:${{ GITHUB_SHA }} .
+    - name: Build worker image
+      run: |
+        docker build -f Dockerfile.worker -t origuide/worker:${{ GITHUB_SHA }} .
     - name: Push community image
       run: |
         docker push origuide/community:${{ GITHUB_SHA }}
-    - name: Build worker image
-      run: |
-        docker build -f Dockerfile.community -t origuide/community:${{ GITHUB_SHA }} .
     - name: Push worker image
       run: |
-        docker push origuide/community:${{ GITHUB_SHA }}
+        docker push origuide/worker:${{ GITHUB_SHA }}
   deploy:
     needs: build
     name: Deploy
