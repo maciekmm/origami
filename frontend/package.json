@@ -2,7 +2,9 @@
 	"name": "origami",
 	"version": "0.0.1",
 	"description": "",
-	"sideEffects": false,
+	"sideEffects": [
+		"*.css"
+	],
 	"private": true,
 	"scripts": {
 		"build": "webpack --mode production",
