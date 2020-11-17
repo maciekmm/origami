@@ -1,12 +1,16 @@
 const path = require("path")
 const HtmlWebPackPlugin = require("html-webpack-plugin")
 const CopyWebPackPlugin = require("copy-webpack-plugin")
+const TerserPlugin = require("terser-webpack-plugin")
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+	.BundleAnalyzerPlugin
 
 module.exports = {
 	entry: "./src/index.js",
 	output: {
 		path: path.resolve(__dirname, "dist"),
-		filename: "index.js",
+		filename: "[name].bundle.js",
+		publicPath: "/",
 	},
 	resolve: {
 		alias: {
@@ -67,5 +71,16 @@ module.exports = {
 				},
 			],
 		}),
+		new BundleAnalyzerPlugin({
+			analyzerMode: "static",
+		}),
 	],
+	optimization: {
+		usedExports: true,
+		splitChunks: {
+			chunks: "all",
+		},
+		minimize: true,
+		minimizer: [new TerserPlugin()],
+	},
 }

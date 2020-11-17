@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react"
-import * as THREE from "three"
+import React, { useEffect, useState } from "react"
+import { BufferAttribute, BufferGeometry } from "three"
 
 export default function EdgeSet({
 	vertices,
@@ -8,7 +8,7 @@ export default function EdgeSet({
 	assignment,
 	lineWidth,
 }) {
-	const [geometry] = useState(() => new THREE.BufferGeometry())
+	const [geometry] = useState(() => new BufferGeometry())
 
 	useEffect(() => {
 		const edgesToVertexIndices = new Uint16Array(edges.length * 2)
@@ -16,17 +16,14 @@ export default function EdgeSet({
 			edgesToVertexIndices[2 * i] = vertexFromId
 			edgesToVertexIndices[2 * i + 1] = vertexToId
 		})
-		geometry.setIndex(new THREE.BufferAttribute(edgesToVertexIndices, 1))
+		geometry.setIndex(new BufferAttribute(edgesToVertexIndices, 1))
 
 		geometry.setDrawRange(0, edges.length * 2)
 	}, [edges, geometry])
 
 	useEffect(() => {
 		const vertexPositions = new Float32Array(vertices.length * 3)
-		geometry.setAttribute(
-			"position",
-			new THREE.BufferAttribute(vertexPositions, 3)
-		)
+		geometry.setAttribute("position", new BufferAttribute(vertexPositions, 3))
 	}, [vertices.length, geometry])
 
 	useEffect(() => {

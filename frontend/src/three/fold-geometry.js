@@ -1,9 +1,9 @@
-import * as THREE from "three"
+import { Vector3, Face3, Geometry } from "three"
 import { triangulate } from "./triangulation"
 
 export default class FoldGeometry {
 	constructor() {
-		this.geometry = new THREE.Geometry()
+		this.geometry = new Geometry()
 		this.vertices = this.geometry.vertices
 		this.faces = this.geometry.faces
 	}
@@ -18,7 +18,7 @@ export default class FoldGeometry {
 	}
 
 	addVertex(x, y, z = 0) {
-		const vertexIdx = this.vertices.push(new THREE.Vector3(x, y, z)) - 1
+		const vertexIdx = this.vertices.push(new Vector3(x, y, z)) - 1
 		this.geometry.verticesNeedUpdate = true
 		return vertexIdx
 	}
@@ -36,7 +36,7 @@ export default class FoldGeometry {
 			vertices
 		)
 		triangulated.forEach((indices) =>
-			this.faces.push(new THREE.Face3(...indices, null))
+			this.faces.push(new Face3(...indices, null))
 		)
 		this.geometry.elementsNeedUpdate = true
 		this.geometry.normalsNeedUpdate = true

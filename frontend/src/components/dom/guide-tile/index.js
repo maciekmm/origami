@@ -1,13 +1,11 @@
 import React from "react"
 import GridListTile from "@material-ui/core/GridListTile"
 import IconButton from "@material-ui/core/IconButton"
-import {
-	Favorite,
-	FavoriteBorder,
-	PlayArrow,
-	Edit,
-	Delete,
-} from "@material-ui/icons"
+import Favorite from "@material-ui/icons/Favorite"
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder"
+import PlayArrow from "@material-ui/icons/PlayArrow"
+import Edit from "@material-ui/icons/Edit"
+import Delete from "@material-ui/icons/Delete"
 import GridListTileBar from "@material-ui/core/GridListTileBar"
 import makeStyles from "@material-ui/core/styles/makeStyles"
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react"
-import * as THREE from "three"
+import { FaceColors, FrontSide, BackSide } from "three"
 import FoldGeometry from "../../../three/fold-geometry"
 import FigureEdges from "../figure-edges"
 
@@ -43,9 +43,9 @@ export default function Figure({
 				selectedEdges={selectedEdges}
 			></FigureEdges>
 			<meshPhongMaterial
-				side={THREE.FrontSide}
+				side={FrontSide}
 				color={0x31d631}
-				vertexColors={THREE.FaceColors}
+				vertexColors={FaceColors}
 				attach="material"
 				polygonOffset={true}
 				flatShading={true}
@@ -55,9 +55,9 @@ export default function Figure({
 			<primitive attach="geometry" object={foldGeometry.geometry} />
 			<mesh>
 				<meshPhongMaterial
-					side={THREE.BackSide}
+					side={BackSide}
 					color={0xeeeeee}
-					vertexColors={THREE.FaceColors}
+					vertexColors={FaceColors}
 					attach="material"
 					flatShading={true}
 					polygonOffset={true}

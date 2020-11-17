@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useEffect, useRef } from "react"
-import * as THREE from "three"
+import React, { useMemo, useRef } from "react"
+import { Raycaster } from "three"
 import EdgeSet from "../figure-edge-set"
-import { useThree, useResource } from "react-three-fiber"
+import { useResource, useThree } from "react-three-fiber"
 
 const ASSIGNMENT_COLORS = {
 	M: 0xd63131,
@@ -43,7 +43,7 @@ export default function FigureEdges({
 	const handleEdgePreSelect = () => (mousePosition.current = mouse.clone())
 
 	const raycaster = useMemo(() => {
-		const raycaster = new THREE.Raycaster()
+		const raycaster = new Raycaster()
 		raycaster.params.Line.threshold = RAYCASTER_LINE_THRESHOLD
 		return raycaster
 	}, [])

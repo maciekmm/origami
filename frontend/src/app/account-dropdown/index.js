@@ -1,7 +1,7 @@
 import React from "react"
 import MenuItem from "@material-ui/core/MenuItem"
 import Menu from "@material-ui/core/Menu"
-import { AccountCircle } from "@material-ui/icons"
+import AccountCircle from "@material-ui/icons/AccountCircle"
 import IconButton from "@material-ui/core/IconButton"
 import { useCommunityStore } from "@store/community"
 import { useHistory } from "react-router-dom"
