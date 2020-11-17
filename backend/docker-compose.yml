@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 x-shared_environment: &shared-environment
   CELERY_BROKER_URL: redis://redis:6379
@@ -14,6 +14,12 @@ volumes:
   redis:
   guides:
 
+networks:
+  origuide:
+  proxy-tier:
+    external:
+      name: nginx-proxy
+
 services:
   postgres:
     image: postgres:13
@@ -21,19 +27,24 @@ services:
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: origuide
     volumes:
       - postgres:/var/lib/postgresql/data
     restart: always
+    networks:
+      - origuide
   redis:
     image: redis:6
+    networks:
+      - origuide
     volumes:
       - redis:/data
     restart: always
   worker:
-    build:
-      context: .
-      dockerfile: Dockerfile.worker
+    image: origuide/worker:master
     env_file: .env
+    networks:
+      - origuide
     environment:
       <<: *shared-environment
     volumes:
@@ -43,12 +54,17 @@ services:
       - migrations
     restart: always
   community:
-    build:
-      context: .
-      dockerfile: Dockerfile.community
+    image: origuide/community:master
     env_file: .env
+    networks:
+      - origuide
+      - proxy-tier
     environment:
       <<: *shared-environment
+      VIRTUAL_HOST: api.origami.wtf
+      VIRTUAL_PORT: 8000
+      LETSENCRYPT_HOST: api.origami.wtf
+      LETSENCRYPT_EMAIL: noreply@origami.wtf
     volumes:
       - guides:/files
     ports:
@@ -58,12 +74,12 @@ services:
       - migrations
     restart: always
   migrations:
-    build:
-      context: .
-      dockerfile: Dockerfile.community
+    image: origuide/community:master
     env_file: .env
     environment:
       <<: *shared-environment
     command: python /community/manage.py migrate
+    networks:
+      - origuide
     depends_on:
       - postgres
