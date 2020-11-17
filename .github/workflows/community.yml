@@ -58,7 +58,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Login to docker hub
       run: |
-        echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+        docker login --username "${{ secrets.DOCKER_HUB_USERNAME }}" --password "${{ secrets.DOCKER_HUB_TOKEN }}"
     - name: Build community image
       run: |
         docker build -f Dockerfile.community -t origuide/community:${{ github.sha }} .
@@ -85,6 +85,7 @@ jobs:
           ssh_host: api.origami.wtf
           ssh_user: origuide
         run: |
+          eval `ssh-agent -s`
           mkdir $HOME/.ssh/
           chmod 700 $HOME/.ssh/
           echo "$ssh_key" > $HOME/.ssh/id_ed25519
@@ -92,6 +93,10 @@ jobs:
           ssh-keyscan $ssh_host >> ~/.ssh/known_hosts
           ssh-add $HOME/.ssh/id_ed25519
       - name: Deploy 
+        env:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_host: api.origami.wtf
+          ssh_user: origuide
         run: |
           sed -i "s/origuide\/worker:.*/origuide\/worker:${{ github.sha }}/g" docker-compose.yml
           sed -i "s/origuide\/community:.*/origuide\/community:${{ github.sha }}/g" docker-compose.yml
