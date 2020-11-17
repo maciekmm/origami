@@ -16,7 +16,15 @@ defaults:
     working-directory: backend
 
 jobs:
-  build:
+  check_skip:
+    runs-on: ubuntu-latest
+    if: |
+      !contains(format('{0} {1}', github.event.head_commit.message, github.event.pull_request.title), '[skip ci]')
+    steps:
+      - run: |
+          echo "Skipping pipeline due to [skip ci] being in the title"
+  test:
+    needs: check_skip
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -50,3 +58,51 @@ jobs:
         DATABASE_NAME: "origuide"
         DATABASE_PORT: "9999"
       run: python community/manage.py test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to docker hub
+      run: |
+        echo "${{ secrets.DOCKER_HUB_TOKEN }}" | docker login --username ${{ secrets.DOCKER_HUB_USER }} --password-stdin
+    - name: Build community image
+      run: |
+        docker build -f Dockerfile.community -t origuide/community:${{ GITHUB_SHA }} .
+    - name: Push community image
+      run: |
+        docker push origuide/community:${{ GITHUB_SHA }}
+    - name: Build worker image
+      run: |
+        docker build -f Dockerfile.community -t origuide/community:${{ GITHUB_SHA }} .
+    - name: Push worker image
+      run: |
+        docker push origuide/community:${{ GITHUB_SHA }}
+  deploy:
+    needs: build
+    name: Deploy
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy
+        env:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_host: api.origami.wtf
+          ssh_user: origuide
+        run: |
+          mkdir $HOME/.ssh/
+          chmod 700 $HOME/.ssh/
+          echo "$ssh_key" > $HOME/.ssh/id_ed25519
+          chmod 600 $HOME/.ssh/id_ed25519
+          ssh-keyscan $ssh_host >> ~/.ssh/known_hosts
+          ssh-add $HOME/.ssh/id_ed25519
+      - name: Deploy 
+        run: |
+          sed -i "s/origuide\/worker:.*/origuide\/worker:${{ GITHUB_SHA }}/g" docker-compose.yml
+          sed -i "s/origuide\/community:.*/origuide\/community:${{ GITHUB_SHA }}/g" docker-compose.yml
+          scp -i $HOME/.ssh/id_ed25519 docker-compose.yml $ssh_user@$ssh_host:/home/$ssh_user/origuide/docker-compose.yml
+          ssh -i $HOME/.ssh/id_ed25519 $ssh_user@$ssh_host "cd origuide && docker-compose up -d"
+

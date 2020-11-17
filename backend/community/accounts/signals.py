@@ -34,7 +34,7 @@ def password_reset_token_created(sender, instance, reset_password_token, *args, 
     msg = EmailMultiAlternatives(
         "Password Reset for Origuide",
         email_plaintext_message,
-        "origuide@maciekmm.net",
+        "noreply@origami.wtf",
         [reset_password_token.user.email]
     )
     msg.attach_alternative(email_html_message, "text/html")

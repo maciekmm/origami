@@ -1,4 +1,4 @@
-FROM maciekmm/pypy-scientific:0.1
+FROM maciekmm/pypy-scientific:0.2
 
 RUN mkdir /build
 WORKDIR /build

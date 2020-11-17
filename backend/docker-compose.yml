@@ -14,6 +14,12 @@ volumes:
   redis:
   guides:
 
+networks:
+  origuide:
+  proxy-tier:
+    external:
+      name: nginx-proxy
+
 services:
   postgres:
     image: postgres:13
@@ -24,16 +30,20 @@ services:
     volumes:
       - postgres:/var/lib/postgresql/data
     restart: always
+    networks:
+      - origuide
   redis:
     image: redis:6
+    networks:
+      - origuide
     volumes:
       - redis:/data
     restart: always
   worker:
-    build:
-      context: .
-      dockerfile: Dockerfile.worker
+    image: origuide/worker:invalid
     env_file: .env
+    networks:
+      - origuide
     environment:
       <<: *shared-environment
     volumes:
@@ -43,12 +53,17 @@ services:
       - migrations
     restart: always
   community:
-    build:
-      context: .
-      dockerfile: Dockerfile.community
+    image: origuide/community:invalid
     env_file: .env
+    networks:
+      - origuide
+      - proxy-tier
     environment:
       <<: *shared-environment
+      VIRTUAL_HOST: api.origami.wtf
+      VIRTUAL_PORT: 8000
+      LETSENCRYPT_HOST: api.origami.wtf
+      LETSENCRYPT_EMAIL: noreply@origami.wtf
     volumes:
       - guides:/files
     ports:
@@ -58,9 +73,7 @@ services:
       - migrations
     restart: always
   migrations:
-    build:
-      context: .
-      dockerfile: Dockerfile.community
+    image: origuide/community:invalid
     env_file: .env
     environment:
       <<: *shared-environment

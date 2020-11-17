@@ -1,4 +1,8 @@
 services:
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
   community:
     command: python /community/manage.py runserver 0.0.0.0:8000 
     environment:
