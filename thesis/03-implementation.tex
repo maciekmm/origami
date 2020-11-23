@@ -83,10 +83,87 @@ The solver is implemented in \tech{python}, using \tech{numpy} and \tech{scipy} 
 
 
 \subsection{Project overview}
-% Ogólny rzut na projekt - jakie są jego główne moduły, komponenty? Koniecznie rysunek z komentarzem. Koniecznie zasada działania, jeśli potrzebna. Mile widziane rysunki koncepcyjne. %
+
+\begin{figure}[H]
+	\caption{High level system overview}
+  \centering
+    \includegraphics[width=\textwidth]{assets/architecture.png}
+\end{figure}
+
+Origuide consists of the following layers:
+\begin{description}
+	\item[Frontend] - a component that handles all user interactions with the system. 
+	\item[Backend] - a component responsible for: \begin{itemize}
+		\item processing all user requests initiated on the Frontend
+		\item managing persistent data 
+		\item authentication and authorization
+		\item scheduling Guide processing
+	\end{itemize}
+	\item[Guides to process] - a task queue distributing guides to process among Solver workers
+	\item[Solver worker] - a component responsible for converting Instructions to Guides.
+\end{description}
+
+As we previously distinguished two types of users in the system, there are two main success paths through the application.
+
+\begin{figure}[H]
+	\caption{Designer's success path}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-designer-flow.png}
+\end{figure}
+
+Designer's main objective is to create Guides. After uploading a Crease Pattern, Designer is required to provide instruction steps. When an Instruction is saved it gets scheduled on a Task Queue and processed by a Solver worker. Once processing is finished the Instruction associatied with the Guide is marked as solved in the database.
+
+\begin{figure}[H]
+	\caption{Folder's success path}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-folder-flow.png}
+\end{figure}
+
+Folder's main objective is to fold origami figures following steps presented by the Application. After successfully retrieving a guide from the Backend, he is presented with a Guide Viewer.
 
 \subsection{Technology stack}
-% Stos technologiczny - jaki jest, z opisem do czego poszczególne elementy, z komentarzem czemu taki i co było brane pod uwagę, tutaj może być opis ew. prototypów technologicznych jako wyjaśnienie. Ew. w dokumentacji procesowej z odwołaniem w tym miejscu. Jeśli wykorzystaliście jakieś specyficzne narzędzie np. do tworzenia gier to warto poświecić nieco więcej miejsca i opisać co z niego wykorzystaliście i jak ono działa i co daje. %
+
+Source Code is version controlled using a hosted \tech{Git} solution - \tech{Github}.  
+
+Continuous Integration and Continuous Deployment is provided by \tech{Github Actions}. 
+
+\subsubsection{Frontend}
+
+\begin{itemize}
+	\item The Application is built in \tech{Javascript} using \tech{React} framework. 
+	\item \tech{Three.JS} is used to display 3D models.
+	\item Triangulation is done using \tech{earcut}. 
+	\item Parsing folds is aided by \tech{fold}.
+	\item User Interface components come mainly from \tech{material-ui}.
+	\item \tech{Webpack} is responsible for bundling, minimizing and transpiling the source code.
+	\item Code style is checked using \tech{Prettier} with \tech{eslint} and enforced on every commit using \tech{Husky}.
+	\item \tech{Jest} has been incorporated as a test runner.
+\end{itemize}
+
+// TODO: comment
+
+\subsubsection{Backend}
+
+\begin{itemize}
+	\item The Backend is built in \tech{Python} using \tech{Django} framework. 
+	\item \tech{DjangoRestFramework} simplifies a REST server setup.
+	\item \tech{drf-base64} helps with decoding of base64 encoded files.
+	\item \tech{PyJWT} assists in auth process.
+	\item \tech{factory-boy} is used to generate testing data.
+	\item Data is stored in a \tech{PostgreSQL} database.
+	\item \tech{Celery} was chosen for an asynchronous task processing.
+	\item \tech{Redis} acts as a task queue for \tech{Celery}.
+\end{itemize}
+
+
+\subsubsection{Solver}
+
+\begin{itemize}
+	\item Solver runs under \tech{Python}'s alternative implementation - \tech{PyPy}.
+	\item \tech{Shapely} is used for triangulation.
+\end{itemize}
+
+
 
 \subsection{Components overview}
 % Przegląd poszczególnych komponentów a wiec np. baza danych, aplikacja typu klient, serwis RESTowy. Jeśli baza to ERD z opisem, jeśli aplikacja kliencka to jakie elementy, widoki, jak się łączy i kiedy. Jeśli prosta aplikacja WWW to można pokazać strukturę projektu. Jeśli serwis RESTowy to jego specyfikacja z przykładami. Protokół komunikacji to może być zupełnie osobny opis. %
@@ -97,8 +174,12 @@ The solver is implemented in \tech{python}, using \tech{numpy} and \tech{scipy} 
 \subsection{Development environment setup}
 % Instrukcja postawienia środowiska deweloperskiego - jeśli potrzeba wypełniacza %
 
+\subsection{Deployment}
+% Instrukcja postawienia środowiska deweloperskiego - jeśli potrzeba wypełniacza %
+
 \subsection{Quality assurance}
 % Quality Assurance: czy mamy testy jednostkowe? Czy mamy inne testy automatyczne? Jakich bibliotek używacie? %
+At every commit that is a part of the master branch or a Pull Request Unit Tests are run. \\
 
 \subsection{Problems encountered}
 % Z jakimi problemami technicznymi sie borykaliście? Jeśli nie opisaliście ich w dokumentacji procesowej. %
