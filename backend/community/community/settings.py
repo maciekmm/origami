@@ -73,6 +73,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_rest_passwordreset',
     'corsheaders',
+    'django_extensions',
+    'rest_framework_swagger'
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,105 @@
+name: Community
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+    - 'backend/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+    - 'backend/**'
+
+defaults:
+  run:
+    shell: bash
+    working-directory: backend
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 wheel
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        cd solver
+        python setup.py install
+        cd ..
+    - name: Lint with flake8
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 community/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        flake8 community/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    - name: Unit tests
+      env:
+        DEBUG: "false"
+        SECRET_KEY: "invalid-secret-key"
+        EMAIL_HOST: "localhost"
+        EMAIL_PORT: "1025"
+        EMAIL_USE_TLS: "false"
+        DATABASE_USER: "origuide"
+        DATABASE_PASSWORD: "password"
+        DATABASE_NAME: "origuide"
+        DATABASE_PORT: "9999"
+      run: python community/manage.py test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to docker hub
+      run: |
+        docker login --username "${{ secrets.DOCKER_HUB_USERNAME }}" --password "${{ secrets.DOCKER_HUB_TOKEN }}"
+    - name: Build community image
+      run: |
+        docker build -f Dockerfile.community -t origuide/community:${{ github.sha }} .
+    - name: Build worker image
+      run: |
+        docker build -f Dockerfile.worker -t origuide/worker:${{ github.sha }} .
+    - name: Push community image
+      run: |
+        docker push origuide/community:${{ github.sha }}
+    - name: Push worker image
+      run: |
+        docker push origuide/worker:${{ github.sha }}
+  deploy:
+    needs: build
+    name: Deploy
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy
+        env:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_host: api.origami.wtf
+          ssh_user: origuide
+        run: |
+          eval `ssh-agent -s`
+          mkdir $HOME/.ssh/
+          chmod 700 $HOME/.ssh/
+          echo "$ssh_key" > $HOME/.ssh/id_ed25519
+          chmod 600 $HOME/.ssh/id_ed25519
+          ssh-keyscan $ssh_host >> ~/.ssh/known_hosts
+          ssh-add $HOME/.ssh/id_ed25519
+      - name: Deploy 
+        env:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          ssh_host: api.origami.wtf
+          ssh_user: origuide
+        run: |
+          sed -i "s/origuide\/worker:.*/origuide\/worker:${{ github.sha }}/g" docker-compose.yml
+          sed -i "s/origuide\/community:.*/origuide\/community:${{ github.sha }}/g" docker-compose.yml
+          scp -i $HOME/.ssh/id_ed25519 docker-compose.yml $ssh_user@$ssh_host:/home/$ssh_user/origuide/docker-compose.yml
+          ssh -i $HOME/.ssh/id_ed25519 $ssh_user@$ssh_host "cd origuide && docker-compose up -d"
+

@@ -97,7 +97,7 @@ Origuide consists of the following layers:
 		\item processing all user requests initiated on the Frontend
 		\item managing persistent data 
 		\item authentication and authorization
-		\item scheduling Guide processing
+		\item scheduling of Instruction processing
 	\end{itemize}
 	\item[Guides to process] - a task queue distributing guides to process among Solver workers
 	\item[Solver worker] - a component responsible for converting Instructions to Guides.
@@ -111,7 +111,7 @@ As we previously distinguished two types of users in the system, there are two m
     \includegraphics[width=\textwidth]{assets/3-designer-flow.png}
 \end{figure}
 
-Designer's main objective is to create Guides. After uploading a Crease Pattern, Designer is required to provide Instruction steps. When an Instruction is saved it gets scheduled on a Task Queue and processed by a Solver worker. Once processing is finished the Instruction associated with the Guide is marked as solved in the database.
+The Designer's main objective is to create Guides. After uploading a Crease Pattern, the Designer is required to provide instruction steps. When an Instruction is saved it gets scheduled on a Task Queue and processed by a Solver worker. Once processing is finished the Guide is marked as solved in the database.
 
 \begin{figure}[H]
 	\caption{Folder's success path}
@@ -119,42 +119,40 @@ Designer's main objective is to create Guides. After uploading a Crease Pattern,
     \includegraphics[width=\textwidth]{assets/3-folder-flow.png}
 \end{figure}
 
-Folder's main objective is to fold origami figures following steps presented by the Application. After successfully retrieving a guide from the Backend, he is presented with a Guide Viewer.
+The Folder's main objective is to fold origami figures following steps presented by the Application. After successfully retrieving a guide from the Backend he is presented with a Guide Viewer.
 
 \subsection{Technology stack}
-
-Source Code is version controlled using a hosted \tech{Git} solution - \tech{Github}.  
-
-Continuous Integration and Continuous Deployment is provided by \tech{Github Actions}. 
 
 \subsubsection{Frontend}
 
 \begin{itemize}
-	\item The Application is built in \tech{Javascript} using \tech{React} framework. 
+	\item The Application is built in \tech{Javascript} using the \tech{React} framework. 
 	\item \tech{Three.JS} is used to display 3D models.
 	\item Triangulation is done using \tech{earcut}. 
 	\item Parsing folds is aided by \tech{fold}.
-	\item User Interface components come mainly from \tech{material-ui}.
-	\item \tech{Webpack} is responsible for bundling, minimizing and transpiling the source code.
-	\item Code style is checked using \tech{Prettier} with \tech{eslint} and enforced on every commit using \tech{Husky}.
+	\item User Interface components come mainly from \tech{Material-UI}.
+	\item \tech{Webpack} is responsible for bundling, minimizing, and transpiling the source code.
+	\item Code style is checked using \tech{Prettier} with \tech{ESLint} and enforced on every commit using \tech{Husky}.
 	\item \tech{Jest} has been incorporated as a test runner.
 \end{itemize}
 
-// TODO: comment
+Origuide is a web application. Hence, \tech{Javascript} has been an obvious choice. We have briefly considered \tech{Typescript} as well, but have not used it due to its more enforcing nature, which could have potentially slowed down the development process. When it comes to 3D rendering frameworks \tech{Three.js} is one of the most mature and most frequently used libraries for modern rendering targets such as \tech{WebGL}. The decision to use \tech{Material-UI} has been made without much research on other tools, which we later regretted. As previously mentioned, we have also introduced \tech{React} early in the process to aid us with state management and organize the frontend application in a structurized manner. The tools chosen for code and software quality assurance have been picked based on our familiarity with them.
+
 
 \subsubsection{Backend}
 
 \begin{itemize}
-	\item The Backend is built in \tech{Python} using \tech{Django} framework. 
+	\item Backend is built in \tech{Python} using \tech{Django} framework. 
 	\item \tech{DjangoRestFramework} simplifies a REST server setup.
-	\item \tech{drf-base64} helps with decoding of base64 encoded files.
-	\item \tech{PyJWT} assists in auth process.
+	\item \tech{drf-base64} helps with decoding base64 encoded files.
+	\item \tech{PyJWT} assists in authentication processes.
 	\item \tech{factory-boy} is used to generate testing data.
 	\item Data is stored in a \tech{PostgreSQL} database.
-	\item \tech{Celery} was chosen for an asynchronous task processing.
+	\item \tech{Celery} was chosen for asynchronous task processing.
 	\item \tech{Redis} acts as a task queue for \tech{Celery}.
 \end{itemize}
 
+The Community backend technology stack has been chosen based on the maturity of tools, perceived speed of iteration, and our prior experience. \tech{Django} is an opinionated framework, which provides a set of sane default configuration for rapid prototyping and building of web applications. Choosing it has enabled us to focus on the main product instead of common security issues of HTTP servers, database access, schema migrations, password policies, or mail sending. The rest of the libraries used are strongly tied to the \tech{Django} community and recommendations.
 
 \subsubsection{Solver}
 
@@ -163,14 +161,230 @@ Continuous Integration and Continuous Deployment is provided by \tech{Github Act
 	\item \tech{Shapely} is used for triangulation.
 \end{itemize}
 
+At first, Python was meant to be used only for building a proof of concept to answer the question of whether writing a solving library on the Solver backend is feasible for the project. The question has been answered affirmatively, and at that moment we were quite happy with the performance aspect. Unfortunately, down the line, after loading more and more complicated Origami models it became apparent that Python's native performance will not cut it. We were worried that a whole rewrite in a more performant language is imminent. After seeking an alternative solution, the fear has been dispelled. The implementation has benefited from a ten-fold increase in performance by using a performance-oriented Python implementation - \tech{PyPy}.
+
 
 
 \subsection{Components overview}
 % Przegląd poszczególnych komponentów a wiec np. baza danych, aplikacja typu klient, serwis RESTowy. Jeśli baza to ERD z opisem, jeśli aplikacja kliencka to jakie elementy, widoki, jak się łączy i kiedy. Jeśli prosta aplikacja WWW to można pokazać strukturę projektu. Jeśli serwis RESTowy to jego specyfikacja z przykładami. Protokół komunikacji to może być zupełnie osobny opis. %
 
-\subsection{Algorithms}
-% Ciekawsze algorytmy, aspekty, mechanizmy np. logowanie, indeksowane, cachowanie, synchronizacja, backup, jakieś procesy w tle, jakieś progress bary, jakieś analizy, generowanie warstw GISowych, lokalizacja etc. Jest tu często o czym pisać. %
+\subsubsection{Frontend}
 
+The web application contains two main subcomponents: \textit{Guide Creator} and \textit{Guide Viewer}, responsible respectively for: creating instructions and viewing animated guides. Other pages are mainly related to the community aspect and will only be covered superficially in this section.
+
+\begin{figure}[H]
+  \caption{Overview of the frontend pages and components. Grayed out pages are related to user management.}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-frontend-architecture.png}
+\end{figure}
+
+The web application has been structured in a way that encourages building and reusing small components. An example would be a \textit{Viewer} component which is responsible for rendering origami figures and appears in both \textit{Guide Creator} and \textit{Guide Viewer} pages. The structure has allowed us to keep the code maintainable and implement changes quickly.
+
+\medskip
+
+Data storage and manipulation are powered by three stores which store data related to different aspects and functionality of the system.
+
+\begin{itemize}
+	\item The Creator store is responsible for storing an Instruction while it is being worked on.
+	\item The Player store stores information about the Guide while it is being viewed.
+	\item The Community store holds information regarding user sessions.
+\end{itemize}
+
+The application also contains a service responsible for communication with the Community backend.
+
+\begin{figure}[H]
+  \caption{Overview of the frontend stores and services.}
+  \centering
+    \includegraphics[width=0.7\textwidth]{assets/3-frontend-stores-services.png}
+\end{figure}
+
+\medskip
+
+
+\textbf{Guide Creator}
+
+\medskip
+
+A guide creator is a frontend subcomponent allowing Designers to create step-by-step Instructions from a crease pattern.
+
+
+\begin{figure}[H]
+  \caption{An overview of the Guide Creator}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-component-creator.png}
+\end{figure}
+
+In the center one can see a loaded crease pattern with the edge assignments reflecting the currently selected step. At the bottom an interactive list of steps is shown.
+
+\medskip
+
+To the right there is a set of configuration sections correspondingly responsible for: \begin{description}
+	\item[edge] - Setting an edge target assignment or a fixed target angle.
+	\item[step] - Setting a step name and a description.
+	\item[file] - Setting an Instruction name and description.
+\end{description}
+
+\medskip
+
+\begin{figure}[H]
+  \caption{The process of creating an Instruction using the Guide Creator from a Designer's perspective.}
+  \label{3-designer-creator-flow}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-designer-creator-flow.png}
+\end{figure}
+
+Until \textit{Save the Guide} step, all data and actions are done on the client-side. When \textit{Save the Guide} action is invoked:
+
+\begin{itemize}
+	\item if a user is logged in, a request is sent to the Community backend with all configuration attached, or
+	\item a file download is initiated.
+\end{itemize}
+
+\begin{figure}[H]
+	\caption{A Guide creation request. Almost all information is encoded in the \texttt{.fold} file}
+	\begin{lstlisting}
+{
+	"private":false,
+	"guide_file":"data:text/json;base64,<base64 encoded guide>",
+	"thumbnail":"data:text/json;base64,<base64 thumbnail>"
+}
+	\end{lstlisting}
+\end{figure}
+
+\begin{figure}[H]
+	\caption{A Guide creation response. The Instruction has not been processed yet, therefore, \texttt{animation\_file} is not available.}
+	\label{guide-response}
+	\begin{lstlisting}
+{
+	"id":6,
+	"owner":1,
+	"name":"penguin",
+	"published_at":"2020-12-01T18:49:18.131223Z",
+	"steps":9,
+	"guide_file":"https://api.<domain>/uploads/guides/file.fold",
+	"thumbnail_file":"https://api.<domain>/uploads/thumbnails/thumbnail.png",
+	"animation_file":null,
+	"status":"QUE",
+	"private":false,
+	"solved":false,
+	"liked":false,
+	"owner_username":"maciekmm1"
+}
+	\end{lstlisting}
+\end{figure}
+
+
+\textbf{Guide Viewer}
+
+The purpose of the \textbf{Guide Viewer} is to show animated steps fluently. It consists of a model, a list of steps, and playback controls.
+
+\begin{figure}[H]
+  \caption{An overview of the Guide Viewer.}
+  \label{3-guide-viewer}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-guide-viewer.png}
+\end{figure}
+
+When a Guide is opened the Guide Viewer fetches the \texttt{animation\_file} from the Community backend and renders it.
+The response conforms to the same model as the aforementioned(\ref{guide-response}) guide creation response.
+
+\medskip
+Playback controls allow rewinding, forwarding, stopping, and pausing. Guide Viewer also provides functionality to load an arbitrary \tech{.fold} file by clicking the file icon located in the top-left corner of the screen.
+
+
+\subsubsection{Community backend}
+
+\begin{figure}[H]
+  \caption{The Community application consists of two main subapplications.}
+  \label{3-backend-community-components}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-community-application.png}
+\end{figure}
+
+The community component is built using Django and split into a couple of subapplications:
+
+\begin{itemize}
+	\item accounts
+	\item guides
+\end{itemize}
+
+\textbf{Guides}
+
+Guides is the main subapplication. It is responsible for handling guide creation, deletion, marking guides as favorites, and delegation of Guide processing tasks.
+
+\medskip
+
+Every action in the subapplication is performed in the context of a Guide. The figure below(\ref{model--guide}) depicts the Guide model.
+
+\begin{figure}[H]
+  \caption{ERD diagram of the model of a Guide}
+  \label{model--guide}
+  \centering
+    \includegraphics[width=0.6\textwidth]{assets/3-erd-guides.png}
+\end{figure}
+
+The fields describe: \begin{description}
+	\item[id] - a handle for a particular Guide.
+	\item[owner] - the Designer who created a particular Guide.
+	\item[animation\_file] - an Animated Guide, a set of Transitions.
+	\item[guide\_file] - an Instruction, a set of Steps.
+	\item[name] - a name that is displayed on the website.
+	\item[private] - a flag indicating whether the guide is only visible for the \texttt{owner}.
+	\item[published\_at] - the date on which a Guide was published.
+	\item[status] - the outcome of Instruction to Guide processing step.
+	\item[thumbnail\_file] - a preview of the figure.
+\end{description}
+
+All actions initiated by a user are passed through a REST API that performs simple CRUD operations.
+
+\bigskip
+
+When a Guide is created or updated it is scheduled onto a task queue and later assembled into an Animated Guide. The processing task invokes Solver to calculate intermediate steps forming a smooth folding animation. 
+
+\medskip 
+Guide processing may terminate with 3 different outcomes.
+
+\begin{itemize}
+	\item An Instruction may be impossible to fold programmatically or realistically. It might occur that the solving algorithm never stops, consuming all available resources. To counteract, a hard timeout has been introduced after which the Guide is marked as timed out - \texttt{TMO}.
+	\item An Instruction file may be malformed or unprocessable, in such scenario the Guide is marked as errored - \texttt{ERR}.
+	\item Finally, a properly folded Instruction is marked as done - \texttt{DON}. The generated Animation file is persisted in the file system.
+\end{itemize}
+
+
+\begin{figure}[H]
+  \caption{Guide states}
+  \centering
+    \includegraphics[width=0.8\textwidth]{assets/3-guide-states.png}
+\end{figure}
+
+
+\medskip
+
+\textbf{Accounts}
+
+Accounts subapplication's responsibilities include, but are not limited to:
+\begin{itemize}
+	\item authentication
+	\item account creation
+	\item password resetting 
+	\item password changing
+\end{itemize}
+
+To fulfill its duties, the Accounts subapplication exposes several REST API endpoints.
+The data model is mostly derived from the built-in Django model which increased the development speed considerably.
+\medskip
+
+ 
+\begin{figure}[H]
+  \caption{Accounts - ERD diagram}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-erd-accounts.png}
+\end{figure}
+
+
+
+
+\subsection{Algorithms}
 \subsubsection{Solver}
 
 \textit{Please note that most of the ideas in this section come from \cite{origami-simulator:paper}}.
@@ -520,16 +734,203 @@ To generate all the Transitions in the model, we run the solve function for each
 \end{figure}
 
 
-\subsection{Development environment setup}
-% Instrukcja postawienia środowiska deweloperskiego - jeśli potrzeba wypełniacza %
+\subsection{Quality assurance}
+
+To ensure the quality of the application the codebase is continuously linted, tested, built, and delivered. Immediate feedback is available for developers, code reviewers, and operators, reducing the possibility of merging a faulty code into the \texttt{master} branch and therefore using a faulty deployment in the production environment.
+
+\medskip
+The pipeline is implemented using \tech{Github Actions}, which is a part of \tech{Github}. This allows for seamless integration with the code repository.
+
+\medskip
+Furthermore, no changes can be pushed directly to the \texttt{master} branch. Every commit needs to be reviewed by at least one other developer before being merged. This policy is enforced using \tech{Github} settings.
+
+\medskip
+Each system component has a dedicated pipeline, tailored to specific requirements. 
+
+\medskip
+Continuous delivery and deployment negate the risk of deploying an application that has not passed all the required checks in the pipelines.
+
+\medskip
+All of the dependencies are bound to a specific minor version. Doing so ensures that in case one of the vendors implements a breaking change our application and pipelines do not break.
+
+\subsubsection{Frontend}
+
+The frontend code is linted on every commit using \tech{Husky}, \tech{ESLint}, and \tech{Prettier}. It is not possible to push an incorrectly formatted code to the repository.
+Uniformly formatted code improves the clarity, allowing a code reviewer to focus on business logic and potential bugs instead of code-formatting.
+
+\medskip
+
+To aid the code review process every pull request containing changes related to the frontend component is deployed as a \tech{preview application} on \tech{Netlify}. A \tech{preview application} is an isolated environment with an application built using the code submitted along with a pull request.
+
+\medskip
+
+Most of the business logic on the frontend is tested. The test runner of choice is \tech{Jest}. Running the whole test suite is as simple as executing \texttt{yarn test}.
+
+\begin{figure}[H]
+  \caption{Workflow - frontend component. Every commit is tested and built.}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-frontend-pipeline.png}
+\end{figure}
+
+\subsubsection{Solver}
+
+Solver is a library written in python and tested using the \tech{unittest} module. Most of the business logic is covered. 
+
+The line test coverage is 77\%.
+
+\begin{figure}[H]
+  \caption{Workflow - solver component. Every change is tested.}
+  \centering
+    \includegraphics[width=0.8\textwidth]{assets/3-solver-pipeline.png}
+\end{figure}
+
+
+\subsubsection{Community}
+
+The community component is written in \tech{Python} using \tech{Django} and therefore uses the \tech{unittest} module that is built-in to the Python standard library. All of the public-facing endpoints are fully covered with integration tests verifying that authentication, authorization, and request body handling are properly implemented. The line test coverage is 96\%.
+
+\medskip
+Code style abides by the \tech{PEP8} standard.
+
+\medskip
+To ensure build reproducibility the community component is enclosed in a Docker image that is automatically deployed to a production environment. 
+
+\begin{figure}[H]
+  \caption{Pipeline - Community backend component.}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-community-pipeline.png}
+\end{figure}
 
 \subsection{Deployment}
+
+Origuide uses Docker images for packaging backend components. Images are pushed to the \tech{Docker Hub} repository where they are publicly available. The frontend build output consists of a set of static files.
+
+\medskip
+The backend deployment configuration is specified using \tech{docker-compose} files. 
+Because all the environment specific configuration is externalized to \texttt{.env} files, the deployment configuration remains environment agnostic. This makes \tech{Origuide}'s backend deployable using a single command.
+
+\begin{figure}[H]
+	\caption{Example configuration of an \textit{.env} file}
+	\lstinputlisting{assets/listings/3-8-env-file}
+\end{figure}
+The backend component can be deployed using a single command.
+\begin{figure}[H]
+	\caption{An exemplary command that deploys the backend component.}
+	\begin{lstlisting}
+docker-compose up -d
+	\end{lstlisting}
+\end{figure}
+
+The frontend component can be easily deployed to any file hosting solution using a file transfer with no additional configuration requirement. This configuration-less nature of the deployment allows switching hosting providers easily should a need arise.
+
+\begin{figure}[H]
+	\caption{An exemplary command that deploys the frontend component.}
+	\begin{lstlisting}
+scp -r ./dist user@{hosting-provider}:/www 
+	\end{lstlisting}
+\end{figure}
+\medskip
+
+\textbf{Production environment}
+
+The backend production environment is running on servers provided by \tech{Digital Ocean}.
+
+\medskip
+The frontend is built and deployed on \tech{Netlify}.
+
+
+
+
 % Instrukcja postawienia środowiska deweloperskiego - jeśli potrzeba wypełniacza %
 
-\subsection{Quality assurance}
-% Quality Assurance: czy mamy testy jednostkowe? Czy mamy inne testy automatyczne? Jakich bibliotek używacie? %
-At every commit that is a part of the master branch or a Pull Request Unit Tests are run. \\
 
 \subsection{Problems encountered}
 % Z jakimi problemami technicznymi sie borykaliście? Jeśli nie opisaliście ich w dokumentacji procesowej. %
+% Collissions
+\subsubsection{Collision detection and handling}
+\subsubsection{Damping force}
+\subsubsection{Paper stiffness}
+\subsubsection{Unnatural guide encoding}
+
+\subsubsection{Mesh rendering hazard}
+
+When folding origami models, two faces lying flat on each other are a common occurrence.
+
+The Solving algorithm is not sophisticated enough to have a sense of sheet thickness. Therefore, it places the folded faces close to each other, on the verge of numerical error. The rendering engine cannot distinguish which face is on top and which one is below, resulting in face color mixture demonstrated below.
+
+\begin{figure}[H]
+	\caption{An example of a mesh rendering hazard}
+  \centering
+    \includegraphics[width=0.6\textwidth]{assets/3-rendering-hazard.png}
+\end{figure}
+
+Unfortunately, the issue has not been resolved in the current iteration. Some potential solutions include:
+\begin{itemize}
+	\item preventing face collision during solving,
+	\item detecting face interpenetration after solving and marking which one is on top.
+\end{itemize}
+
+\subsubsection{Large web application bundle size}
+
+The frontend application uses multiple feature-rich libraries of significant file size footprint such as \tech{Three.js} or \tech{Material-UI}. The whole bundle size was $ 6.81\mathrm{MB} $ resulting in a non-ideal download and parsing times of several seconds.
+
+\medskip
+To analyze the size of all bundle components, \tech{BundleAnalyzerPlugin} for \tech{Webpack} was used. 
+
+\medskip
+
+\begin{figure}[H]
+	\caption{The output of the analysis is in the form of an interactive website that allows drilling down and identifying potential areas of improvement.}
+  \centering
+    \includegraphics[width=\textwidth]{assets/3-bundle.png}
+\end{figure}
+
+To optimize the application size several techniques have been used:
+
+\begin{description}
+	\item[tree-shaking] - dead code elimination technique
+	\item[minimizing] - unnecessary character removal
+	\item[chunking] - code splitting and on-demand chunk loading
+\end{description}
+
+The minimizing was done using the \tech{Terser} plugin. Chunk splitting and tree-shaking features are included, but not enabled by default, in \tech{Webpack}.
+
+\begin{table}[H]
+\label{bundle-size-optimizations}
+\caption{Incorporating optimizations reduced the bundle size massively, cutting the load time by a large factor.}
+\begin{minipage}[t]{\linewidth}
+\begin{tabular}{|l|l|l|l|l|}
+\hline
+\multicolumn{1}{|c|}{} & \multicolumn{2}{l|}{Before optimizations} & \multicolumn{2}{l|}{After optimizations} \\ \hline
+                       & Size                & Gzipped            & Size                & Gzipped            \\ \hline
+Three.js               & 1.2MB               & 233.82KB           & 624.87KB            & 148.83KB           \\ \hline
+Material-UI            & 701.28KB            & 122.62KB           & 196.81KB            & 56.33KB            \\ \hline
+Application size       & 6.81MB              & 1.52MB             & 1.2MB               & 322.15KB           \\ \hline
+\multicolumn{1}{|l|}{Load time\footnotemark} & \multicolumn{2}{c|}{4.24s} & \multicolumn{2}{c|}{0.81s} \\ \hline
+\end{tabular}
+\footnotetext{Duration calculated between client-connection connection establishment and \texttt{load} DOM event being fired}
+\end{minipage}
+\end{table}
+
+\subsubsection{Generating thumbnails for computed Guides}
+
+As of now, Guide thumbnails represent a flat crease pattern. Ideally, the Guide's image would contain a fully folded model. The functionality is not trivial to implement and, due to other issues having a higher priority, has not been worked on.
+
+\begin{figure}[H]
+	\caption{A guide thumbnail with a crease pattern}
+  \centering
+    \includegraphics[width=0.3\textwidth]{assets/3-thumbnails.png}
+\end{figure}
+
+\medskip
+
+
+A couple of potential implementations include:
+
+\begin{itemize}
+	\item Capturing a generated model on the first model view (that is how a crease pattern preview is currently implemented).
+	\item Spinning up a headless browser instance, loading a model, and making a screenshot.
+	\item Rendering a final solver step on the Solver backend using a plotting library.
+\end{itemize}
+
 
