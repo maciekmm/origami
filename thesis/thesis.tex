@@ -8,12 +8,29 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{hyperref}
+\usepackage{listings}
+\usepackage{subfig}
+\usepackage{amsbsy}
+\usepackage{mathtools}
 \hypersetup{colorlinks,breaklinks,urlcolor=black,linkcolor=black,pdfborderstyle={/S/U/W 1}}
 \usepackage{tikz}
 \usetikzlibrary{positioning}
 \bibliographystyle{ieeetr}
 
 \newcommand{\tech}[1]{\textbf{#1}}
+\newcommand{\uveci}[0]{\pmb{\hat{\imath}}}
+\newcommand{\uvecj}[0]{\pmb{\hat{\jmath}}}
+\newcommand{\norm}[1]{\|#1\|}
+
+\DeclareRobustCommand{\uvec}[1]{{
+  \ifcsname uvec#1\endcsname
+     \csname uvec#1\endcsname
+   \else
+    \pbm{\hat{\mathbf{#1}}}
+   \fi
+}}
+
+\everymath{\displaystyle}
 
 \author{Antoni Mleczko \\ Maciej Mionskowski}
 
