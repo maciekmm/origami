@@ -195,8 +195,8 @@ Therefore, before any folding-algorithm can happen, it has to generate a mesh th
 \end{figure}
 
 As an input, we get a set of 3D points, but triangulation works only in 2D.
-Because of that first we convert a set of 3D points to 2D by removing one of the axes (the one which will not lead to degenerate faces, if possible).
-Then, 2D \textbf{Delaunay triangulation} is carried out (we used \textit{shapely} library for that).
+Hence, at first we convert a set of 3D points to 2D by removing one of the axes (the one which will not lead to degenerate faces, if possible).
+Then, 2D \textbf{Delaunay triangulation} is carried out (we used \textit{Shapely} library for that).
 The algorithm introduces new edges. These edges are dynamically constrained to stay flat while folding.
 
 There are cases, where the default triangulation will not be satisfactory
@@ -229,7 +229,7 @@ Each edge is modeled as a spring which length should be kept constant at each it
 \end{figure}
 
 Before solving begins, the initial edge length $l_{0}$ is calculated.
-Then, the \textbf{Hooke's law} is used to calculate the beam force:
+Then, \textbf{Hooke's law} is used to calculate the beam force:
 
 $$F_{l} = -k_{axial} * (l - l_{0})$$
 
@@ -310,8 +310,9 @@ In the implementation, there are 5 possible edge assignments:
 	\item unknown
 \end{enumerate}
 
-The $k_{crease}$ depends on the type of the edge.
-The following piece of code computes the correct $k_{crease}$.
+$k_{crease}$ depends on the edge type.
+
+The following piece of code computes the correct $k_{crease}$:
 
 \lstinputlisting[language=Python]{assets/listings/crease_force_edge_assignment.py}
 
@@ -326,8 +327,9 @@ The stiffness parameter is chosen so that $k_{axial} \gg k_{fold}$.
 
 Manipulating $k_{facet}$ influences how the material behaves. The smaller it is the more it acts like a piece of fabric.
 The bigger it gets the more it starts to resemble paper and then plastic or metal.
+\smallskip
 
-Angle $\theta _{target}$ depends on the type of the edge:
+As well as $k_{crease}$, angle $\theta _{target}$ also depends on the edge type:
 
 $$
 \theta _{target} =
@@ -339,8 +341,9 @@ $$
 $$
 
 By default, the target angle will be one of: $\pi, -\pi, 0$ but the provided Instruction can override the default target angle.
+\smallskip
 
-Finally, the partial derivatives of $\theta$ with respect to $\pmb{p}$ are given by:
+Finally, partial derivatives of $\theta$ with respect to $\pmb{p}$ are given by:
 
 \begin{equation} \label{solver:crease_force1}
 \frac{\partial \theta}{\partial \pmb{p}_1} = \frac{\pmb{n}_1}{h_1}
@@ -362,7 +365,7 @@ with all the symbols as marked on the figure \ref{solver:crease_force_face}.
 \smallskip
 
 The code for calculating crease force strictly follows the above formulations with one slight
-addition - conditionally adding or subtracting a full angle if the faces "flipped" with each other.
+addition - conditionally adding or subtracting a full angle if the faces passed through each other.
 This prevents neighbouring faces from interpenetrating while folding.
 
 \begin{figure}[H]
