@@ -6,3 +6,4 @@
 | Community | [![Community](https://github.com/maciekmm/origami/workflows/Community/badge.svg)](https://github.com/maciekmm/origami/actions?query=workflow%3ACommunity) | |
 | Solver | [![Solver](https://github.com/maciekmm/origami/workflows/Solver/badge.svg)](https://github.com/maciekmm/origami/actions?query=workflow%3ASolver) | |
 | Thesis | [![Thesis](https://github.com/maciekmm/origami/workflows/Thesis/badge.svg)](https://github.com/maciekmm/origami/actions?query=workflow%3AThesis) ||
+
