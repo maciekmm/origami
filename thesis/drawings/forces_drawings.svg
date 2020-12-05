@@ -608,9 +608,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="106.82731"
-     inkscape:cy="608.45153"
+     inkscape:zoom="3.959798"
+     inkscape:cx="318.66219"
+     inkscape:cy="107.45092"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -633,7 +633,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -642,60 +642,13 @@
      inkscape:groupmode="layer"
      id="layer1">
     <g
-       id="g3679"
-       inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/3-edge_as_spring.png"
-       inkscape:export-xdpi="120.07"
-       inkscape:export-ydpi="120.07">
-      <path
-         style="fill:none;stroke:#000000;stroke-width:0.210852px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker3331);marker-end:url(#marker3467)"
-         d="M 9.2604185,37.041666 36.026034,8.9702485"
-         id="path18" />
-      <path
-         style="fill:none;stroke:#000000;stroke-width:0.220318px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker3192);marker-end:url(#marker3192)"
-         d="m 27.781252,37.041667 9.009103,-8.620621 h 2.252272 v -2.155151 h 2.252272 v -2.155151 h 2.252281 v -2.155159 h 2.252272 v -2.155152 h 2.252272 v -2.155151 l 8.833693,-8.3848653"
-         id="path16"
-         sodipodi:nodetypes="ccccccccccccc" />
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
-         x="48.892979"
-         y="27.104492"
-         id="text121"
-         inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/path20.png"
-         inkscape:export-xdpi="120.07"
-         inkscape:export-ydpi="120.07"><tspan
-           sodipodi:role="line"
-           id="tspan119"
-           x="48.892979"
-           y="27.104492"
-           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583">k_axial</tspan></text>
-      <path
-         style="fill:none;stroke:#000000;stroke-width:0.283297;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow2Sstart);marker-mid:url(#Arrow1Lend);marker-end:url(#Arrow2Send)"
-         d="M 27.781251,22.48958 H 38.364583"
-         id="path123"
-         inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/path20.png"
-         inkscape:export-xdpi="120.07"
-         inkscape:export-ydpi="120.07" />
-      <path
-         style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker1426);marker-end:url(#marker1472)"
-         d="m 42.333333,29.10416 6.614585,-6.61458"
-         id="path1422"
-         inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/path20.png"
-         inkscape:export-xdpi="120.07"
-         inkscape:export-ydpi="120.07" />
-    </g>
-    <g
-       id="g3011"
+       id="g2216"
        inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/3-edge_as_spring_l0_l.png"
-       inkscape:export-xdpi="299.38937"
-       inkscape:export-ydpi="299.38937">
+       inkscape:export-xdpi="299.66379"
+       inkscape:export-ydpi="299.66379">
       <path
-         style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#DotL);marker-end:url(#marker1956)"
-         d="M 78.052082,37.041666 104.51042,10.583333"
-         id="path1896" />
-      <path
-         style="fill:none;stroke:#000000;stroke-width:0.165;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#TriangleInL);marker-end:url(#TriangleOutL);stroke-miterlimit:4;stroke-dasharray:0.66, 0.16500000000000001;stroke-dashoffset:0"
-         d="M 100.54167,9.2604166 72.760416,37.041666"
+         style="fill:none;stroke:#000000;stroke-width:0.155074;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.620297, 0.155074;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#TriangleInL);marker-end:url(#TriangleOutL)"
+         d="M 98.830593,10.971493 72.720539,37.081543"
          id="path2024" />
       <path
          style="fill:none;stroke:#000000;stroke-width:0.152308;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.609231, 0.152308;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker2528);marker-end:url(#marker2738)"
@@ -726,12 +679,71 @@
            x="93.124458"
            y="30.425323"
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;stroke-width:0.264583">l</tspan></text>
+      <path
+         style="opacity:0.5;fill:#666666;stroke:#000000;stroke-width:0.25446901;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.25446901,1.01787602;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 99.807835,20.454123 H 89.442607"
+         id="path1966" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.271245px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#DotL);marker-end:url(#marker1956)"
+         d="M 77.35603,37.737717 104.48062,10.613134"
+         id="path1896" />
       <circle
-         style="opacity:0.7;fill:#666666;stroke-width:0.165;stroke-miterlimit:4;stroke-dasharray:0.66, 0.165;stroke-dashoffset:0"
+         style="opacity:0.7;fill:#666666;stroke-width:0.165;stroke-miterlimit:4;stroke-dasharray:0.66, 0.16500000000000001;stroke-dashoffset:0"
          id="path2940"
-         cx="94.901031"
-         cy="20.103394"
+         cx="94.520805"
+         cy="20.491638"
          r="1.3229166" />
+      <path
+         style="opacity:0.5;fill:#666666;stroke:#000000;stroke-width:0.25896901;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.25896901,1.03587604;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 82.779216,37.776189 H 72.030863"
+         id="path1966-7" />
+      <path
+         style="opacity:0.5;fill:#666666;stroke:#000000;stroke-width:0.180498;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:0.180498,0.72199199;stroke-dashoffset:0;stroke-opacity:1"
+         d="M 104.40657,10.531173 H 99.191554"
+         id="path1966-71" />
+    </g>
+    <g
+       id="g1763"
+       inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/3-edge_as_spring.png"
+       inkscape:export-xdpi="300.32233"
+       inkscape:export-ydpi="300.32233">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.210852px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker3331);marker-end:url(#marker3467)"
+         d="M 9.2604185,37.041666 36.026034,8.9702485"
+         id="path18" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.220318px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker3192);marker-end:url(#marker3192)"
+         d="m 27.781252,37.041667 9.009103,-8.620621 h 2.252272 v -2.155151 h 2.252272 v -2.155151 h 2.252281 v -2.155159 h 2.252272 v -2.155152 h 2.252272 v -2.155151 l 8.833693,-8.3848653"
+         id="path16"
+         sodipodi:nodetypes="ccccccccccccc" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:2.82222px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+         x="48.892979"
+         y="27.104492"
+         id="text121"
+         inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/path20.png"
+         inkscape:export-xdpi="120.07"
+         inkscape:export-ydpi="120.07"><tspan
+           sodipodi:role="line"
+           id="tspan119"
+           x="48.892979"
+           y="27.104492"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:2.82222px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';stroke-width:0.264583">k_axial</tspan></text>
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.283;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutL-2)"
+         d="M 26.69511,22.619414 H 37.278442"
+         id="path123"
+         inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/path20.png"
+         inkscape:export-xdpi="120.07"
+         inkscape:export-ydpi="120.07" />
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#marker1426);marker-end:url(#marker1472)"
+         d="m 42.333333,29.10416 6.614585,-6.61458"
+         id="path1422"
+         inkscape:export-filename="/home/zemiret/dev/origami/thesis/assets/path20.png"
+         inkscape:export-xdpi="120.07"
+         inkscape:export-ydpi="120.07" />
     </g>
     <text
        xml:space="preserve"
@@ -743,7 +755,7 @@
          id="tspan4686"
          x="35.71875"
          y="58.208332"
-         style="stroke-width:0.264583"></tspan></text>
+         style="stroke-width:0.264583" /></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
@@ -754,7 +766,7 @@
          id="tspan4690"
          x="31.75"
          y="58.208332"
-         style="stroke-width:0.264583"></tspan></text>
+         style="stroke-width:0.264583" /></text>
     <g
        id="g7508">
       <path

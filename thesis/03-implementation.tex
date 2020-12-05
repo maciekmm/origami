@@ -71,7 +71,7 @@ using the forward Euler integration.
 An additional \textbf{damping force} is introduced to prevent solver from
 high frequency oscilations, assuring numerical stability under most conditions.\\
 
-The solver is implemented in \tech{python}, using \tech{numpy} and \tech{scipy} libraries. 
+The solver is implemented in \tech{Python}, using \tech{numpy} and \tech{scipy} libraries. 
 
 
 \begin{figure}[H]
@@ -83,6 +83,10 @@ The solver is implemented in \tech{python}, using \tech{numpy} and \tech{scipy} 
 
 
 \subsection{Project overview}
+
+As a name for our project, we picked \textbf{Origuide}.
+We will use this code name interchangeably with terms like \textit{the system} or \textit{the application}.
+\smallskip
 
 \begin{figure}[H]
 	\caption{High level system overview}
@@ -161,7 +165,7 @@ The Community backend technology stack has been chosen based on the maturity of 
 	\item \tech{Shapely} is used for triangulation.
 \end{itemize}
 
-At first, Python was meant to be used only for building a proof of concept to answer the question of whether writing a solving library on the Solver backend is feasible for the project. The question has been answered affirmatively, and at that moment we were quite happy with the performance aspect. Unfortunately, down the line, after loading more and more complicated Origami models it became apparent that Python's native performance will not cut it. We were worried that a whole rewrite in a more performant language is imminent. After seeking an alternative solution, the fear has been dispelled. The implementation has benefited from a ten-fold increase in performance by using a performance-oriented Python implementation - \tech{PyPy}.
+At first, Python was meant to be used only for building a proof of concept to answer the question of whether implementing a solving library on the backend, instead of the frontend, is a feasible solution for the project. The question has been answered affirmatively, and at that moment we were quite happy with the performance aspect. Unfortunately, down the line, after loading more and more complicated Origami models it became apparent that Python's native performance will not cut it. We were worried that a whole rewrite in a more performant language is imminent. After seeking an alternative solution, the fear has been dispelled. The implementation has benefited from a ten-fold increase in performance by using a performance-oriented Python implementation - \tech{PyPy}.
 
 
 
@@ -205,7 +209,7 @@ The application also contains a service responsible for communication with the C
 
 \medskip
 
-A guide creator is a frontend subcomponent allowing Designers to create step-by-step Instructions from a crease pattern.
+Guide Creator is a frontend subcomponent allowing Designers to create step-by-step Instructions from a crease pattern.
 
 
 \begin{figure}[H]
@@ -221,7 +225,7 @@ In the center one can see a loaded crease pattern with the edge assignments refl
 To the right there is a set of configuration sections correspondingly responsible for: \begin{description}
 	\item[edge] - Setting an edge target assignment or a fixed target angle.
 	\item[step] - Setting a step name and a description.
-	\item[file] - Setting an Instruction name and description.
+	\item[file] - Setting an Instruction name and a description.
 \end{description}
 
 \medskip
@@ -233,10 +237,10 @@ To the right there is a set of configuration sections correspondingly responsibl
     \includegraphics[width=\textwidth]{assets/3-designer-creator-flow.png}
 \end{figure}
 
-Until \textit{Save the Guide} step, all data and actions are done on the client-side. When \textit{Save the Guide} action is invoked:
+Until \textit{Save the Guide} step, all data and user actions are handled on the client-side. When \textit{Save the Guide} action is invoked:
 
 \begin{itemize}
-	\item if a user is logged in, a request is sent to the Community backend with all configuration attached, or
+	\item if a user is logged in, a request is sent to the Community backend with the whole configuration attached, or
 	\item a file download is initiated.
 \end{itemize}
 
@@ -285,8 +289,8 @@ The purpose of the \textbf{Guide Viewer} is to show animated steps fluently. It 
     \includegraphics[width=\textwidth]{assets/3-guide-viewer.png}
 \end{figure}
 
-When a Guide is opened the Guide Viewer fetches the \texttt{animation\_file} from the Community backend and renders it.
-The response conforms to the same model as the aforementioned(\ref{guide-response}) guide creation response.
+When a Guide is opened, the Guide Viewer fetches the \texttt{animation\_file} from the Community backend and renders it.
+The response conforms to the same model as the aforementioned (\ref{guide-response}) Guide creation response.
 
 \medskip
 Playback controls allow rewinding, forwarding, stopping, and pausing. Guide Viewer also provides functionality to load an arbitrary \tech{.fold} file by clicking the file icon located in the top-left corner of the screen.
@@ -301,20 +305,20 @@ Playback controls allow rewinding, forwarding, stopping, and pausing. Guide View
     \includegraphics[width=\textwidth]{assets/3-community-application.png}
 \end{figure}
 
-The community component is built using Django and split into a couple of subapplications:
+The Community backend is built using \tech{Django}. It consists of a single application - Community application - that is split into a couple of subapplications:
 
 \begin{itemize}
-	\item accounts
-	\item guides
+	\item Accounts
+	\item Guides
 \end{itemize}
 
 \textbf{Guides}
 
-Guides is the main subapplication. It is responsible for handling guide creation, deletion, marking guides as favorites, and delegation of Guide processing tasks.
+Guides is the main subapplication. It is responsible for handling Guide creation, deletion, marking guides as favorites, and delegation of Guide processing tasks.
 
 \medskip
 
-Every action in the subapplication is performed in the context of a Guide. The figure below(\ref{model--guide}) depicts the Guide model.
+Every action in the subapplication is performed in the context of a Guide. The figure below (\ref{model--guide}) depicts the Guide model.
 
 \begin{figure}[H]
   \caption{ERD diagram of the model of a Guide}
@@ -332,6 +336,7 @@ The fields describe: \begin{description}
 	\item[private] - a flag indicating whether the guide is only visible for the \texttt{owner}.
 	\item[published\_at] - the date on which a Guide was published.
 	\item[status] - the outcome of Instruction to Guide processing step.
+	\item[steps] - a number of steps in the Guide.
 	\item[thumbnail\_file] - a preview of the figure.
 \end{description}
 
@@ -371,7 +376,7 @@ Accounts subapplication's responsibilities include, but are not limited to:
 \end{itemize}
 
 To fulfill its duties, the Accounts subapplication exposes several REST API endpoints.
-The data model is mostly derived from the built-in Django model which increased the development speed considerably.
+The data model is mostly derived from the built-in Django User model, which increased the development speed considerably.
 \medskip
 
  
@@ -390,7 +395,7 @@ The data model is mostly derived from the built-in Django model which increased 
 \textit{Please note that most of the ideas in this section come from \cite{origami-simulator:paper}}.
 \smallskip
 
-The input to the Solver is a \textit{.fold} file containing an Instruction, and its output is a \textit{.fold} file containing a Guide. 
+The input to the Solver is a \textit{.fold} file containing an Instruction and its output is a \textit{.fold} file containing a Guide. 
 Instruction, at its simplest, is a set of vertices laying on a flat surface, and a set of edge assignments in each step.
 The Solver's job is to output a resulting Guide file which has all the information necessary to display
 a folding animation - that is, all the vertex positions at each step in time.
@@ -409,7 +414,7 @@ Therefore, before any folding-algorithm can happen, it has to generate a mesh th
 \end{figure}
 
 As an input, we get a set of 3D points, but triangulation works only in 2D.
-Hence, at first we convert a set of 3D points to 2D by removing one of the axes (the one which will not lead to degenerate faces, if possible).
+Hence, at first we convert a set of 3D points to 2D by removing one of the axes (the one which will not lead to degenerate faces if possible).
 Then, 2D \textbf{Delaunay triangulation} is carried out (we used \textit{Shapely} library for that).
 The algorithm introduces new edges. These edges are dynamically constrained to stay flat while folding.
 
@@ -417,14 +422,14 @@ There are cases, where the default triangulation will not be satisfactory
 since we would like to preserve faces' concavity and the algorithm always generates a convex polygon.
 
 \begin{figure}[H]
-	\caption{An example, where triangulating a polygon marked with blue will result in an excessive triangle generated.}
+	\caption{An example where triangulating a polygon marked with blue will result in an excessive triangle generated.}
 	\centering
 	\subfloat{\includegraphics[width=0.5\textwidth]{assets/3-triangulation-improper-cp.png}}\qquad\qquad\qquad
 	\subfloat[\centering Wrong (convex) triangulation]{{\includegraphics[width=.4\linewidth]{assets/3-triangulation-improper-cp-wrong.png} }}\qquad
 	\subfloat[\centering Correct (concave) triangulation]{{\includegraphics[width=.4\linewidth]{assets/3-triangulation-improper-cp-right.png} }}
 \end{figure}
 
-For such cases, we first compute a face's original hull. After the triangulation, we check whether the resulting triangles
+For such cases, we first compute a face's original hull. After the triangulation we check whether the resulting triangles
 lay within the original hull. If they do not, they are excluded from the triangulation result.
 
 \smallskip
@@ -554,7 +559,7 @@ $$
 \end{cases}
 $$
 
-By default, the target angle will be one of: $\pi, -\pi, 0$ but the provided Instruction can override the default target angle.
+By default, the target angle will be one of: $\pi, -\pi, 0$, but the provided Instruction can override the default target angle.
 \smallskip
 
 Finally, partial derivatives of $\theta$ with respect to $\pmb{p}$ are given by:
@@ -575,7 +580,7 @@ Finally, partial derivatives of $\theta$ with respect to $\pmb{p}$ are given by:
 \frac{\partial \theta}{\partial \pmb{p}_4} = \frac{-\cot{\alpha _{3,14}}}{\cot{\alpha _{3,14}} + \cot{\alpha _{4,31}}} \frac{\pmb{n}_1}{h_1} + \frac{-\cot{\alpha _{3,42}}}{\cot{\alpha _{3,42}} + \cot{\alpha _{4,23}}} \frac{\pmb{n}_2}{h_2} 
 \end{equation}
 
-with all the symbols as marked on the figure \ref{solver:crease_force_face}.
+with all the symbols as marked on the figure (\ref{solver:crease_force_face}).
 \smallskip
 
 The code for calculating crease force strictly follows the above formulations with one slight
@@ -635,7 +640,7 @@ Derivatives of $\alpha$ with respect to $p$ are given by
 \textbf{Damping - damping force}
 \smallskip
 
-Damping is an additional force that is not required from the modeling perspective
+Damping is an additional force that is not required from the modeling perspective,
 but is required from the solver's stability point of view. It prevents model's
 oscillation while folding and without it barely any model folds correctly.
 
@@ -700,7 +705,7 @@ $$
 where $m$ is a vertex's mass. We assumed that mass is constant for each vertex, however a more appropriate analysis could yield
 better results in terms of folding dynamics.
 
-Having acceleration, we compute vertex velocity, and next position using \textit{forward Euler Integration} method:
+Having acceleration, we compute vertex velocity and next position using \textit{forward Euler Integration} method:
 
 $$
 \begin{aligned}
@@ -719,14 +724,14 @@ We assume the initial conditions:
 \end{equation}
 
 
-As an end condition, we check whether the difference between current and previous forces is smaller than some configured $\varepsilon$:
+As an end condition we check whether the difference between current and previous forces is smaller than some configured $\varepsilon$:
 
 \begin{lstlisting}[language=Python]
 diff = np.abs(np.array(current_forces) - np.array(previous_forces))
 return np.all(diff <= epsilon)
 \end{lstlisting}
 
-To generate all the Transitions in the model, we run the solve function for each step in the Instruction.
+To generate all the Transitions in the model we run the solve function for each step in the Instruction.
 
 \begin{figure}[H]
 	\caption{The simplified pseudocode for the solving process}
@@ -736,7 +741,7 @@ To generate all the Transitions in the model, we run the solve function for each
 
 \subsection{Quality assurance}
 
-To ensure the quality of the application the codebase is continuously linted, tested, built, and delivered. Immediate feedback is available for developers, code reviewers, and operators, reducing the possibility of merging a faulty code into the \texttt{master} branch and therefore using a faulty deployment in the production environment.
+To ensure the quality of the application, the codebase is continuously linted, tested, built, and delivered. Immediate feedback is available for developers, code reviewers, and operators, reducing the possibility of merging a faulty code into the \texttt{master} branch and therefore using a faulty deployment in the production environment.
 
 \medskip
 The pipeline is implemented using \tech{Github Actions}, which is a part of \tech{Github}. This allows for seamless integration with the code repository.
@@ -751,7 +756,7 @@ Each system component has a dedicated pipeline, tailored to specific requirement
 Continuous delivery and deployment negate the risk of deploying an application that has not passed all the required checks in the pipelines.
 
 \medskip
-All of the dependencies are bound to a specific minor version. Doing so ensures that in case one of the vendors implements a breaking change our application and pipelines do not break.
+All of the dependencies are bound to a specific minor version. Doing so ensures that in case one of the vendors implements a breaking change our application and pipelines will not break.
 
 \subsubsection{Frontend}
 
@@ -774,7 +779,7 @@ Most of the business logic on the frontend is tested. The test runner of choice 
 
 \subsubsection{Solver}
 
-Solver is a library written in python and tested using the \tech{unittest} module. Most of the business logic is covered. 
+Solver is a library written in \tech{Python} and tested using the \tech{unittest} module. Most of the business logic is covered. 
 
 The line test coverage is 77\%.
 
@@ -787,35 +792,35 @@ The line test coverage is 77\%.
 
 \subsubsection{Community}
 
-The community component is written in \tech{Python} using \tech{Django} and therefore uses the \tech{unittest} module that is built-in to the Python standard library. All of the public-facing endpoints are fully covered with integration tests verifying that authentication, authorization, and request body handling are properly implemented. The line test coverage is 96\%.
+The Community backend is written in \tech{Python} using \tech{Django} and therefore uses the \tech{unittest} module that is built-in to the Python standard library. All of the public-facing endpoints are fully covered with integration tests verifying that authentication, authorization, and request body handling are properly implemented. The line test coverage is 96\%.
 
 \medskip
 Code style abides by the \tech{PEP8} standard.
 
 \medskip
-To ensure build reproducibility the community component is enclosed in a Docker image that is automatically deployed to a production environment. 
+To ensure build reproducibility, the Community backend is enclosed in a Docker image that is automatically deployed to a production environment. 
 
 \begin{figure}[H]
-  \caption{Pipeline - Community backend component.}
+  \caption{Pipeline - Community backend.}
   \centering
     \includegraphics[width=\textwidth]{assets/3-community-pipeline.png}
 \end{figure}
 
 \subsection{Deployment}
 
-Origuide uses Docker images for packaging backend components. Images are pushed to the \tech{Docker Hub} repository where they are publicly available. The frontend build output consists of a set of static files.
+Origuide uses \tech{Docker} images for packaging backend components. Images are pushed to the \tech{Docker Hub} repository where they are publicly available. The frontend build output consists of a set of static files.
 
 \medskip
 The backend deployment configuration is specified using \tech{docker-compose} files. 
-Because all the environment specific configuration is externalized to \texttt{.env} files, the deployment configuration remains environment agnostic. This makes \tech{Origuide}'s backend deployable using a single command.
+Because all the environment specific configuration is externalized to \texttt{.env} files, the deployment configuration remains environment agnostic. This makes Origuide's backend deployable using a single command.
 
 \begin{figure}[H]
 	\caption{Example configuration of an \textit{.env} file}
 	\lstinputlisting{assets/listings/3-8-env-file}
 \end{figure}
-The backend component can be deployed using a single command.
+
 \begin{figure}[H]
-	\caption{An exemplary command that deploys the backend component.}
+	\caption{An example of a command that deploys the backend components.}
 	\begin{lstlisting}
 docker-compose up -d
 	\end{lstlisting}
@@ -824,7 +829,7 @@ docker-compose up -d
 The frontend component can be easily deployed to any file hosting solution using a file transfer with no additional configuration requirement. This configuration-less nature of the deployment allows switching hosting providers easily should a need arise.
 
 \begin{figure}[H]
-	\caption{An exemplary command that deploys the frontend component.}
+	\caption{An example of a command that deploys the frontend components.}
 	\begin{lstlisting}
 scp -r ./dist user@{hosting-provider}:/www 
 	\end{lstlisting}
@@ -856,7 +861,7 @@ The frontend is built and deployed on \tech{Netlify}.
 
 When folding origami models, two faces lying flat on each other are a common occurrence.
 
-The Solving algorithm is not sophisticated enough to have a sense of sheet thickness. Therefore, it places the folded faces close to each other, on the verge of numerical error. The rendering engine cannot distinguish which face is on top and which one is below, resulting in face color mixture demonstrated below.
+The Solving algorithm is not sophisticated enough to have a sense of sheet thickness. Therefore, it places the folded faces close to each other, on the verge of numerical error. The rendering engine cannot distinguish which face is on top and which one is below, resulting in a face color mixture demonstrated below.
 
 \begin{figure}[H]
 	\caption{An example of a mesh rendering hazard}
@@ -866,8 +871,8 @@ The Solving algorithm is not sophisticated enough to have a sense of sheet thick
 
 Unfortunately, the issue has not been resolved in the current iteration. Some potential solutions include:
 \begin{itemize}
-	\item preventing face collision during solving,
-	\item detecting face interpenetration after solving and marking which one is on top.
+	\item preventing faces from colliding during solving,
+	\item detecting interpenetrating faces after solving and marking which one is on top.
 \end{itemize}
 
 \subsubsection{Large web application bundle size}
