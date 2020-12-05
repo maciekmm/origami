@@ -1,5 +1,4 @@
 export const FRAME_RATE_PROPERTY = "file_og:frameRate"
-const INHERIT_DEEP_PROPERTY = "frame_og:inheritDeep"
 
 export function getComputedProperty(frames, frameId, property) {
 	if (typeof frameId !== "number") {
@@ -20,18 +19,17 @@ export function getComputedProperty(frames, frameId, property) {
 	}
 
 	const isPropertyDefined = property in frame
+	const deepInherit =
+		!!frame["frame_og:inheritDeep"] &&
+		(!isPropertyDefined || Array.isArray(value))
+	if (isPropertyDefined && !deepInherit) {
+		return value
+	}
 
-	// no property whatsoever
 	if (!isPropertyDefined) {
 		return getComputedProperty(frames, frame["frame_parent"], property)
 	}
 
-	const deepInherit = !!frame[INHERIT_DEEP_PROPERTY] && Array.isArray(value)
-	if (!deepInherit) {
-		return value
-	}
-
-	// property is an array
 	const containsNulls = value.includes(null)
 	if (!containsNulls) {
 		return value
