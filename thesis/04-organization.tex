@@ -85,5 +85,188 @@ us has provided to the given area.
 \subsection{Project timeline}
 % Przebieg prac (harmonogram, kalendarz): podział na poszczególne etapy, iteracje i jak one wyglądały i co było ich efektem.
 
-\subsection{Deployments, tests, and experiments}
-% Opis ewentualnych wdrożeń, testów, eksperymentów
+The idea for the project was born in Februrary 2020, during a brainstorming session.
+The project began in March 2020 and was finalized in December 2020.
+
+\medskip
+
+The general overview of the project timeline can be presented in four phases:
+\begin{enumerate}
+	\item \textbf{Brainstorming}, during which we held a couple of brainstorming sessions and came up with a few dozen of project ideas.
+	\item \textbf{Idea Formalization}, in the midst of which we looked for a supervisor.
+	\item \textbf{Topic Research}, throughout which we gathered required scientific knowledge.
+	\item \textbf{Development}, during which we developed an actual product.
+\end{enumerate}
+
+The diagram below (\ref{4-project-phases}) depicts the estimated phase lengths during the project time frame.
+
+\begin{figure}[H]
+\label{4-project-phases}
+  \caption{Project phases timeline}
+  \centering
+    \includegraphics[width=\textwidth]{assets/4-phases.png}
+\end{figure}
+
+
+To see how different aspects of the project unfolded, a more detailed graphic has been created (\ref{04-component-timeline}). The data has been mostly sourced from the project's code repository.
+
+\begin{figure}[H]
+	\label{04-component-timeline}
+\caption{Components development timeline}
+  \centering
+    \includegraphics[width=1.01\textwidth]{assets/4-component-timeline.png}
+\end{figure}
+
+As can be seen, the work has been pretty well planned and thought out. The actual development time spans the whole project time frame.
+
+The figure below (\ref{04-commit-intensity}) presents the estimated intensity of work.
+
+\begin{figure}[H]
+	\label{04-commit-intensity}
+	\caption{The project contributions graph - the number of commits to the \texttt{master} branch.}
+  \centering
+    \includegraphics[width=1.01\textwidth]{assets/4-contributions-graph.png}
+\end{figure}
+
+The more detailed monthly breakdown of the project state, with features on which we worked, is listed below.
+
+\subsubsection{March}
+
+At the beginning of March we were looking for a supervisor, formulating problems, and planning the project.
+
+\medskip
+
+Having all the formal issues sorted out, we started the Topic Research phase.
+
+Most of the time was spent on studying the \textit{Geometric folding algorithms: Linkages, Origami, Polyhedra} course\cite{mit-course}. The videos provided us with knowledge concerning the scientific field of computational origami, and most importantly:
+\begin{itemize}
+	\item the terminology,
+	\item current numerical algorithms for paper solving problems,
+	\item on-going research,
+	\item a file format for saving crease patterns,
+	\item pitfalls to avoid.
+\end{itemize}
+
+It is hard to imagine this project coming to fruition without getting familiar with the aforementioned course.
+
+\subsubsection{April}
+
+April was the start of the Development phase.
+
+We started prototyping, in parallel, the following components:
+\begin{itemize}
+	\item the Guide Viewer
+	\item the Solver.
+\end{itemize}
+
+Most notable features that were completed in April include:
+\begin{itemize}
+	\item adapting the \tech{.fold} file specification to suit the project needs,
+	\item \tech{.fold} file parsing on both the backend and the frontend,
+	\item \tech{.fold} file rendering on the frontend,
+	\item the frontend deployment pipeline,
+	\item triangulation on the backend.
+\end{itemize}
+The end of April resulted in first prototypes being previewed and discussed. Our vision of the project was materializing.
+
+\begin{figure}[H]
+	\label{04-first-prototypes}
+	\caption{The Guide Viewer at the end of April}
+  \centering
+    \includegraphics[width=1.01\textwidth]{assets/prototype-front.png}
+\end{figure}
+
+
+% 05-11.04 - FOLD preview prototype
+% 12-18.04 - Rewrite in react, file loader, code quality enforcement
+% 19-25.04 - Continuous integration setup, lightning changes, solver 
+% 24.05-30.05 - Thesis, solver
+
+\subsubsection{May}
+
+During May we refactored the prototype that was developed in April. We adjusted our technology choices and introduced testing libraries.
+
+The most notable aspects that were completed in May include:
+
+\begin{itemize}
+	\item first working prototype of the Solver
+	\item incorporation of the React framework into the frontend,
+	\item the first chapter of the thesis. 
+\end{itemize}
+
+\subsubsection{June}
+
+The main topic for May and June was the second chapter of the thesis. The prototype section was written during that time.
+
+\subsubsection{July}
+
+July was not a fruitful month for the project. Several discussions were held, but no actual progress was made.
+
+\subsubsection{August}
+
+In August our focus shifted to performance and stability aspects of the system. 
+
+The most important matters that were wrapped up in August consist of:
+
+\begin{itemize}
+	\item adding a damping force to the Solver,
+	\item switching the Solver's runtime environment to PyPy,
+	\item adding Continuous Integration to the Solver,
+	\item supporting target angles in the Solver,
+	\item displaying edges with their assignment on the model,
+	\item adding timeline scrubbing to the Guide Viewer.
+\end{itemize}
+
+\subsubsection{September}
+
+September was a productive time, which brought a lot of business value to the application. 
+
+This time we undertook the implementation of Guide Creator and Community backend parts of the system.
+\medskip
+We accomplished:
+
+\begin{itemize}
+	\item smooth animations with an addition of Guide encoding,
+	\item a possibility to compose and create Guides intuitively using the Guide Creator,
+\end{itemize}
+
+\subsubsection{October}
+
+In October, we continued working on the community aspect of the system. 
+
+The most valuable features completed in October include:
+
+\begin{itemize}
+	\item option to create an account,
+	\item ability to log in,
+	\item Guide upload functionality,
+	\item password reset form,
+	\item ability to like a Guide,
+	\item Guides Browser,
+	\item support for 2D crease patterns.
+\end{itemize}
+
+
+\subsubsection{November}
+% 01.11-07.11 - Multi-crease select, triangulation changes, color tweaking,
+% 08.11-14.11 - Updating, deleting guides
+% 15.11-21.11 - Community backend deployment
+% 22.11-now - Thesis, bugfixing
+
+At the beginning of November, we had an application with almost all functional requirements covered. It needed some tweaking, mainly from the User Experience and User Interface points of view. The deadline was nigh. Therefore, we focused all our attention on wrapping up the development process and gaining momentum on writing the paper.
+
+\medskip
+
+We have:
+
+\begin{itemize}
+	\item eliminated most of the major pain points from the system,
+	\item added Guide deleting and updating functionalities,
+	\item widened crease pattern support by changing the triangulation algorithm,
+	\item improved visual aspects of the system.
+\end{itemize}
+
+
+\subsubsection{December}
+
+As stated previously, in December we buckled down to writing the thesis and fulfilling formal requirements.
