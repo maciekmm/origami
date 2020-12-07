@@ -82,6 +82,52 @@ us has provided to the given area.
 % Organizacja prac i wykorzystane narzędzia - używaliście facebooka, emaili czy spotykaliście się zawsze o określonej porze? Jak i kiedy dzieliliście się zadaniami: czy było to po każdym spotkaniu z klientem? Kiedy spotykaliście się z klientem? Jak często? Używaliście Jiry, confluence, trello? Koniecznie zróbcie screenshota! A może jakieś statystyki z githuba które jakoś podsumują Wasz projekt? Tutaj Wasze przemyślenia i komentarze mile widziane.
 % Zastosowane techniki i praktyki - odnosi się do powyższego, ale możecie tutaj spróbować wskazać takie praktyki jak Pair Programming, TDD, Refactoring, Planning Game, User Stories, Team Velocity, Continuous Integration, Sprint Review Meeting, makiety GUI. Jak wyglądał proces testowania? Czy były robione jakieś prototypy? Jak były walidowane, odrzucane (te kwestie ew. do dokumentacji technicznej)?
 
+\subsubsection{Tools}
+
+\tech{Github} was our provider of choice for hosting the code repository, planning work, incorporating continuous integration, continuous delivery, and tracking progress. Despite some of the project management  and CI related features on Github being relatively new and simple, they were suitable enough for our needs. Using the same service for managing all project aspects allows for natural cross-referencing between issues and code. It also acts as a single source of truth, hence reducing the hassle associated with jumping between platforms and keeping them synchronized. 
+
+For creating diagrams we used \tech{diagrams.net} (formerly draw.io), \tech{canva.com}, and \tech{TikZ}. \tech{GIMP} was used for editing screenshots and graphics. System mock-ups were designed in \tech{Adobe XD}.
+
+\subsubsection{Work methodology}
+
+Our work methodology was simple, agile, and based on the Kanban system.
+
+\medskip
+We used multiple Github project boards to incorporate Kanban into our environment. 
+Community Backend, Solver Backend, Thesis, and Infrastructure each received their separate Kanban Boards. Every Board could represent a separate team working on the project.
+
+\begin{figure}[H]
+  \caption{One of the many Kanban Boards in our project.}
+  \centering
+  \includegraphics[width=\textwidth]{assets/4-gh-board.png}
+\end{figure}
+
+We would pick issues to work on by moving a card from the \textbf{To Do} to the \textbf{In progress} column. Once the development was finished and ready for a review, a Pull Request would be created and the card would be marked as \textbf{Review in progress}. Should a feature pass the review process, the card would be moved to the \textbf{Done} lane.
+
+\medskip 
+
+After we established all functional requirements, they acted as our guide for creating issues. Feature's priority impacted the position of the card in the \textbf{To Do} column. The more important the feature was, the higher it appeared on the \textbf{To Do} pane.
+
+\subsubsection{Communication}
+
+\textbf{Internal}
+
+Thanks to all development team members working from the same place, most of the communication was carried out face to face. This fact had a positive impact on the project as ideas were communicated clearly and quickly. Non-urgent matters were handled through Github issues.
+
+\medskip
+
+\textbf{External}
+
+E-mail was used as the main mean of information exchange between the developer team and the thesis supervisor. Occasionally, phone calls and \tech{Microsoft Teams} were used when a longer discussion was needed. The communication was established primarily in situations when we wanted to confirm a path the project is heading.
+
+
+\subsubsection{Code development}
+
+As a version control framework we used a simplified \tech{Git workflow}. Each feature would be first developed on a feature branch. Once the work was finished, a Pull Request would be created. The Pipeline would run tests against the changed components. Should the pipeline pass, the review process would commence. Once the work was successfully reviewed, the \texttt{master} branch would be rebased onto the feature branch to avoid merge conflicts. The Pull Request would then be squashed and merged into the \texttt{master} branch. The main branch would run the Pipeline with an additional delivery step, which would result in the code being published to the production environment.
+
+
+
+
 \subsection{Project timeline}
 % Przebieg prac (harmonogram, kalendarz): podział na poszczególne etapy, iteracje i jak one wyglądały i co było ich efektem.
 
@@ -98,7 +144,7 @@ The general overview of the project timeline can be presented in four phases:
 	\item \textbf{Development}, during which we developed an actual product.
 \end{enumerate}
 
-The diagram below (\ref{4-project-phases}) depicts the estimated phase lengths during the project time frame.
+The diagram below depicts the estimated phase lengths during the project time frame.
 
 \begin{figure}[H]
 \label{4-project-phases}
@@ -107,19 +153,18 @@ The diagram below (\ref{4-project-phases}) depicts the estimated phase lengths d
     \includegraphics[width=\textwidth]{assets/4-phases.png}
 \end{figure}
 
-
-To see how different aspects of the project unfolded, a more detailed graphic has been created (\ref{04-component-timeline}). The data has been mostly sourced from the project's code repository.
+To see how different aspects of the project unfolded, a more detailed graphic has been created. The data has been mostly sourced from the project's code repository.
 
 \begin{figure}[H]
 	\label{04-component-timeline}
-\caption{Components development timeline}
-  \centering
+	\caption{Components development timeline}
+  	\centering
     \includegraphics[width=1.01\textwidth]{assets/4-component-timeline.png}
 \end{figure}
 
 As can be seen, the work has been pretty well planned and thought out. The actual development time spans the whole project time frame.
 
-The figure below (\ref{04-commit-intensity}) presents the estimated intensity of work.
+The figure below presents the estimated intensity of work.
 
 \begin{figure}[H]
 	\label{04-commit-intensity}
