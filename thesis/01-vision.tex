@@ -1,97 +1,103 @@
 \subsection{Problem characteristics}
-Origami has been around for a long time. It originated in China and Japan and
-spread all around the world\cite{wiki:history-of-origami}. Origami is
-recognized as the art of paper folding.
-Recently it is becoming increasingly popular in a scientific context.
-Although known for centuries, it still exhibits properties that are useful
-in many different contexts, e.g.
+Origami has been around for a long time. It originated in China and Japan, roughly at the same time, from where it 
+spread all around the world\cite{wiki:history-of-origami}. 
+Origami is recognized as the art of paper folding.
+Although known for centuries, it exhibits properties that are applicable 
+in many different contemporary contexts, e.g.
 space exploration\cite{origami-in-orbit}, or deploying solar arrays\cite{solar-panel-origami}.
-Mathematicians started recognizing material folding as a distinct
-branch known as \hyperref[dictionary:computational-origami]{\textit{computational origami}}.
-The field has seen a tremendous development in the past couple decades especially in the software space.
-Although dynamic, there are still many open problems \cite{mit-open-problems}.
-Beginners fold origami following step-by-step instructions.
-More advanced origamists will use a \hyperref[dictionary:crease-pattern]{\textit{crease pattern}}
-to form a \hyperref[dictionary:folded-state]{\textit{folded state}}.
+It has recently started to attract attention among scientists and engineers.
+Researchers are now recognizing material folding as a distinct
+branch of mathematics, known as \hyperref[dictionary:computational-origami]{\textit{computational origami}}.
+The field has seen tremendous development in the past couple of decades.
+Being such a broad topic, it is not surprising that there are numerous open problems \cite{mit-open-problems} and on-going research.
+
+\medskip
+
+While beginners fold origami following step-by-step instructions,
+more advanced origamists would use \hyperref[dictionary:crease-pattern]{\textit{crease patterns}}
+to form the \hyperref[dictionary:folded-state]{\textit{folded state}}.
 The process of origami creation consists of two stages: \textit{design} and \textit{folding}.
+The former is a reference to the \textit{crease pattern} creation, and the latter is the process of the actual folding.
 
 \begin{figure}[H]
-\caption{A crease pattern for the popular origami crane model}
+\caption{A crease pattern for a popular origami model, a crane.\label{fig:creasepattern}}
   \centering
     \includegraphics[width=0.8\textwidth]{assets/crane-crease-pattern.png}
 \end{figure}
 
 \subsection{Motivation}
 
-Even though origami seems to be a child's play, at times
+Even though origami might seem to be a child's play, at times
 people would get discouraged whilst following the origami instructions due to
 the lack of details they expose.
 
-We would like to provide a way for beginners (and advanced origamists alike) to visualize step-by-step the folding process of the origami pattern that they provide.
-While there exist some programs aiding the process of design, there is no satisfactory solution
-that would present the process of folding as it would be carried out manually.
+We would like to provide a way, for beginners and advanced origamists alike,
+to visualize the folding process step by step.
+While there exist some programs aiding the process of design \cite{app:treemaker} \cite{app:omto} \cite{app:origami-draw}, there is no satisfactory solution 
+that would present the process of folding the way it would be carried out manually.
 
-We have evaluated existing solutions, and the one that resembles 
+We have evaluated existing products, and the one that resembles 
 what we would like to achieve the most \cite{origami-simulator} provides a way to load a crease pattern
-and display the process of folding, however it does not allow to visualize the process step-by-step, it only allows 
-to go from a flat sheet of paper to a folded state immediately. It also bypasses some physical properties, such as the fact that the
-paper should collide with itself.
+and view the folding process. 
+However, it goes immediately from a flat sheet of paper to the folded figure, skipping all the steps
+that would be required while folding the figure by hand.
+It also bypasses some physical properties that we would like to achieve, such as the fact that the
+paper should not interpenetrate itself.
 
 
 \begin{figure}[H]
 \caption{Origami simulator by Amanda Ghassaei}
   \centering
-    \includegraphics[width=0.8\textwidth]{assets/origami-simulator.png}
+    \includegraphics[width=\textwidth]{assets/origami-simulator.png}
 \end{figure}
+
+\clearpage 
 
 \subsection{Product Vision}
 
 \subsubsection{Functionality}
 
-Our main goal is to create a platform to visualize the origami model in 3D,
-in every step of the folding process, while animating the transitions between the steps.
+Our main goal is to create a platform that would allow visualisation of the origami folding process in a 3D space.
+It would be possible to see how the figure folds at each step by playing an animation of the transition.
 
-The inseparable component of the system would be a file format describing the folding steps necessary to complete the origami.\\
+The inseparable component of the system would be a file format describing the folding sequence necessary to complete the origami figure.\\
 
-\noindent \textbf{The users would be able to:}
+The users in our system would at least be able to:
 \begin{itemize}
-	\item load the folding instruction
-	\item choose the step of the instruction that they want to visualize
-	\item rotate the scene
-    \item zoom in and out
-	\item move around the scene
-	\item pause the animation at any time, and move back and forth
+	\item load a folding instruction;
+	\item choose a step they want visualized;
+	\item rotate the scene;
+    \item zoom in and out;
+	\item move around the scene;
+	\item pause the animation at any time, and move back and forth.
 \end{itemize}
 
 \subsubsection{Technology}
 
-Our application will consist of two layers - backend and frontend.
+Our application will consist of two layers -- backend and frontend.
 
-Backend part will serve frontend pages, and be responsible
-for storing user files.
+The backend part will be responsible for storing user files and turning Instructions into animated Guides.
+The frontend part will handle user interactions and 3D visualisations.
 
-Frontend part will handle user interaction, computations on the origami model,
-3D visualizations, and communication with backend.
+We have decided to use well-known and widely spread technologies.
+For the backend part we will take advantage of \tech{Python} language with \tech{Django} framework.
+As a data storage, we are going to incorporate \tech{PostgreSQL}.
 
-We have decided to use well-known and tested technologies.
-For the backend part, we are going to use \tech{Go} language,
-using standard library to write the server part.
-
-For the frontend, we will use vanilla \tech{JavaScript}
-for user interface and computations,
-and we will perform 3D rendering using \tech{Three.js} library
-that is built on top of \tech{WebGL}.
+For the frontend, we will use \tech{JavaScript} with \tech{React} for building the user interface.
+The 3D rendering will be performed using \tech{Three.js} library that is built on top of \tech{WebGL} renderer.
 
 \begin{figure}[H]
 	\caption{Technology stack}
 	\centering
 	\begin{tikzpicture}
 	\node (backend) at (0,0) [draw,thick,minimum width=4cm,label=north west:Backend] {
-		\includegraphics[width=.25\textwidth]{assets/go-logo-blue.png}
+		\includegraphics[width=.15\textwidth]{assets/python.png}
+		\includegraphics[width=.15\textwidth]{assets/django-logo.png}
 	};
 	\node[below = of backend] (frontend) [draw,thick,minimum width=4cm, label=north west:Frontend] {
-		\includegraphics[width=.15\textwidth]{assets/javascript-logo.png}
-		\includegraphics[width=.30\textwidth]{assets/three-js-logo.png}
+		\includegraphics[width=.12\textwidth]{assets/javascript-logo.png}
+		\includegraphics[width=.12\textwidth]{assets/react-logo.png}
+		\includegraphics[width=.23\textwidth]{assets/three-js-logo.png}
 	};
 	\draw[<->,thick] (backend.south) -- (frontend.north);
 	\end{tikzpicture}
@@ -100,57 +106,54 @@ that is built on top of \tech{WebGL}.
 
 \subsection{Feasibility Study}
 
-Both \tech{Go} and \tech{JavaScript} are widely spread and actively maintained languages.
+Both \tech{Python} and \tech{JavaScript} are widely spread and actively maintained.
 There is a strong community surrounding both of them.
 \tech{Three.js} is the most popular library for 3D \tech{WebGL} rendering.
 
 Therefore, we are not expecting problems connected with the tools we have selected.
 
-Since the project will require a lot of knowledge from the computational origami
+Since the project will require a lot of knowledge from the \textit{computational origami}
 field, we will have to research the existing materials on this topic.
-The most promising resource seems to be a MIT course by
-Eric Demaine \cite{mit-course}, and a book co-authored by the same person -
-Geometric Folding Algorithms\cite{origami-book}.
-Various papers are also available which might come in handy, especially those regarding software implementations.
+The most promising resources seem to be the MIT course by
+Eric Demaine \cite{mit-course} and a book co-authored by the same person -- \textit{Geometric Folding Algorithms: Linkages, Origami, Polyhedra} \cite{origami-book}.
+Various available papers might come in handy as well, especially the ones regarding software implementations of origami folding algorithms.
 
 
 \subsection{Threat Assessment}
 
-Playing with the intersection between reality and computer science has always
-been a challenging task.
-Here, we are trying to tackle a problem that has not been discussed previously.
-Every year the field of computational origami sees a progress,
-so the mathematics behind it are not yet well developed.
-We foresee many challenges along the way, such as:
+Playing with the intersection between reality and computer science has always been a challenging task.
+As the field of \textit{computational origami} is relatively young, there are still many obstacles to overcome.
+As of now, the mathematical rules governing the origami folding are not fully developed.
+On top of it, we are going to tackle a problem that has not been widely discussed.
+
+Taking all of that into account, we foresee many challenges along the way, such as:
 
 \begin{itemize}
-	\item NP-hardness - some problems that we will face are in general proved to be NP-hard.
-		Example of such a problem can be computing layer ordering based on a crease pattern.
-		We will have to overcome them either using approximate methods, or coming up with solutions that will avoid them.
+	\item NP-hardness - some problems that we will face are proved to be NP-hard.
+		Computing layer ordering based on a crease pattern is an example of such a problem.
+		We will have to overcome them, either by using approximate methods or coming up with solutions that will avoid them.
 
-	\item physical properties of a paper - if we would like to support complex physical properties,
-		there is a lot of features that would require a separate set of computations simulating paper physics, e.g.
+	\item Physical properties of paper - should we support more complex physical properties,
+		there are many features that would require a separate set of computations simulating paper physics, e.g.
 		\begin{itemize}
-			\item inflating
-			\item curving 
-			\item cutting
+			\item inflating,
+			\item curving,
+			\item cutting.
 		\end{itemize}
 
-	\item performance - web browser are still not well optimized to carry out 3D computations and render 3D graphics in real time.
-		The system will have to be highly optimized, in order to be usable.
-		State of the art programs offload computational payload to GPU.
+	\item Performance -- web browsers are still not fully optimized to carry out 3D computations and render 3D graphics in real time.
+		The system will have to be highly optimized in order to be usable.
+		
+	\item Mathematics -- we have little experience writing complex simulations utilizing complicated mathematical formulas.
+		Even modelling a simple paper fold requires a lot of knowledge on different physical properties and frameworks that one could use.
 
-	\item mathematics - we don't have a lot of experience in writing complex simulations utilizing complicated mathematical formulas.
-		Even computing a simple paper fold requires physical computations such as computing strain on different parts of the paper.
-
-	\item 3D graphics - we have some experience working with 3D, however only from the user perspective.
+	\item 3D graphics -- we have some experience working with 3D, however only from the user perspective.
 		We have little experience in creating 3D graphical software.
 
 \end{itemize}
 
-That all being said, we believe we are able to undertake this problem and provide a solution to it.
-While challenging it is also rewarding in terms of business value and as a unique product in the field.
-
+Having said that, we believe we are capable of undertaking this problem and providing a solution to it.
+Albeit challenging, it is rewarding especially in terms of projected business value and gained expertise.
 
 \subsection{Dictionary} \label{dictionary}
 
