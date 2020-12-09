@@ -391,7 +391,9 @@ The data model is mostly derived from the built-in Django User model, which incr
 
 
 \subsection{Algorithms}
+
 \subsubsection{Solver}
+\label{section:algorithms-solver}
 
 \textit{Please note that most of the ideas in this section come from \cite{origami-simulator:paper}}.
 \smallskip
@@ -845,18 +847,67 @@ The backend production environment is running on servers provided by \tech{Digit
 The frontend is built and deployed on \tech{Netlify}.
 
 
-
-
-% Instrukcja postawienia środowiska deweloperskiego - jeśli potrzeba wypełniacza %
-
-
 \subsection{Problems encountered}
 % Z jakimi problemami technicznymi sie borykaliście? Jeśli nie opisaliście ich w dokumentacji procesowej. %
 % Collissions
-\subsubsection{Collision detection and handling}
+\subsubsection{Collision detection and prevention}
+
+The Solver algorithm does not handle face collisions correctly.
+What it means in practice is that sometimes users see a peculiar effect 
+of two faces interpenetrating each other while folding.
+We have implemented collision detection, which would be the first step to solve this problem,
+but we have not made any progress from that point on. 
+
+The collision detection algorithm had to work fast, since it would be called at each step of the solving process. 
+We had researched available options and settled on the method described in the article
+\textit{Surface Collision Detection with the Overlapping Bounding Box between Virtual Prototype Models} \cite{collision-detection}.
+
+After implementing collision detection, we had several attempts, using different approaches, to 
+solve the problem of collision prevention. Unfortunately, none of them proved to be robust enough for our application.
+
 \subsubsection{Damping force}
-\subsubsection{Paper stiffness}
-\subsubsection{Unnatural guide encoding}
+
+Once we had implemented all the forces necessary to model the folding of origami figures, we ran the solving process.
+Unfortunately, the models would enter the perpetual cycle of form changing that would never cease.
+In essence -- the solving algorithm was numerically unstable.
+
+While researching some of the possible solutions to the problem, 
+we came across references to \textit{numerical damping}. 
+The following publications helped us understand the topic: 
+
+\begin{itemize}
+	\item an answer to a question at \textit{researchgate.net} \cite{researchgate:what-is-damping},
+	\item \textit{Insight into an implicit time integration scheme for structural dynamics} \cite{damping1}
+	\item \textit{On a composite implicit time integration procedure for nonlinear dynamics} \cite{damping2}
+\end{itemize}
+
+Having that insight, we were able to implement the \textit{damping force}. Models that previously failed to complete, started to fold properly.
+
+\subsubsection{Guide encoding}
+
+Normally when we run the Solver for a single step of an Instruction, it would produce around 
+1000 to 10000 frames.
+90\% of the actual folding process would occur in the first 5\% of frames and the rest of them would differ by very little in terms of changes in vertex positions.
+
+To mitigate these problems we have written the \texttt{LogFoldEncoder} class.
+
+\begin{figure}[H]
+	\caption{The \texttt{LogFoldEncoder} class}
+	\lstinputlisting[language=Python]{assets/listings/3-log_fold_encoder.py}
+\end{figure}
+
+When the Solver produces a frame, the encoder is responsible for either including it in or excluding it from the resulting Guide.
+The \texttt{encode} and \texttt{advance} methods are called on every frame.
+The former accepts a frame and decides whether it should be included or not, 
+and the latter adjusts some internal state.
+
+The \texttt{next\_step} function is called when switching to a next step in the Instruction so as to reset the encoding state.
+
+To solve the problem of the first 5\% of the folding process containing 90\% of the information, the
+\texttt{LogFoldEncoder} does its job by utilizing \textit{exponential dropout}.
+At first, the frame drop rate is assigned the value of \texttt{frame\_drop\_rate}
+Then it gets multiplied every \texttt{frame\_drop\_change\_iter} calls of \texttt{advance}
+by \texttt{frame\_drop\_multiplier}.
 
 \subsubsection{Mesh rendering hazard}
 
