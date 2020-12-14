@@ -20,6 +20,7 @@ frontend/.eslintcache
 *.nav
 *.snm
 thesis/thesis.pdf
+thesis/presentation.pdf
 
 venv/
 venv-pypy/
