@@ -1,9 +1,9 @@
 \subsection{Prototype}
 
-From the list of requirements mentioned in the previous chapter we have selected the most important ones and created a prototype that would serve as a MVP (Minimum Viable Product) which we could develop further into a full-featured application.
+From the list of requirements defined in the previous chapter we have selected the most important ones and created a prototype that would serve as a MVP (Minimum Viable Product) which we could develop further into a full-featured application.
 \smallskip
 
-The selected features list consists of: 
+The list of selected features consists of: 
 
 \begin{enumerate}
 	\requirement{3}{loading an Instruction}
@@ -16,16 +16,17 @@ The selected features list consists of:
 	\requirement{2}{forwarding the Transition}
 	\requirement{3}{rotating the Model in 3D space}
 	\requirement{3}{zooming the Model in and out in 3D space}
-	\requirement{1}{seeing creases of the Model} 
-	\requirement{2}{distinguishing paper's top and bottom sides} 
+	\requirement{1}{seeing creases of the Model}
+	\requirement{2}{distinguishing paper's top and bottom sides}
 \end{enumerate}
 
 \subsubsection{Frontend}
 
 At first we had decided to use plain \tech{JavaScript} with the \tech{Rollup} bundler and \tech{Three.js} framework.
 It quickly became apparent that the state management of the application will become problematic as the development progresses.
-Following that realization we have decided to incorporate a framework for building user interfaces - \tech{React} - to structure the project as a well-defined UI components and to help with the aforementioned state manipulation. 
-Due to interoperability issues the \tech{Rollup} was replaced with \tech{Webpack}.
+Following that realization, we have decided to incorporate a framework for building user interfaces - \tech{React} - to structure the project
+using a set of well-defined UI components and to help with the aforementioned state manipulation. 
+Due to interoperability issues \tech{Rollup} has been replaced with \tech{Webpack}.
 \smallskip
 
 The quality assurance is achieved through the use of:
@@ -63,7 +64,7 @@ The computational framework consists of the three most important forces that dri
 \end{description}
 
 Given the current vertex positions and the mountain-valley assignment,
-Solver computes forces imposed on all the vertices and calculates their next position
+Solver computes forces imposed on all vertices and calculates their next position
 using the \textit{forward Euler integration}.
 
 An additional \textbf{damping force} is introduced to prevent Solver from
@@ -174,7 +175,9 @@ At first, Python was meant to be used only for building a proof of concept to an
 
 \subsubsection{Frontend}
 
-The web application contains two main subcomponents: \textit{Guide Creator} and \textit{Guide Viewer}, responsible respectively for creating instructions, and viewing animated guides. Other components are mainly related to the community aspect and will only be covered superficially.
+The web application contains two main subcomponents: \textit{Guide Creator} and \textit{Guide Viewer}
+responsible for creating instructions and viewing animated guides, respectively.
+Other components are mainly related to the community aspect and will only be covered superficially.
 
 \begin{figure}[H]
   \caption{Overview of the frontend pages and components. Grayed out pages are related to user management.}
@@ -182,14 +185,14 @@ The web application contains two main subcomponents: \textit{Guide Creator} and 
     \includegraphics[width=\textwidth]{assets/3-frontend-architecture.png}
 \end{figure}
 
-The web application has been structured in a way that encourages building and reusing small components. An example would be a \textit{Viewer} component which is responsible for rendering origami figures and appears in both \textit{Guide Creator} and \textit{Guide Viewer} pages. This structure has allowed us to keep the code maintainable and implement changes quickly.
+The web application has been structured in a way that encourages building and reusing small components. An example would be a \texttt{Viewer} component which is responsible for rendering origami figures and appears in both \textit{Guide Creator} and \textit{Guide Viewer} pages. This structure has allowed us to keep the code maintainable and implement changes quickly.
 
 \medskip
 
 Data storage and manipulation are powered by three \textit{stores} which store data related to different aspects and functionality of the system.
 
 \begin{itemize}
-	\item The \textit{Creator store} is responsible for storing an Instruction while it is being worked on.
+	\item The \textit{Creator store} is responsible for storing the Instruction while it is being worked on.
 	\item The \textit{Player store} stores information about the Guide while it is being viewed.
 	\item The \textit{Community store} holds information regarding user sessions.
 \end{itemize}
@@ -314,7 +317,7 @@ The Community backend is built using \tech{Django}. It consists of a single appl
 
 \textbf{Guides}
 
-Guides is the subapplication responsible for handling guide creation, deletion, marking guides as favorites, and delegation of guide processing tasks.
+Guides is a subapplication responsible for handling guide creation, deletion, marking guides as favorites, and delegation of guide processing tasks.
 
 \medskip
 
