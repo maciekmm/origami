@@ -1,27 +1,28 @@
 \subsection{System actors}
 
-Based on the requirements analysis, we have  two types of actors in our system:
+Based on the requirements analysis, we have determined two types of actors in our system:
 
 \begin{description}
 	\item[Folder] \label{actors:folder} - A person who carries out the most important functionality in our system,
-		that is - folds the origami, based on the provided simulation. This person does not need to have any
-		knowledge about origami creation nor the simulation process.
+		that is - folds origami figures following the provided interactive instruction.
+		This person does not need to have any special knowledge about origami creation nor the simulation process.
 	\item[Designer] \label{actors:designer} - A person who is responsible for providing folding instructions
-		for other users (folders). A Designer is required to have some basic knowledge about origami construction, 
-		and interaction with the system to be able to create and upload a guide. A Designer has to have an account.
+		for other users (\textit{folders}).
+		A Designer is required to have basic knowledge about origami construction
+		and interaction with the system to be able to create and upload an Instruction.
 \end{description}
 
 \newcommand{\requirement}[2]{\item #2. (#1)}
 \subsection{Functional requirements}
 \label{section:functional-requirements}
 
-We provide functional requirements to the system as User Stories divided by actor type.
-They have a priority assigned to them from 1 to 3. Where:
+We define functional requirements for the system as User Stories grouped by actor type.
+They have a priority assigned to them that ranges from 1 to 3. Where:
 
 \begin{enumerate}
-	\item[(1)] low priority - a feature that is nice to have, but not required 
-	\item[(2)] medium priority - a feature that is important, but not essential for the system functionality
 	\item[(3)] high priority - a feature required for the system functionality 
+	\item[(2)] medium priority - a feature that is important, but not essential for the system functionality
+	\item[(1)] low priority - a feature that is nice to have, but not required 
 \end{enumerate}
 
 \subsubsection{Folder user stories}
@@ -86,7 +87,7 @@ present the most important parts of our system.
 
 
 \begin{figure}[H]
-\caption{Origami simulation view}
+\caption{Guide Viewer view}
   \centering
     \includegraphics[width=0.8\textwidth]{assets/simulator-wireframe.png}
 \end{figure}
