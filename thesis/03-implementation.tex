@@ -1,44 +1,43 @@
 \subsection{Prototype}
 
-From the list of features mentioned in the previous chapter we have selected the most important ones and created a prototype in a form of MVP (Minimum Viable Product). 
+From the list of requirements mentioned in the previous chapter we have selected the most important ones and created a prototype that would serve as a MVP (Minimum Viable Product) which we could develop further into a full-featured application.
+\smallskip
 
-The selected features:
+The selected features list consists of: 
 
 \begin{enumerate}
-	\requirement{3}{load an Instruction}
-	\requirement{3}{view the 3D representation of the Instruction step}
-	\requirement{3}{switch to the next step in the Instruction}
-	\requirement{3}{switch to the previous step in the Instruction}
-	\requirement{3}{see the Transition between two Instruction steps}
-	\requirement{2}{pause the Transition at any time}
-	\requirement{2}{rewind the Transition}
-	\requirement{2}{forward the Transition}
-	\requirement{3}{rotate the Model in 3D space}
-	\requirement{3}{zoom the Model in and out in 3D space}
-	\requirement{1}{see creases of the Model} 
-	\requirement{2}{distinguish paper's top and bottom sides} 
+	\requirement{3}{loading an Instruction}
+	\requirement{3}{viewing the 3D representation of the Instruction step}
+	\requirement{3}{switching to the next step in the Instruction}
+	\requirement{3}{switching to the previous step in the Instruction}
+	\requirement{3}{seeing the Transition between two Instruction steps}
+	\requirement{2}{pausing the Transition at any time}
+	\requirement{2}{rewinding the Transition}
+	\requirement{2}{forwarding the Transition}
+	\requirement{3}{rotating the Model in 3D space}
+	\requirement{3}{zooming the Model in and out in 3D space}
+	\requirement{1}{seeing creases of the Model} 
+	\requirement{2}{distinguishing paper's top and bottom sides} 
 \end{enumerate}
-
-Some of the listed functionalities require a numerical solver which is also included in the MVP.
-
-Both Instructions and Transitions are represented using \tech{.fold} files which we have extended with information required by the application.
 
 \subsubsection{Frontend}
 
 At first we had decided to use plain \tech{JavaScript} with the \tech{Rollup} bundler and \tech{Three.js} framework.
-It quickly became apparent that the lack of state management will become problematic as the development progresses. Following that realization we have decided to incorporate a reactive framework - \tech{React} to aid the project with basic layout and aforementioned state manipulation. 
-Due to minor interoperability issues the Rollup was also replaced with \tech{Webpack}.
+It quickly became apparent that the state management of the application will become problematic as the development progresses.
+Following that realization we have decided to incorporate a framework for building user interfaces - \tech{React} - to structure the project as a well-defined UI components and to help with the aforementioned state manipulation. 
+Due to interoperability issues the \tech{Rollup} was replaced with \tech{Webpack}.
+\smallskip
 
 The quality assurance is achieved through the use of:
 
 \begin{description}
-\item[Code linter] - EsLint
-\item[Code prettiefier] - Prettier
-\item[Test Runner] - Jest
-\item[Continuous integration] - Github Actions
+	\item[Code linter] - \tech{EsLint}
+	\item[Code prettiefier] - \tech{Prettier}
+	\item[Test Runner] - \tech{Jest}
+	\item[Continuous integration] - \tech{Github Actions}
 \end{description}
 
-The implementation is continuously delivered to \tech{Netlify} via Github Actions.
+The implementation is continuously delivered to \tech{Netlify} via \tech{Github Actions}.
 
 
 \begin{figure}[H]
@@ -47,31 +46,31 @@ The implementation is continuously delivered to \tech{Netlify} via Github Action
     \includegraphics[width=0.8\textwidth]{assets/prototype-front.png}
 \end{figure}
 
-\subsubsection{Backend}
+\subsubsection{Backend - Solver}
 
 The current backend part is responsible for carrying out numerical computations.
-It converts a provided Instruction into a set of coordinates representing
-transitions between folding steps.\\
+It converts a provided Instruction into a Guide.
+Both Instructions and Guides are represented using \textit{.fold} files which we have extended with information required by the application.
+\smallskip
 
-The solver is based on the techniques presented in the publication by A. Ghassaei.\cite{origami-simulator:paper}.
-
-The computational framework consists of the three most important forces,
-that drive the folding process.
+Solver is based on the techniques presented in the publication by A. Ghassaei.\cite{origami-simulator:paper}.
+The computational framework consists of the three most important forces that drive the folding process.
 
 \begin{description}
 	\item[Beam force] - responsible for preserving edge length
 	\item[Face force] - responsible for preserving the original face shape
-	\item[Crease force] - responsible for folding
+	\item[Crease force] - responsible for creating a momentum that makes faces fold
 \end{description}
 
-Given the current vertices' positions, and the mountain-valley assignment,
-the solver computes forces imposed on vertices, and calculates their next position
-using the forward Euler integration.
+Given the current vertex positions and the mountain-valley assignment,
+Solver computes forces imposed on all the vertices and calculates their next position
+using the \textit{forward Euler integration}.
 
-An additional \textbf{damping force} is introduced to prevent solver from
-high frequency oscilations, assuring numerical stability under most conditions.\\
+An additional \textbf{damping force} is introduced to prevent Solver from
+high frequency oscillations, assuring numerical stability under most conditions.
+\smallskip
 
-The solver is implemented in \tech{Python}, using \tech{numpy} and \tech{scipy} libraries. 
+Solver is implemented in \tech{Python}, using \tech{numpy} and \tech{scipy} libraries. 
 
 
 \begin{figure}[H]
@@ -85,7 +84,7 @@ The solver is implemented in \tech{Python}, using \tech{numpy} and \tech{scipy} 
 \subsection{Project overview}
 \label{section:project-overview}
 
-As a name for our project, we picked \textbf{Origuide}.
+As a name for our project we picked \textbf{Origuide}.
 We will use this code name interchangeably with terms like \textit{the system} or \textit{the application}.
 \smallskip
 
@@ -99,10 +98,10 @@ Origuide consists of the following layers:
 \begin{description}
 	\item[Frontend] - a component that handles all user interactions with the system. 
 	\item[Backend] - a component responsible for: \begin{itemize}
-		\item processing all user requests initiated on the Frontend
-		\item managing persistent data 
-		\item authentication and authorization
-		\item scheduling of Instruction processing
+		\item processing all user requests initiated on the Frontend;
+		\item managing persistent data;
+		\item authentication and authorization;
+		\item scheduling of Instruction processing;
 	\end{itemize}
 	\item[Guides to process] - a task queue distributing guides to process among Solver workers
 	\item[Solver worker] - a component responsible for converting Instructions to Guides.
@@ -124,14 +123,14 @@ The Designer's main objective is to create Guides. After uploading a Crease Patt
     \includegraphics[width=\textwidth]{assets/3-folder-flow.png}
 \end{figure}
 
-The Folder's main objective is to fold origami figures following steps presented by the Application. After successfully retrieving a guide from the Backend, the user is presented with a Guide Viewer.
+The Folder's main objective is to fold origami figures following steps presented by the application. After successfully retrieving a guide from the Backend, the user is presented with Guide Viewer.
 
 \subsection{Technology stack}
 
 \subsubsection{Frontend}
 
 \begin{itemize}
-	\item The Application is built in \tech{Javascript} using the \tech{React} framework. 
+	\item The application is built in \tech{Javascript} using the \tech{React} framework. 
 	\item \tech{Three.JS} is used to display 3D models.
 	\item Triangulation is done using \tech{earcut}. 
 	\item Parsing folds is aided by \tech{fold}.
@@ -175,7 +174,7 @@ At first, Python was meant to be used only for building a proof of concept to an
 
 \subsubsection{Frontend}
 
-The web application contains two main subcomponents: \textit{Guide Creator} and \textit{Guide Viewer}, responsible respectively for: creating instructions and viewing animated guides. Other pages are mainly related to the community aspect and will only be covered superficially in this section.
+The web application contains two main subcomponents: \textit{Guide Creator} and \textit{Guide Viewer}, responsible respectively for creating instructions, and viewing animated guides. Other components are mainly related to the community aspect and will only be covered superficially.
 
 \begin{figure}[H]
   \caption{Overview of the frontend pages and components. Grayed out pages are related to user management.}
@@ -183,16 +182,16 @@ The web application contains two main subcomponents: \textit{Guide Creator} and 
     \includegraphics[width=\textwidth]{assets/3-frontend-architecture.png}
 \end{figure}
 
-The web application has been structured in a way that encourages building and reusing small components. An example would be a \textit{Viewer} component which is responsible for rendering origami figures and appears in both \textit{Guide Creator} and \textit{Guide Viewer} pages. The structure has allowed us to keep the code maintainable and implement changes quickly.
+The web application has been structured in a way that encourages building and reusing small components. An example would be a \textit{Viewer} component which is responsible for rendering origami figures and appears in both \textit{Guide Creator} and \textit{Guide Viewer} pages. This structure has allowed us to keep the code maintainable and implement changes quickly.
 
 \medskip
 
-Data storage and manipulation are powered by three stores which store data related to different aspects and functionality of the system.
+Data storage and manipulation are powered by three \textit{stores} which store data related to different aspects and functionality of the system.
 
 \begin{itemize}
-	\item The Creator store is responsible for storing an Instruction while it is being worked on.
-	\item The Player store stores information about the Guide while it is being viewed.
-	\item The Community store holds information regarding user sessions.
+	\item The \textit{Creator store} is responsible for storing an Instruction while it is being worked on.
+	\item The \textit{Player store} stores information about the Guide while it is being viewed.
+	\item The \textit{Community store} holds information regarding user sessions.
 \end{itemize}
 
 The application also contains a service responsible for communication with the Community backend.
@@ -210,11 +209,11 @@ The application also contains a service responsible for communication with the C
 
 \medskip
 
-Guide Creator is a frontend subcomponent allowing Designers to create step-by-step Instructions from a crease pattern.
+Guide Creator is a frontend subcomponent that allows Designers to create Instructions in a simple manner.
 
 
 \begin{figure}[H]
-  \caption{An overview of the Guide Creator}
+  \caption{An overview of Guide Creator}
   \centering
     \includegraphics[width=\textwidth]{assets/3-component-creator.png}
 \end{figure}
@@ -232,7 +231,7 @@ To the right there is a set of configuration sections correspondingly responsibl
 \medskip
 
 \begin{figure}[H]
-  \caption{The process of creating an Instruction using the Guide Creator from a Designer's perspective.}
+  \caption{The process of creating an Instruction using Guide Creator from a Designer's perspective.}
   \label{3-designer-creator-flow}
   \centering
     \includegraphics[width=\textwidth]{assets/3-designer-creator-flow.png}
@@ -241,7 +240,7 @@ To the right there is a set of configuration sections correspondingly responsibl
 Until \textit{Save the Guide} step, all data and user actions are handled on the client-side. When \textit{Save the Guide} action is invoked:
 
 \begin{itemize}
-	\item if a user is logged in, a request is sent to the Community backend with the whole configuration attached, or
+	\item if a user is logged in, a Guide creation request is sent to the Community backend with the whole configuration attached, or
 	\item a file download is initiated.
 \end{itemize}
 
@@ -281,20 +280,20 @@ Until \textit{Save the Guide} step, all data and user actions are handled on the
 
 \textbf{Guide Viewer}
 
-The purpose of the \textbf{Guide Viewer} is to show animated steps fluently. It consists of a model, a list of steps, and playback controls.
+The purpose of \textbf{Guide Viewer} is to show Transitions in a Guide. It consists of a 3D model, a list of steps, and playback controls.
 
 \begin{figure}[H]
-  \caption{An overview of the Guide Viewer.}
+  \caption{An overview of Guide Viewer}
   \label{3-guide-viewer}
   \centering
     \includegraphics[width=\textwidth]{assets/3-guide-viewer.png}
 \end{figure}
 
-When a Guide is opened, the Guide Viewer fetches the \texttt{animation\_file} from the Community backend and renders it.
-The response conforms to the same model as the aforementioned (\ref{guide-response}) Guide creation response.
+When a Guide is opened, Guide Viewer fetches the \texttt{animation\_file} from the Community backend and renders it.
+The response conforms to the same format as the aforementioned (\ref{guide-response}) Guide creation response.
 
 \medskip
-Playback controls allow rewinding, forwarding, stopping, and pausing. Guide Viewer also provides functionality to load an arbitrary \tech{.fold} file by clicking the file icon located in the top-left corner of the screen.
+Playback controls allow rewinding, forwarding, stopping, and pausing the animation. Guide Viewer also provides functionality to load an arbitrary \tech{.fold} file by clicking the file icon located in the top-left corner of the screen.
 
 
 \subsubsection{Community backend}
@@ -315,27 +314,27 @@ The Community backend is built using \tech{Django}. It consists of a single appl
 
 \textbf{Guides}
 
-Guides is the main subapplication. It is responsible for handling Guide creation, deletion, marking guides as favorites, and delegation of Guide processing tasks.
+Guides is the subapplication responsible for handling guide creation, deletion, marking guides as favorites, and delegation of guide processing tasks.
 
 \medskip
 
-Every action in the subapplication is performed in the context of a Guide. The figure below (\ref{model--guide}) depicts the Guide model.
+Every action in the subapplication is performed in the context of a guide. The figure below (\ref{model--guide}) depicts the guide model.
 
 \begin{figure}[H]
-  \caption{ERD diagram of the model of a Guide}
-  \label{model--guide}
-  \centering
+  \caption{\label{model--guide}Simplified ERD diagram of the guide model}
+    \centering
     \includegraphics[width=0.6\textwidth]{assets/3-erd-guides.png}
 \end{figure}
 
-The fields describe: \begin{description}
-	\item[id] - a handle for a particular Guide.
-	\item[owner] - the Designer who created a particular Guide.
-	\item[animation\_file] - an Animated Guide, a set of Transitions.
-	\item[guide\_file] - an Instruction, a set of Steps.
+The fields present on a guide model describe:
+\begin{description}
+	\item[id] - a handle for a particular guide.
+	\item[owner] - the Designer who created a particular guide.
+	\item[animation\_file] - an animated Guide file.
+	\item[guide\_file] - an Instruction file.
 	\item[name] - a name that is displayed on the website.
 	\item[private] - a flag indicating whether the guide is only visible for the \texttt{owner}.
-	\item[published\_at] - the date on which a Guide was published.
+	\item[published\_at] - the date on which a guide was published.
 	\item[status] - the outcome of Instruction to Guide processing step.
 	\item[steps] - a number of steps in the Guide.
 	\item[thumbnail\_file] - a preview of the figure.
@@ -345,15 +344,15 @@ All actions initiated by a user are passed through a REST API that performs simp
 
 \bigskip
 
-When a Guide is created or updated it is scheduled onto a task queue and later assembled into an Animated Guide. The processing task invokes Solver to calculate intermediate steps forming a smooth folding animation. 
+When a guide is created or updated it is scheduled onto a task queue and later assembled into an animated Guide. The processing task invokes Solver to calculate intermediate steps that form a smooth folding animation. 
 
 \medskip 
 Guide processing may terminate with 3 different outcomes.
 
 \begin{itemize}
-	\item An Instruction may be impossible to fold programmatically or realistically. It might occur that the solving algorithm never stops, consuming all available resources. To counteract, a hard timeout has been introduced after which the Guide is marked as timed out - \texttt{TMO}.
-	\item An Instruction file may be malformed or unprocessable, in such scenario the Guide is marked as errored - \texttt{ERR}.
-	\item Finally, a properly folded Instruction is marked as done - \texttt{DON}. The generated Animation file is persisted in the file system.
+	\item An Instruction may be impossible to fold programmatically or physically. It might occur that the solving algorithm never stops, consuming all available resources. To counteract, a hard timeout has been introduced after which the Guide is marked as timed out - \texttt{TMO}.
+	\item An Instruction may be malformed or unprocessable. In such scenario the Guide is marked as errored - \texttt{ERR}.
+	\item Finally, if the Instruction folded properly, the corresponding Guide is marked as done - \texttt{DON}. The generated animation file is persisted in the file system.
 \end{itemize}
 
 
@@ -370,14 +369,14 @@ Guide processing may terminate with 3 different outcomes.
 
 Accounts subapplication's responsibilities include, but are not limited to:
 \begin{itemize}
-	\item authentication
-	\item account creation
-	\item password resetting 
-	\item password changing
+	\item authentication,
+	\item account creation,
+	\item password resetting,
+	\item password changing.
 \end{itemize}
 
 To fulfill its duties, the Accounts subapplication exposes several REST API endpoints.
-The data model is mostly derived from the built-in Django User model, which increased the development speed considerably.
+The data model is mostly derived from the \tech{Django}'s built-in User model, which increased the development speed considerably.
 \medskip
 
  
@@ -393,22 +392,22 @@ The data model is mostly derived from the built-in Django User model, which incr
 \subsection{Algorithms}
 
 \subsubsection{Solver}
-\label{section:algorithms-solver}
+\label{section:algorithms-Solver}
 
-\textit{Please note that most of the ideas in this section come from \cite{origami-simulator:paper}}.
+\textit{Please note that most of the ideas in this section come from the publication by A. Ghassaei \cite{origami-simulator:paper}}.
 \smallskip
 
-The input to the Solver is a \textit{.fold} file containing an Instruction and its output is a \textit{.fold} file containing a Guide. 
-Instruction, at its simplest, is a set of vertices laying on a flat surface, and a set of edge assignments in each step.
-The Solver's job is to output a resulting Guide file which has all the information necessary to display
+The input to Solver is a \textit{.fold} file containing an Instruction and its output is a \textit{.fold} file containing a Guide. 
+Instruction, at its simplest, is a set of vertices laying on a flat surface and a set of edge assignments in each step.
+Solver's job is to output a resulting Guide file which has all the information necessary to display
 a folding animation - that is, all the vertex positions at each step in time.
 
 \smallskip
 \textbf{Triangulation}
 \smallskip
 
-The Solver works using only triangular faces.
-Therefore, before any folding-algorithm can happen, it has to generate a mesh that only consists of triangles.
+Solver works using only triangular faces.
+Therefore, before any folding algorithm can happen, it has to generate a mesh that consists only of triangles.
 \begin{figure}[H]
     \centering
     \subfloat[\centering Crease pattern before triangulation]{{\includegraphics[width=.4\linewidth]{assets/3-2d-cp.png} }}
@@ -416,12 +415,12 @@ Therefore, before any folding-algorithm can happen, it has to generate a mesh th
     \subfloat[\centering Crease pattern after triangulation]{{\includegraphics[width=.4\linewidth]{assets/3-2d-cp-triangulated.png} }}
 \end{figure}
 
-As an input, we get a set of 3D points, but triangulation works only in 2D.
+As an input we get a set of 3D points, but triangulation works only in 2D.
 Hence, at first we convert a set of 3D points to 2D by removing one of the axes (the one which will not lead to degenerate faces if possible).
 Then, 2D \textbf{Delaunay triangulation} is carried out (we used \textit{Shapely} library for that).
-The algorithm introduces new edges. These edges are dynamically constrained to stay flat while folding.
+The triangulation algorithm introduces new edges. These edges are dynamically constrained to stay flat while folding.
 
-There are cases, where the default triangulation will not be satisfactory
+There are cases where the default triangulation will not be satisfactory
 since we would like to preserve faces' concavity and the algorithm always generates a convex polygon.
 
 \begin{figure}[H]
@@ -453,19 +452,19 @@ Each edge is modeled as a spring which length should be kept constant at each it
 Before solving begins, the initial edge length $l_{0}$ is calculated.
 Then, \textbf{Hooke's law} is used to calculate the beam force:
 
-$$F_{l} = -k_{axial} * (l - l_{0})$$
+$$F_{beam} = -k_{axial} * (l - l_{0})$$
 
-where $l$ is the current edge length and $k_{axial}$ is a constant.
+where $l$ is the current edge length and $k_{axial}$ is constant.
 
 \smallskip
 Before we apply the force to the vertices, first we need to convert it to a vector $\pmb{F}_{beam}$ in a model's coordinate space.
-The $\pmb{F}_{beam}$ is related to the vertices position $\pmb{p}$ by:
+The $\pmb{F}_{beam}$ is related to the vertices' position $\pmb{p}$ by:
 
 $$\pmb{F}_{beam} = -\nabla V(\pmb{p}) = -\frac{\partial V}{\partial \pmb{p}}$$
 
 where V is the potential energy of the system. By the chain rule, we get:
 
-\begin{equation} \label{solver:beam_force}
+\begin{equation} \label{Solver:beam_force}
 \pmb{F}_{beam} = -\frac{\partial V}{\partial l}\frac{\partial l}{\partial \pmb{p}} = F_{l}\frac{\partial l}{\partial \pmb{p}} = -k_{axial} * (l - l_{0})\frac{\partial l}{\partial \pmb{p}}
 \end{equation}
 
@@ -502,14 +501,14 @@ The angle $\theta$ is the supplement of the dihedral angle between the two neigh
 	\caption{Crease constraints formulation between the two neighbouring triangular faces}
     \centering
 	\includegraphics[width=.6\linewidth]{assets/3-crease_force_face.png}
-	\label{solver:crease_force_face}
+	\label{Solver:crease_force_face}
 \end{figure}
 
 Crease constraints are modeled as linear-elastic torsional springs.
-Therefore, similarly to equation \eqref{solver:beam_force}, crease constraints will apply forces to the neighbouring
+Therefore, similarly to equation \eqref{Solver:beam_force}, crease constraints will apply forces to the neighbouring
 vertices by:
 
-\begin{equation} \label{solver:crease_force}
+\begin{equation} \label{Solver:crease_force}
 	\pmb{F}_{crease} = -k_{crease}(\theta - \theta _{target})\frac{\partial \theta}{\partial \pmb{p}}
 \end{equation}
 
@@ -567,23 +566,23 @@ By default, the target angle will be one of: $\pi, -\pi, 0$, but the provided In
 
 Finally, partial derivatives of $\theta$ with respect to $\pmb{p}$ are given by:
 
-\begin{equation} \label{solver:crease_force1}
+\begin{equation} \label{Solver:crease_force1}
 \frac{\partial \theta}{\partial \pmb{p}_1} = \frac{\pmb{n}_1}{h_1}
 \end{equation}
 
-\begin{equation} \label{solver:crease_force2}
+\begin{equation} \label{Solver:crease_force2}
 \frac{\partial \theta}{\partial \pmb{p}_2} = \frac{\pmb{n}_2}{h_2}
 \end{equation}
 
-\begin{equation} \label{solver:crease_force3}
+\begin{equation} \label{Solver:crease_force3}
 	\frac{\partial \theta}{\partial \pmb{p}_3} = \frac{-\cot{\alpha _{4,31}}}{\cot{\alpha _{3,14}} + \cot{\alpha _{4,31}}} \frac{\pmb{n}_1}{h_1} + \frac{-\cot{\alpha _{4,23}}}{\cot{\alpha _{3,42}} + \cot{\alpha _{4,23}}} \frac{\pmb{n}_2}{h_2} 
 \end{equation}
 
-\begin{equation} \label{solver:crease_force4}
+\begin{equation} \label{Solver:crease_force4}
 \frac{\partial \theta}{\partial \pmb{p}_4} = \frac{-\cot{\alpha _{3,14}}}{\cot{\alpha _{3,14}} + \cot{\alpha _{4,31}}} \frac{\pmb{n}_1}{h_1} + \frac{-\cot{\alpha _{3,42}}}{\cot{\alpha _{3,42}} + \cot{\alpha _{4,23}}} \frac{\pmb{n}_2}{h_2} 
 \end{equation}
 
-with all the symbols as marked on the figure (\ref{solver:crease_force_face}).
+with all the symbols as marked on the figure (\ref{Solver:crease_force_face}).
 \smallskip
 
 The code for calculating crease force strictly follows the above formulations with one slight
@@ -610,9 +609,9 @@ constant during the folding process.
 \end{figure}
 
 As previously, face constraints are modeled as a linear-elastic spring.
-For each of the interior angle of a triangular face, forces are applied to its neighbouring vertices.
+For each of the interior angles of a triangular face, forces are applied to its neighbouring vertices.
 
-\begin{equation} \label{solver:face_force}
+\begin{equation} \label{Solver:face_force}
 	\pmb{F}_{face} = -k_{face}(\alpha - \alpha _0)\frac{\partial \alpha}{\partial \pmb{p}}
 \end{equation}
 
@@ -626,15 +625,15 @@ where
 
 Derivatives of $\alpha$ with respect to $p$ are given by
 
-\begin{equation} \label{solver:face_force1}
+\begin{equation} \label{Solver:face_force1}
 	\frac{\partial \alpha _{2,31}}{\partial \pmb{p}_1} = \frac{\pmb{n} \times (\pmb{p}_1 - \pmb{p}_2)}{\norm{\pmb{p}_1 - \pmb{p}_2}^2}
 \end{equation}
 
-\begin{equation} \label{solver:face_force2}
+\begin{equation} \label{Solver:face_force2}
 	\frac{\partial \alpha _{2,31}}{\partial \pmb{p}_2} = \frac{\pmb{n} \times (\pmb{p}_1 - \pmb{p}_2)}{\norm{\pmb{p}_1 - \pmb{p}_2}^2} + \frac{\pmb{n} \times (\pmb{p}_3 - \pmb{p}_2)}{\norm{\pmb{p}_3 - \pmb{p}_2}^2}
 \end{equation}
 
-\begin{equation} \label{solver:face_force3}
+\begin{equation} \label{Solver:face_force3}
 	\frac{\partial \alpha _{2,31}}{\partial \pmb{p}_3} = \frac{\pmb{n} \times (\pmb{p}_3 - \pmb{p}_2)}{\norm{\pmb{p}_3 - \pmb{p}_2}^2}
 \end{equation}
 
@@ -644,7 +643,7 @@ Derivatives of $\alpha$ with respect to $p$ are given by
 \smallskip
 
 Damping is an additional force that is not required from the modeling perspective,
-but is required from the solver's stability point of view. It prevents model's
+but is required from Solver's stability point of view. It prevents model's
 oscillation while folding and without it barely any model folds correctly.
 
 \begin{figure}[H]
@@ -685,7 +684,7 @@ and then applied to each of the edge's vertices.
 
 \begin{figure}[H]
 	\centering
-	\caption{The code carrying out damping force calculation}
+	\caption{The code carrying that calculates and sets damping force}
 	\lstinputlisting{assets/listings/damping_force.py}
 \end{figure}
 
@@ -693,9 +692,9 @@ and then applied to each of the edge's vertices.
 \textbf{Numerical integration}
 \smallskip
 
-Once all the forces are defined, the total force for each vertex is computed as a sum of all the imposed forces.
+The total force for each vertex is computed as a sum of all the imposed forces.
 
-\begin{equation} \label{solver:total_force}
+\begin{equation} \label{Solver:total_force}
 	\pmb{F}_{total} = \sum_{edges} \pmb{F}_{beam} + \sum_{edges} \pmb{F}_{crease} + \sum_{faces}\pmb{F}_{face} + \sum_{edges}\pmb{F}_{damping}
 \end{equation}
 
@@ -738,7 +737,7 @@ To generate all the Transitions in the model we run the solve function for each 
 
 \begin{figure}[H]
 	\caption{The simplified pseudocode for the solving process}
-	\lstinputlisting{assets/listings/solver.py}
+	\lstinputlisting{assets/listings/Solver.py}
 \end{figure}
 
 
@@ -775,7 +774,7 @@ To aid the code review process every pull request containing changes related to 
 Most of the business logic on the frontend is tested. The test runner of choice is \tech{Jest}. Running the whole test suite is as simple as executing \texttt{yarn test}.
 
 \begin{figure}[H]
-  \caption{Workflow - frontend component. Every commit is tested and built.}
+  \caption{Pipeline - frontend component. Every commit is tested and built.}
   \centering
     \includegraphics[width=\textwidth]{assets/3-frontend-pipeline.png}
 \end{figure}
@@ -787,9 +786,9 @@ Solver is a library written in \tech{Python} and tested using the \tech{unittest
 The line test coverage is 77\%.
 
 \begin{figure}[H]
-  \caption{Workflow - solver component. Every change is tested.}
+  \caption{Pipeline - Solver component. Every change is tested.}
   \centering
-    \includegraphics[width=0.8\textwidth]{assets/3-solver-pipeline.png}
+    \includegraphics[width=0.8\textwidth]{assets/3-Solver-pipeline.png}
 \end{figure}
 
 
@@ -829,7 +828,8 @@ docker-compose up -d
 	\end{lstlisting}
 \end{figure}
 
-The frontend component can be easily deployed to any file hosting solution using a file transfer with no additional configuration requirement. This configuration-less nature of the deployment allows switching hosting providers easily should a need arise.
+The frontend component can be easily deployed to any file hosting solution with no additional configuration requirements.
+This configuration-less nature of the deployment allows switching hosting providers easily should a need arise.
 
 \begin{figure}[H]
 	\caption{An example of a command that deploys the frontend components.}
@@ -852,7 +852,7 @@ The frontend is built and deployed on \tech{Netlify}.
 % Collissions
 \subsubsection{Collision detection and prevention}
 
-The Solver algorithm does not handle face collisions correctly.
+Solver algorithm does not handle face collisions correctly.
 What it means in practice is that sometimes users see a peculiar effect 
 of two faces interpenetrating each other while folding.
 We have implemented collision detection, which would be the first step to solve this problem,
@@ -885,7 +885,7 @@ Having that insight, we were able to implement the \textit{damping force}. Model
 
 \subsubsection{Guide encoding}
 
-Normally when we run the Solver for a single step of an Instruction, it would produce around 
+Normally when we run Solver for a single step of an Instruction, it would produce around 
 1000 to 10000 frames.
 90\% of the actual folding process would occur in the first 5\% of frames and the rest of them would differ by very little in terms of changes in vertex positions.
 
@@ -896,7 +896,7 @@ To mitigate these problems we have written the \texttt{LogFoldEncoder} class.
 	\lstinputlisting[language=Python]{assets/listings/3-log_fold_encoder.py}
 \end{figure}
 
-When the Solver produces a frame, the encoder is responsible for either including it in or excluding it from the resulting Guide.
+When Solver produces a frame, the encoder is responsible for either including it in or excluding it from the resulting Guide.
 The \texttt{encode} and \texttt{advance} methods are called on every frame.
 The former accepts a frame and decides whether it should be included or not, 
 and the latter adjusts some internal state.
@@ -921,7 +921,7 @@ The Solving algorithm is not sophisticated enough to have a sense of sheet thick
     \includegraphics[width=0.6\textwidth]{assets/3-rendering-hazard.png}
 \end{figure}
 
-Unfortunately, the issue has not been resolved in the current iteration. Some potential solutions include:
+Unfortunately, the issue has not been resolved in the final product. Some potential solutions include:
 \begin{itemize}
 	\item preventing faces from colliding during solving,
 	\item detecting interpenetrating faces after solving and marking which one is on top.
@@ -937,7 +937,7 @@ To analyze the size of all bundle components, \tech{BundleAnalyzerPlugin} for \t
 \medskip
 
 \begin{figure}[H]
-	\caption{The output of the analysis is in the form of an interactive website that allows drilling down and identifying potential areas of improvement.}
+	\caption{The output of the analysis in the form of an interactive website that allows drilling down and identifying potential areas of improvement.}
   \centering
     \includegraphics[width=\textwidth]{assets/3-bundle.png}
 \end{figure}
@@ -945,9 +945,9 @@ To analyze the size of all bundle components, \tech{BundleAnalyzerPlugin} for \t
 To optimize the application size several techniques have been used:
 
 \begin{description}
-	\item[tree-shaking] - dead code elimination technique
-	\item[minimizing] - unnecessary character removal
-	\item[chunking] - code splitting and on-demand chunk loading
+	\item[tree-shaking] - dead code elimination technique,
+	\item[minimizing] - unnecessary character removal,
+	\item[chunking] - code splitting and on-demand chunk loading.
 \end{description}
 
 The minimizing was done using the \tech{Terser} plugin. Chunk splitting and tree-shaking features are included, but not enabled by default, in \tech{Webpack}.
@@ -987,7 +987,7 @@ A couple of potential implementations include:
 \begin{itemize}
 	\item Capturing a generated model on the first model view (that is how a crease pattern preview is currently implemented).
 	\item Spinning up a headless browser instance, loading a model, and making a screenshot.
-	\item Rendering a final solver step on the Solver backend using a plotting library.
+	\item Rendering a final Solver step on Solver backend using a plotting library.
 \end{itemize}
 
 
