@@ -41,7 +41,7 @@ The quality assurance is achieved through the use of:
 The implementation is continuously delivered to \tech{Netlify} via \tech{Github Actions}.
 
 
-\begin{figure}[H]
+\begin{figure}[h]
 \caption{Origami simulation view}
   \centering
     \includegraphics[width=0.8\textwidth]{assets/prototype-front.png}
@@ -113,17 +113,15 @@ As we previously distinguished two types of users in the system, there are two m
 \begin{figure}[H]
 	\caption{Designer's success path}
   \centering
-    \includegraphics[width=\textwidth]{assets/3-designer-flow.png}
+    \includegraphics[width=1\textwidth]{assets/3-designer-flow.png}
 \end{figure}
 
 The Designer's main objective is to create Guides. After uploading a Crease Pattern, the Designer is required to provide instruction steps. When an Instruction is saved it gets scheduled on a Task Queue and processed by a Solver worker. Once processing is finished the Guide is marked as solved in the database.
 
-\clearpage
-
 \begin{figure}[H]
 	\caption{Folder's success path}
   \centering
-    \includegraphics[width=1\textwidth]{assets/3-folder-flow.png}
+    \includegraphics[width=0.70\textwidth]{assets/3-folder-flow.png}
 \end{figure}
 
 The Folder's main objective is to fold origami figures following steps presented by the application. After successfully retrieving a guide from the Backend, the user is presented with Guide Viewer.
@@ -151,7 +149,6 @@ Origuide is a web application. Hence, \tech{Javascript} has been an obvious choi
 \begin{itemize}
 	\item Backend is built in \tech{Python} using \tech{Django} framework. 
 	\item \tech{DjangoRestFramework} simplifies a REST server setup.
-	\item \tech{drf-base64} helps with decoding base64 encoded files.
 	\item \tech{PyJWT} assists in authentication processes.
 	\item \tech{factory-boy} is used to generate testing data.
 	\item Data is stored in a \tech{PostgreSQL} database.
@@ -170,8 +167,6 @@ The Community backend technology stack has been chosen based on the maturity of 
 
 At first, Python was meant to be used only for building a proof of concept to answer the question of whether implementing a solving library on the backend, instead of the frontend, is a feasible solution for the project. The question has been answered affirmatively, and at that moment we were quite happy with the performance aspect. Unfortunately, down the line, after loading more and more complicated Origami models it became apparent that Python's native performance will not cut it. We were worried that a whole rewrite in a more performant language is imminent. After seeking an alternative solution, the fear has been dispelled. The implementation has benefited from a ten-fold increase in performance by using a performance-oriented Python implementation - \tech{PyPy}.
 
-
-\clearpage
 \subsection{Components overview}
 % Przegląd poszczególnych komponentów a wiec np. baza danych, aplikacja typu klient, serwis RESTowy. Jeśli baza to ERD z opisem, jeśli aplikacja kliencka to jakie elementy, widoki, jak się łączy i kiedy. Jeśli prosta aplikacja WWW to można pokazać strukturę projektu. Jeśli serwis RESTowy to jego specyfikacja z przykładami. Protokół komunikacji to może być zupełnie osobny opis. %
 
@@ -201,15 +196,14 @@ Data storage and manipulation are powered by three \textit{stores} which store d
 
 The application also contains a service responsible for communication with the Community backend.
 
-\begin{figure}[H]
+\begin{figure}[hbt]
   \caption{Overview of the frontend stores and services.}
   \centering
     \includegraphics[width=0.7\textwidth]{assets/3-frontend-stores-services.png}
 \end{figure}
 
-\medskip
 
-
+\clearpage
 \textbf{Guide Creator}
 
 \medskip
@@ -217,7 +211,7 @@ The application also contains a service responsible for communication with the C
 Guide Creator is a frontend subcomponent that allows Designers to create Instructions in a simple manner.
 
 
-\begin{figure}[H]
+\begin{figure}[hbt]
   \caption{An overview of Guide Creator}
   \centering
     \includegraphics[width=\textwidth]{assets/3-component-creator.png}
@@ -287,7 +281,7 @@ Until \textit{Save the Guide} step, all data and user actions are handled on the
 
 The purpose of \textbf{Guide Viewer} is to show Transitions in a Guide. It consists of a 3D model, a list of steps, and playback controls.
 
-\begin{figure}[H]
+\begin{figure}[h]
   \caption{An overview of Guide Viewer}
   \label{3-guide-viewer}
   \centering
@@ -303,19 +297,16 @@ Playback controls allow rewinding, forwarding, stopping, and pausing the animati
 
 \subsubsection{Community backend}
 
-\begin{figure}[H]
+\begin{figure}[hb]
   \caption{The Community application consists of two main subapplications.}
   \label{3-backend-community-components}
   \centering
-    \includegraphics[width=\textwidth]{assets/3-community-application.png}
+    \includegraphics[width=0.9\textwidth]{assets/3-community-application.png}
 \end{figure}
 
-The Community backend is built using \tech{Django}. It consists of a single application - Community application - that is split into a couple of subapplications:
+The Community backend is built using \tech{Django}. It consists of a single application - Community application - that is split into \textbf{Guides} and \textbf{Accounts} subapplications.
 
-\begin{itemize}
-	\item Accounts
-	\item Guides
-\end{itemize}
+\medskip
 
 \textbf{Guides}
 
@@ -407,6 +398,7 @@ Instruction, at its simplest, is a set of vertices laying on a flat surface and 
 Solver's job is to output a resulting Guide file which has all the information necessary to display
 a folding animation - that is, all the vertex positions at each step in time.
 
+
 \smallskip
 \textbf{Triangulation}
 \smallskip
@@ -431,15 +423,14 @@ since we would like to preserve faces' concavity and the algorithm always genera
 \begin{figure}[H]
 	\caption{An example where triangulating a polygon marked with blue will result in an excessive triangle.}
 	\centering
-	\subfloat{\includegraphics[width=0.5\textwidth]{assets/3-triangulation-improper-cp.png}}\qquad\qquad\qquad
-	\subfloat[\centering Wrong (convex) triangulation]{{\includegraphics[width=.4\linewidth]{assets/3-triangulation-improper-cp-wrong.png} }}\qquad
-	\subfloat[\centering Correct (concave) triangulation]{{\includegraphics[width=.4\linewidth]{assets/3-triangulation-improper-cp-right.png} }}
+	\subfloat{\includegraphics[width=0.4\textwidth]{assets/3-triangulation-improper-cp.png}}\qquad\qquad\qquad\qquad\qquad\qquad\qquad
+	\subfloat[\centering Wrong (convex) triangulation]{{\includegraphics[width=.3\linewidth]{assets/3-triangulation-improper-cp-wrong.png} }}\qquad
+	\subfloat[\centering Correct (concave) triangulation]{{\includegraphics[width=.3\linewidth]{assets/3-triangulation-improper-cp-right.png} }}
 \end{figure}
 
 For such cases, we first compute a face's original hull. After the triangulation we check whether the resulting triangles
 lay within the original hull. If they do not, they are excluded from the triangulation result.
 
-\smallskip
 \textbf{Axial constraints - beam force}
 \smallskip
 
@@ -538,6 +529,7 @@ In the implementation, there are 5 possible edge assignments:
 
 $k_{crease}$ depends on the edge type.
 
+\clearpage
 The following piece of code computes the correct $k_{crease}$:
 
 \lstinputlisting[language=Python]{assets/listings/crease_force_edge_assignment.py}
@@ -654,7 +646,7 @@ oscillation while folding and without it barely any model folds correctly.
 \begin{figure}[H]
 	\caption{Damping force formulation on the two vertices connected by an edge}
     \centering
-	\includegraphics[width=.4\linewidth]{assets/3-damping_force_edge.png}
+	\includegraphics[width=.3\linewidth]{assets/3-damping_force_edge.png}
 \end{figure}
 
 Damping force is defined in terms of vertices' velocity as:
@@ -693,7 +685,7 @@ and then applied to each of the edge's vertices.
 	\lstinputlisting{assets/listings/damping_force.py}
 \end{figure}
 
-\medskip
+\clearpage
 \textbf{Numerical integration}
 \smallskip
 
@@ -783,7 +775,7 @@ Most of the business logic on the frontend is tested. The test runner of choice 
   \centering
     \includegraphics[width=\textwidth]{assets/3-frontend-pipeline.png}
 \end{figure}
-
+\clearpage
 \subsubsection{Solver}
 
 Solver is a library written in \tech{Python} and tested using the \tech{unittest} module. Most of the business logic is covered. 
@@ -887,7 +879,6 @@ The following publications helped us understand the topic:
 \end{itemize}
 
 Having that insight, we were able to implement the \textit{damping force}. Models that previously failed to complete, started to fold properly.
-\clearpage
 \subsubsection{Guide encoding}
 
 Normally when we run Solver for a single step of an Instruction, it would produce around 
@@ -944,7 +935,7 @@ To analyze the size of all bundle components, \tech{BundleAnalyzerPlugin} for \t
 \begin{figure}[H]
 	\caption{The output of the analysis in the form of an interactive website that allows drilling down and identifying potential areas of improvement.}
   \centering
-    \includegraphics[width=0.8\textwidth]{assets/3-bundle.png}
+    \includegraphics[width=0.62\textwidth]{assets/3-bundle.png}
 \end{figure}
 
 To optimize the application size several techniques have been used:
