@@ -22,5 +22,6 @@ class LogFoldEncoder(FoldEncoder):
     def advance(self):
         self.frame_idx += 1
         if self.frame_idx % self.frame_drop_change_iter == 0:
-            self.frame_drop_rate = int(self.frame_drop_rate * self.frame_drop_multiplier)
+            self.frame_drop_rate = \
+                    int(self.frame_drop_rate * self.frame_drop_multiplier)
 

@@ -54,13 +54,13 @@ It converts a provided Instruction into a Guide.
 Both Instructions and Guides are represented using \textit{.fold} files which we have extended with information required by the application.
 \smallskip
 
-Solver is based on the techniques presented in the publication by A. Ghassaei.\cite{origami-simulator:paper}.
+Solver is based on the techniques presented in the publication by A. Ghassaei\cite{origami-simulator:paper}.
 The computational framework consists of the three most important forces that drive the folding process.
 
 \begin{description}
-	\item[Beam force] - responsible for preserving edge length
-	\item[Face force] - responsible for preserving the original face shape
-	\item[Crease force] - responsible for creating a momentum that makes faces fold
+	\item[Beam force] - responsible for preserving edge length.
+	\item[Face force] - responsible for preserving the original face shape.
+	\item[Crease force] - responsible for creating a momentum that makes faces fold.
 \end{description}
 
 Given the current vertex positions and the mountain-valley assignment,
@@ -118,10 +118,12 @@ As we previously distinguished two types of users in the system, there are two m
 
 The Designer's main objective is to create Guides. After uploading a Crease Pattern, the Designer is required to provide instruction steps. When an Instruction is saved it gets scheduled on a Task Queue and processed by a Solver worker. Once processing is finished the Guide is marked as solved in the database.
 
+\clearpage
+
 \begin{figure}[H]
 	\caption{Folder's success path}
   \centering
-    \includegraphics[width=\textwidth]{assets/3-folder-flow.png}
+    \includegraphics[width=1\textwidth]{assets/3-folder-flow.png}
 \end{figure}
 
 The Folder's main objective is to fold origami figures following steps presented by the application. After successfully retrieving a guide from the Backend, the user is presented with Guide Viewer.
@@ -169,7 +171,7 @@ The Community backend technology stack has been chosen based on the maturity of 
 At first, Python was meant to be used only for building a proof of concept to answer the question of whether implementing a solving library on the backend, instead of the frontend, is a feasible solution for the project. The question has been answered affirmatively, and at that moment we were quite happy with the performance aspect. Unfortunately, down the line, after loading more and more complicated Origami models it became apparent that Python's native performance will not cut it. We were worried that a whole rewrite in a more performant language is imminent. After seeking an alternative solution, the fear has been dispelled. The implementation has benefited from a ten-fold increase in performance by using a performance-oriented Python implementation - \tech{PyPy}.
 
 
-
+\clearpage
 \subsection{Components overview}
 % Przegląd poszczególnych komponentów a wiec np. baza danych, aplikacja typu klient, serwis RESTowy. Jeśli baza to ERD z opisem, jeśli aplikacja kliencka to jakie elementy, widoki, jak się łączy i kiedy. Jeśli prosta aplikacja WWW to można pokazać strukturę projektu. Jeśli serwis RESTowy to jego specyfikacja z przykładami. Protokół komunikacji to może być zupełnie osobny opis. %
 
@@ -185,7 +187,7 @@ Other components are mainly related to the community aspect and will only be cov
     \includegraphics[width=\textwidth]{assets/3-frontend-architecture.png}
 \end{figure}
 
-The web application has been structured in a way that encourages building and reusing small components. An example would be a \texttt{Viewer} component which is responsible for rendering origami figures and appears in both \textit{Guide Creator} and \textit{Guide Viewer} pages. This structure has allowed us to keep the code maintainable and implement changes quickly.
+The web application has been structured in a way that encourages building and reusing small components. An example would be the \texttt{Viewer} component which is responsible for rendering origami figures and appears in both \textit{Guide Creator} and \textit{Guide Viewer} pages. This structure has allowed us to keep the code maintainable and implement changes quickly.
 
 \medskip
 
@@ -226,9 +228,9 @@ In the center one can see a loaded crease pattern with the edge assignments refl
 \medskip
 
 To the right there is a set of configuration sections correspondingly responsible for: \begin{description}
-	\item[edge] - Setting an edge target assignment or a fixed target angle.
-	\item[step] - Setting a step name and a description.
-	\item[file] - Setting an Instruction name and a description.
+	\item[edge] - setting an edge target assignment or a fixed target angle.
+	\item[step] - setting a step name and a description.
+	\item[file] - setting an Instruction name and a description.
 \end{description}
 
 \medskip
@@ -885,7 +887,7 @@ The following publications helped us understand the topic:
 \end{itemize}
 
 Having that insight, we were able to implement the \textit{damping force}. Models that previously failed to complete, started to fold properly.
-
+\clearpage
 \subsubsection{Guide encoding}
 
 Normally when we run Solver for a single step of an Instruction, it would produce around 
@@ -942,7 +944,7 @@ To analyze the size of all bundle components, \tech{BundleAnalyzerPlugin} for \t
 \begin{figure}[H]
 	\caption{The output of the analysis in the form of an interactive website that allows drilling down and identifying potential areas of improvement.}
   \centering
-    \includegraphics[width=\textwidth]{assets/3-bundle.png}
+    \includegraphics[width=0.8\textwidth]{assets/3-bundle.png}
 \end{figure}
 
 To optimize the application size several techniques have been used:
