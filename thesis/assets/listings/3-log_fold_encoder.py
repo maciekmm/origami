@@ -4,11 +4,8 @@ class LogFoldEncoder(FoldEncoder):
                  frame_drop_multiplier=2,
                  frame_drop_change_iter=10):
         self.base_frame_drop_rate = frame_drop_rate
-
-        self.frame_drop_rate = frame_drop_rate
-        self.frame_drop_multiplier = frame_drop_multiplier
-        self.frame_drop_change_iter = frame_drop_change_iter
         self.frame_idx = 0
+        # ...
 
     def encode(self, frame, last_frame):
         if (self.frame_idx % self.frame_drop_rate == 0) or last_frame:
