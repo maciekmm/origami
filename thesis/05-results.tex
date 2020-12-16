@@ -13,7 +13,7 @@ Each section presents some part of the application and lists user stories that a
 Overlaid on the screenshots are markers that describe which functionality is addressed in which part of the UI.
 The format of each marker is $NX$, where $N$ is a letter - either $F$ or $D$ depicting whether  
 the highlighted part of the UI corresponds to a \textbf{F}older's user story or a \textbf{D}esigner's user story.
-And $X$ represents user story's sequence number, assigned to it previously in the section \nameref{section:functional-requirements}.
+And $X$ represents a user story's sequence number, assigned to it previously in the section \nameref{section:functional-requirements}.
 
 \subsubsection{Guide Viewer}
 
@@ -143,8 +143,8 @@ Folder's user stories:
 
 There are some functional requirements that have not been realized.
 All of them happen to be Folder's user stories.
-Some proved to be not as important as we assumed initially.
-There are also some that have been only partially accomplished, e.g. they are 
+Some proved not to be as important as we had initially assumed.
+There are also some that have only been partially accomplished, e.g. they are 
 implemented in the backend but no corresponding frontend option is present.
 \smallskip
 
@@ -195,7 +195,7 @@ First, the user loads a crease pattern.
     \includegraphics[width=\textwidth]{assets/5-designerLoad.png}
 \end{figure}
 
-Next, the creator view is shown, and the user proceeds with creating an Instruction.
+Next, Guide Creator is shown, and the user proceeds with creating an Instruction.
 Once done, the user clicks the \textit{save} button.
 
 \begin{figure}[H]
@@ -204,7 +204,7 @@ Once done, the user clicks the \textit{save} button.
 \end{figure}
 
 Proper requests are dispatched to the backend, the guide is processed in the background, and
-the user is redirected to Guide Browser view.
+the user is redirected to Guide Browser.
 
 \begin{figure}[H]
   	\centering
@@ -213,14 +213,14 @@ the user is redirected to Guide Browser view.
 
 \subsubsection{Folder's success path}
 
-The user is presented with Guide Browser view. Then, the user clicks on one of the Guides.
+The user is presented with Guide Browser. Then, the user clicks on one of the Guides.
 
 \begin{figure}[H]
   	\centering
     \includegraphics[width=\textwidth]{assets/5-folderOpen.png}
 \end{figure}
 
-Once the Guide is loaded, the user is presented with Guide Viewer view.
+Once the Guide is loaded, the user is presented with Guide Viewer.
 
 \begin{figure}[H]
   	\centering
