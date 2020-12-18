@@ -1,11 +1,11 @@
-all: *.tex
+all: *.tex aghthesis.cls
 	latexmk -pdf thesis.tex
 	latexmk -pdf presentation.tex
 
-presentation: presentation.tex
+presentation: presentation.tex 
 	latexmk -pdf presentation.tex
 
-thesis: thesis.tex
+thesis: thesis.tex aghthesis.cls
 	latexmk -pdf thesis.tex
 
 clean:

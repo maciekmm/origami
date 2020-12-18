@@ -42,12 +42,21 @@
 }
 
 \newcommand*{\LangAgh}{Akademia G\'{o}rniczo-Hutnicza\\[2mm] im. Stanis\l{}awa Staszica w Krakowie}
-\newcommand*{\LangFaculty}{Wydzia{\l} Informatyki, Elektroniki i Telekomunikacji\\[2mm] Katedra Informatyki}
+\newcommand*{\LangFaculty}{Wydzia{\l} Informatyki, Elektroniki i Telekomunikacji}
+\newcommand*{\LangDepartment}{Katedra Informatyki}
 \newcommand*{\LangFieldOfStudy}{Kierunek:}
 \newcommand*{\LangSupervisor}{Opiekun:}
-\newcommand*{\LangStatementBody}{Uprzedzony o~odpowiedzialno\'sci karnej na~podstawie art.~115 ust.~1~i~2 ustawy z~dnia 4~lutego 1994~r. o~prawie autorskim i~prawach pokrewnych (t.j. Dz.U. z~2006~r. Nr~90, poz.~631 z~p{\'o}{\'z}n. zm.): ,,Kto przyw\l{}aszcza sobie autorstwo albo~wprowadza w~b\l{}\k{a}d co~do~autorstwa ca\l{}o\'sci lub cz\k{e}\'sci cudzego utworu albo~artystycznego wykonania, podlega grzywnie, karze ograniczenia wolno\'sci albo~pozbawienia wolno\'sci do~lat~3. Tej~samej karze podlega, kto~rozpowszechnia bez~podania nazwiska lub~pseudonimu tw\'orcy cudzy utw\'or w~wersji oryginalnej albo~w~postaci opracowania, artystycznego wykonania albo~publicznie zniekszta\l{}ca taki utw\'or, artystyczne wykonanie, fonogram, wideogram lub nadanie.'', a~tak\.ze uprzedzony o~odpowiedzialno\'sci dyscyplinarnej na~podstawie art.~211 ust.~1 ustawy z~dnia 27~lipca 2005~r. Prawo o~szkolnictwie wy\.zszym (t.j. Dz.~U. z~2012~r. poz.~572, z~p\'o\'zn. zm.): ,,Za~naruszenie przepis\'ow obowi\k{a}zuj\k{a}cych w~uczelni oraz~za~czyny uchybiaj\k{a}ce godno\'sci studenta student ponosi odpowiedzialno\'s\'c dyscyplinarn\k{a} przed komisj\k{a} dyscyplinarn\k{a} albo~przed s\k{a}dem kole\.ze\'nskim samorz\k{a}du studenckiego, zwanym dalej <<s\k{a}dem kole\.ze\'nskim>>.'', o\'swiadczam, \.ze~niniejsz\k{a} prac\k{e} dyplomow\k{a} wykona\l{}em(-am) osobi\'scie, ~samodzielnie i~\.ze~nie~korzysta\l{}em(-am) ze~\'zr\'ode\l{} innych ni\.z~wymienione w pracy.}
-\newcommand*{\LangSignature}{PODPIS}
-\newcommand*{\LangThesisType}{Projekt in\.zynierski}
+\newcommand*{\LangStatementBody}{Uprzedzony(-a) o odpowiedzialności karnej na podstawie art. 115 ust. 1 i 2 ustawy z dnia 4 lutego 1994 r. o prawie autorskim i prawach pokrewnych (t.j. Dz.U. z 2018 r. poz. 1191 z późn. zm.): „Kto przywłaszcza sobie autorstwo albo wprowadza w błąd co do autorstwa całości lub części cudzego utworu albo artystycznego wykonania, podlega grzywnie, karze ograniczenia wolności albo pozbawienia wolności do lat 3. Tej samej karze podlega, kto rozpowszechnia bez podania nazwiska lub pseudonimu twórcy cudzy utwór w wersji oryginalnej albo w postaci opracowania, artystyczne wykonanie albo publicznie zniekształca taki utwór, artystyczne wykonanie, fonogram, wideogram lub nadanie.”, a także uprzedzony(-a) o odpowiedzialności dyscyplinarnej na podstawie art. 307 ust. 1 ustawy z dnia 20 lipca 2018 r. Prawo o szkolnictwie wyższym i nauce (Dz. U. 
+z 2018 r. poz. 1668 z późn. zm.) „Student podlega odpowiedzialności dyscyplinarnej za naruszenie przepisów obowiązujących w uczelni oraz za czyn uchybiający godności studenta.”, oświadczam, że niniejszą pracę dyplomową wykonałem(-am) osobiście i samodzielnie i nie korzystałem(-am) ze źródeł innych niż wymienione w pracy.
+
+\medskip
+
+Jednocześnie Uczelnia informuje, że zgodnie z art. 15a ww. ustawy o prawie autorskim 
+i prawach pokrewnych Uczelni przysługuje pierwszeństwo w opublikowaniu pracy dyplomowej studenta. Jeżeli Uczelnia nie opublikowała pracy dyplomowej w terminie 
+6 miesięcy od dnia jej obrony, autor może ją opublikować, chyba że praca jest częścią utworu zbiorowego. Ponadto Uczelnia jako podmiot, o którym mowa w art. 7 ust. 1 pkt 1 ustawy z dnia 20 lipca 2018 r. – Prawo o szkolnictwie wyższym i nauce (Dz. U. z 2018 r. poz. 1668 z późn. zm.), może korzystać bez wynagrodzenia i bez konieczności uzyskania zgody autora z utworu stworzonego przez studenta w wyniku wykonywania obowiązków związanych z odbywaniem studiów, udostępniać utwór ministrowi właściwemu do spraw szkolnictwa wyższego i nauki oraz korzystać z utworów znajdujących się w prowadzonych przez niego bazach danych, w celu sprawdzania z wykorzystaniem systemu antyplagiatowego. Minister właściwy do spraw szkolnictwa wyższego i nauki może korzystać z prac dyplomowych znajdujących się w prowadzonych przez niego bazach danych w zakresie niezbędnym do zapewnienia prawidłowego utrzymania i rozwoju tych baz oraz współpracujących 
+z nimi systemów informatycznych.}
+\newcommand*{\LangSignature}{(czytelne podpisy studentów)}
+\newcommand*{\LangThesisType}{\textbf{Projekt dyplomowy}}
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 
@@ -95,16 +104,19 @@
 
 \begin{center}
 
-{\Large{\bfseries{\textsc \LangAgh}}}
+%{\Large{\bfseries{\textsc \LangAgh}}}
 
-\vspace*{1mm}\rule{.9\textwidth}{1mm}\vspace*{1mm}
+%\vspace*{1mm}\rule{.9\textwidth}{1mm}\vspace*{1mm}
+\includegraphics[width=\linewidth]{assets/aghlogo.png}
+\vspace*{-0.1cm}
 
-{\large \LangFaculty}\vspace*{1cm}
+{\large \bfseries \textsc \LangFaculty}\vspace*{2mm}
+{\large \textsc \LangDepartment}\vspace*{1cm}
 
-\includegraphics[width=90pt,viewport=250 350 350 500]{agh.pdf}
+%\includegraphics[width=90pt,viewport=250 350 350 500]{agh.pdf}
 
 \vspace*{0.8cm}
-{\large\scshape \LangThesisType}\\
+{\Large\scshape \LangThesisType}\\
 \vspace*{1.0cm}
 
 \doublespacing
@@ -115,42 +127,57 @@
 {\large{\scshape \LangSecondaryTitle}}\\
 \vspace*{1.0cm}
 
-{\large\bfseries\scshape \@author}\\
-%\vspace*{5cm}
-\vfill
+% {\large\bfseries\scshape \@author}\\
+% %\vspace*{5cm}
+% \vfill
+% 
+% \singlespacing
+% \vspace*{0.3cm}
 
-\singlespacing
-\vspace*{0.3cm}
-
-\large{\scshape \LangFieldOfStudy}\\
-{\@fieldofstudy}
-\vfill
-\vspace*{0.3cm}
-\large{\scshape \LangSupervisor}\\
-{\@supervisor}
-\vfill
-
-\rule{.7\textwidth}{1mm}\\
-\vspace*{1mm}
-{\large Krak\'{o}w, \@date}
-
+% \large{\scshape \LangFieldOfStudy}\\
+% {\@fieldofstudy}
+% \vfill
+% \vspace*{0.3cm}
+% \large{\scshape \LangSupervisor}\\
+% {\@supervisor}
+% \vfill
 \end{center}
+\vfill
+\begin{tabular}{ l l }
+	Autorzy: & \@author \\
+	Kierunek studiów: & Informatyka \\
+	Typ studiów: & Stacjonarne \\
+	Opiekun pracy: & \@supervisor
+\end{tabular}
+
+\begin{center}
+
+% \rule{.7\textwidth}{1mm}\\
+\vspace*{1cm}
+{\large Krak\'{o}w, \@date}
+\end{center}
+
 
 
 \newpage
 \thispagestyle{empty} 
 
-{~~}\vspace{20mm}
+{~~}\vspace{10mm}
+
+\centerline{\textbf{Oświadczenie studenta}}
+
+\vspace{10mm}
 
 \LangStatementBody
 
-\vspace{2cm}
+\vspace{1.5cm}
 
 \begin{flushright}
 \makebox[6cm][s]{\dotfill}\par
+\vspace{10mm}
+\makebox[6cm][s]{\dotfill}\par
 \makebox[6cm][c]{\small \LangSignature}
 \end{flushright}
-
 
 %------------------------------------------------------------------------------
 
