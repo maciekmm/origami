@@ -1,0 +1,9 @@
+STRESZCZENIE
+
+
+Produktem zrealizowanym w ramach pracy dyplomowej jest interaktywny wizualizator instrukcji składania Origami. Rozwiązanie pozwala zarówno tworzyć jak i wyświetlać instrukcje składania figurek  w sposób interaktywny. Ponadto projekt zawiera aspekt społecznościowy pozwalający na wymienianie się instrukcjami. 
+
+
+SUMMARY
+
+The product realized as part of the diploma thesis is an interactive visualiser of the Origami folding instructions. The solution provides a way to both create and display Origami instructions in an interactive way. Moreover, the project includes a social aspect allowing for the exchange of instructions. 
