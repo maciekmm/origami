@@ -909,10 +909,10 @@ by \texttt{frame\_drop\_multiplier}.
 
 When folding origami models, two faces lying flat on each other are a common occurrence.
 
-The Solving algorithm is not sophisticated enough to have a sense of sheet thickness. Therefore, it places the folded faces close to each other, on the verge of numerical error. The rendering engine cannot distinguish which face is on top and which one is below, resulting in a face color mixture demonstrated below.
+The Solving algorithm is not sophisticated enough to have a sense of sheet thickness. Therefore, it places the folded faces close to each other, on the verge of numerical error. The rendering engine cannot distinguish which face is on top and which one is below, resulting in a face color mixture demonstrated in \autoref{fig:rendering-hazard}.
 
 \begin{figure}[H]
-	\caption{An example of a mesh rendering hazard}
+	\caption{An example of a mesh rendering hazard\label{fig:rendering-hazard}}
   \centering
     \includegraphics[width=0.6\textwidth]{assets/3-rendering-hazard.png}
 \end{figure}
