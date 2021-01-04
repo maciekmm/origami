@@ -54,7 +54,7 @@ It converts a provided Instruction into a Guide.
 Both Instructions and Guides are represented using \textit{.fold} files which we have extended with information required by the application.
 \smallskip
 
-Solver is based on the techniques presented in the publication by A. Ghassaei\cite{origami-simulator:paper}.
+Solver is based on the techniques presented in the publication by A. Ghassaei \cite{origami-simulator:paper}.
 The computational framework consists of the three most important forces that drive the folding process.
 
 \begin{description}
@@ -85,8 +85,8 @@ Solver is implemented in \tech{Python}, using \tech{numpy} and \tech{scipy} libr
 \subsection{Project overview}
 \label{section:project-overview}
 
-As a name for our project we picked \textbf{Origuide}.
-We will use this code name interchangeably with terms like \textit{the system} or \textit{the application}.
+As a name for our project we have picked \textbf{Origuide}.
+We use this code name interchangeably with terms like \textit{the system} or \textit{the application}.
 \smallskip
 
 \begin{figure}[H]
@@ -141,7 +141,7 @@ The Folder's main objective is to fold origami figures following steps presented
 	\item \tech{Jest} has been incorporated as a test runner.
 \end{itemize}
 
-Origuide is a web application. Hence, \tech{Javascript} has been an obvious choice. We have briefly considered \tech{Typescript} as well, but have not used it due to its more enforcing nature, which could have potentially slowed down the development process. When it comes to 3D rendering frameworks \tech{Three.js} is one of the most mature and most frequently used libraries for modern rendering targets such as \tech{WebGL}. The decision to use \tech{Material-UI} has been made without much research on other tools, which we later regretted. As previously mentioned, we have also introduced \tech{React} early in the process to aid us with state management and organize the frontend application in a structurized manner. The tools chosen for code and software quality assurance have been picked based on our familiarity with them.
+Origuide is a web application. Hence, \tech{Javascript} has been an obvious choice. We have briefly considered \tech{Typescript} as well, but have not used it due to its more enforcing nature, which could have potentially slowed down the development process. When it comes to 3D rendering frameworks \tech{Three.js} is one of the most mature and most frequently used libraries for modern rendering targets such as \tech{WebGL}. As previously mentioned, we have also introduced \tech{React} early in the process to aid us with state management and organize the frontend application in a structurized manner. The tools chosen for code and software quality assurance have been picked based on our familiarity with them.
 
 
 \subsubsection{Backend}
@@ -289,7 +289,7 @@ The purpose of \textbf{Guide Viewer} is to show Transitions in a Guide. It consi
 \end{figure}
 
 When a Guide is opened, Guide Viewer fetches the \texttt{animation\_file} from the Community backend and renders it.
-The response conforms to the same format as the aforementioned (\ref{guide-response}) Guide creation response.
+The response conforms to the same format as the aforementioned (\autoref{guide-response}) Guide creation response.
 
 \medskip
 Playback controls allow rewinding, forwarding, stopping, and pausing the animation. Guide Viewer also provides functionality to load an arbitrary \tech{.fold} file by clicking the file icon located in the top-left corner of the screen.
@@ -314,7 +314,7 @@ Guides is a subapplication responsible for handling guide creation, deletion, ma
 
 \medskip
 
-Every action in the subapplication is performed in the context of a guide. The figure below (\ref{model--guide}) depicts the guide model.
+Every action in the subapplication is performed in the context of a guide. \autoref{model--guide} depicts the guide model.
 
 \begin{figure}[H]
   \caption{\label{model--guide}Simplified ERD diagram of the guide model}
@@ -458,7 +458,7 @@ The $\pmb{F}_{beam}$ is related to the vertices' position $\pmb{p}$ by:
 
 $$\pmb{F}_{beam} = -\nabla V(\pmb{p}) = -\frac{\partial V}{\partial \pmb{p}}$$
 
-where V is the potential energy of the system. By the chain rule, we get:
+where $V$ is the potential energy of the system. By the chain rule, we get:
 
 \begin{equation} \label{Solver:beam_force}
 \pmb{F}_{beam} = -\frac{\partial V}{\partial l}\frac{\partial l}{\partial \pmb{p}} = F_{l}\frac{\partial l}{\partial \pmb{p}} = -k_{axial} * (l - l_{0})\frac{\partial l}{\partial \pmb{p}}
@@ -582,7 +582,7 @@ Finally, partial derivatives of $\theta$ with respect to $\pmb{p}$ are given by:
 \frac{\partial \theta}{\partial \pmb{p}_4} = \frac{-\cot{\alpha _{3,14}}}{\cot{\alpha _{3,14}} + \cot{\alpha _{4,31}}} \frac{\pmb{n}_1}{h_1} + \frac{-\cot{\alpha _{3,42}}}{\cot{\alpha _{3,42}} + \cot{\alpha _{4,23}}} \frac{\pmb{n}_2}{h_2} 
 \end{equation}
 
-with all the symbols as marked on the figure (\ref{Solver:crease_force_face}).
+with all the symbols as marked on \autoref{Solver:crease_force_face}.
 \smallskip
 
 The code for calculating crease force strictly follows the above formulations with one slight
@@ -655,13 +655,13 @@ oscillation while folding and without it barely any model folds correctly.
 Damping force is defined in terms of vertices' velocity as:
 
 
-$$F_{damping} = -e_{damping} * (V_1 - V_2)$$
+$$F_{damping} = -e_{damping} * (\pmb{V}_1 - \pmb{V}_2)$$
 
 where:
 
 \begin{itemize}
 	\item $e_{damping}$ is a damping coefficient 
-	\item $V_1$ and $V_2$ are vertices' velocities
+	\item $\pmb{V}_1$ and $\pmb{V}_2$ are vertices' velocities
 \end{itemize}
 
 For each edge damping coefficient is set as:
@@ -912,10 +912,10 @@ by \texttt{frame\_drop\_multiplier}.
 
 When folding origami models, two faces lying flat on each other are a common occurrence.
 
-The Solving algorithm is not sophisticated enough to have a sense of sheet thickness. Therefore, it places the folded faces close to each other, on the verge of numerical error. The rendering engine cannot distinguish which face is on top and which one is below, resulting in a face color mixture demonstrated below.
+The Solving algorithm is not sophisticated enough to have a sense of sheet thickness. Therefore, it places the folded faces close to each other, on the verge of numerical error. The rendering engine cannot distinguish which face is on top and which one is below, resulting in a face color mixture demonstrated in \autoref{fig:rendering-hazard}.
 
 \begin{figure}[H]
-	\caption{An example of a mesh rendering hazard}
+	\caption{An example of a mesh rendering hazard\label{fig:rendering-hazard}}
   \centering
     \includegraphics[width=0.6\textwidth]{assets/3-rendering-hazard.png}
 \end{figure}

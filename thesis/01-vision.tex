@@ -12,13 +12,13 @@ engineers are able to make spacecraft structures more durable while still compac
 Researchers are now recognizing material folding as a distinct
 branch of computer science, known as \hyperref[dictionary:computational-origami]{\textit{computational origami}}.
 The field has seen tremendous development in the past couple of decades.
-Being such a broad topic, it is not surprising that there are numerous open problems\cite{mit-open-problems} and on-going research.
+Being such a broad topic, it is not surprising that there are numerous open problems \cite{mit-open-problems} and on-going research.
 
 % \medskip
 
 While beginners fold origami following step-by-step instructions,
-more advanced origamists would use \hyperref[dictionary:crease-pattern]{\textit{crease patterns}}
-to form the \hyperref[dictionary:folded-state]{\textit{folded state}}.
+more advanced origamists would use a \hyperref[dictionary:crease-pattern]{\textit{crease pattern}} (\autoref{fig:creasepattern})
+to form the corresponding \hyperref[dictionary:folded-state]{\textit{folded state}} (\autoref{fig:amandasimulator}).
 The process of origami creation consists of two stages: \textit{design} and \textit{folding}.
 The former is a reference to the \textit{crease pattern} creation, and the latter is the process of the actual folding.
 
@@ -36,12 +36,12 @@ the lack of details they expose.
 
 We would like to provide a way, for beginners and advanced origamists alike,
 to visualize the folding process step by step.
-While there exist some programs aiding the process of design\cite{app:treemaker}\cite{app:omto}\cite{app:origami-draw}, there is no satisfactory solution 
+While there exist some programs aiding the process of design \cite{app:treemaker}\cite{app:omto}\cite{app:origami-draw}, there is no satisfactory solution 
 that would present the process of folding the way it would be carried out manually.
 
 We have evaluated existing products, and the one that resembles 
-what we would like to achieve the most\cite{origami-simulator} provides a way to load a crease pattern
-and view the folding process. 
+what we would like to achieve the most \cite{origami-simulator} provides a way to load a crease pattern
+and view the folding process as shown in \autoref{fig:amandasimulator}. 
 However, it goes immediately from a flat sheet of paper to the folded figure, skipping all the steps
 that would be required while folding the figure by hand.
 It also bypasses some physical properties that we would like to achieve, such as the fact that the
@@ -49,7 +49,7 @@ paper should not interpenetrate itself.
 
 
 \begin{figure}[H]
-\caption{Origami simulator by Amanda Ghassaei}
+	\caption{Origami simulator by Amanda Ghassaei\label{fig:amandasimulator}}
   \centering
     \includegraphics[width=\textwidth]{assets/origami-simulator.png}
 \end{figure}
@@ -115,17 +115,17 @@ There is a strong community surrounding both of them.
 
 Therefore, we are not expecting problems connected with the tools we have selected.
 
-Since the project will require a lot of knowledge from the \textit{computational origami}
+Since the project requires a lot of knowledge from the \textit{computational origami}
 field, we will have to research the existing materials on this topic.
 The most promising resources seem to be the MIT course by
-Eric Demaine\cite{mit-course} and a book co-authored by the same person -- \textit{Geometric Folding Algorithms: Linkages, Origami, Polyhedra}\cite{origami-book}.
+Eric Demaine \cite{mit-course} and a book co-authored by the same person -- \textit{Geometric Folding Algorithms: Linkages, Origami, Polyhedra} \cite{origami-book}.
 Various available papers might come in handy as well, especially the ones regarding software implementations of origami folding algorithms.
 
 
 \subsection{Threat Assessment}
 
 Playing with the intersection between reality and computer science has always been a challenging task.
-As the field of \textit{computational origami} is relatively young\cite{recent-results-in-computational-origami:paper}, there are still many obstacles to overcome.
+As the field of \textit{computational origami} is relatively young \cite{recent-results-in-computational-origami:paper}, there are still many obstacles to overcome.
 As of now, the mathematical rules governing the origami folding are not fully developed.
 On top of it, we are going to tackle a problem that has not been widely discussed.
 

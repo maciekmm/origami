@@ -55,7 +55,7 @@ Jednocześnie Uczelnia informuje, że zgodnie z art. 15a ww. ustawy o prawie aut
 i prawach pokrewnych Uczelni przysługuje pierwszeństwo w opublikowaniu pracy dyplomowej studenta. Jeżeli Uczelnia nie opublikowała pracy dyplomowej w terminie 
 6 miesięcy od dnia jej obrony, autor może ją opublikować, chyba że praca jest częścią utworu zbiorowego. Ponadto Uczelnia jako podmiot, o którym mowa w art. 7 ust. 1 pkt 1 ustawy z dnia 20 lipca 2018 r. – Prawo o szkolnictwie wyższym i nauce (Dz. U. z 2018 r. poz. 1668 z późn. zm.), może korzystać bez wynagrodzenia i bez konieczności uzyskania zgody autora z utworu stworzonego przez studenta w wyniku wykonywania obowiązków związanych z odbywaniem studiów, udostępniać utwór ministrowi właściwemu do spraw szkolnictwa wyższego i nauki oraz korzystać z utworów znajdujących się w prowadzonych przez niego bazach danych, w celu sprawdzania z wykorzystaniem systemu antyplagiatowego. Minister właściwy do spraw szkolnictwa wyższego i nauki może korzystać z prac dyplomowych znajdujących się w prowadzonych przez niego bazach danych w zakresie niezbędnym do zapewnienia prawidłowego utrzymania i rozwoju tych baz oraz współpracujących 
 z nimi systemów informatycznych.}
-\newcommand*{\LangSignature}{(czytelne podpisy studentów)}
+\newcommand*{\LangSignature}{(czytelny podpis studenta)}
 \newcommand*{\LangThesisType}{\textbf{Projekt dyplomowy}}
 
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
@@ -173,8 +173,6 @@ z nimi systemów informatycznych.}
 \vspace{1.5cm}
 
 \begin{flushright}
-\makebox[6cm][s]{\dotfill}\par
-\vspace{10mm}
 \makebox[6cm][s]{\dotfill}\par
 \makebox[6cm][c]{\small \LangSignature}
 \end{flushright}
